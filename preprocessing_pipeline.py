@@ -14,8 +14,12 @@ BAD_SAMPLE_PREFIXES = [
 
 def fix_input(df: pd.DataFrame, verbose=False):
     steps = [
+        # Filter out the bad samples
         sample_filtering.build(BAD_SAMPLE_PREFIXES),
+        # Parse the IDs and rename to match metadata
         id_parsing.build(),
+        # Run some aggregation function when multiple ids map to the same
+        # sample ID, (due to technical replicates)
         sample_aggregation.build("sum")
     ]
 

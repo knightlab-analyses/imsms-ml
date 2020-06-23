@@ -20,7 +20,7 @@ def fix_input(df: pd.DataFrame, verbose=False):
         id_parsing.build(),
         # Run some aggregation function when multiple ids map to the same
         # sample ID, (due to technical replicates)
-        sample_aggregation.build("sum")
+        sample_aggregation.build("pick")
     ]
 
     if verbose:

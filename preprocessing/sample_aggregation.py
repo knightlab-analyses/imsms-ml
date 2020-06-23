@@ -2,13 +2,14 @@ import pandas as pd
 from common.named_functor import NamedFunctor
 
 
-def build(method):
-    if method == 'sum':
+def build(method_name):
+    if method_name == 'sum':
         return NamedFunctor("Sum Replicates", aggregate_sum)
-    if method == 'mean':
+    if method_name == 'mean':
         return NamedFunctor("Average Replicates", aggregate_mean)
-    if method == 'pick':
-        return NamedFunctor("Pick High Count Replicate", aggregate_pick_high_count)
+    if method_name == 'pick':
+        return NamedFunctor("Pick High Count Replicate",
+                            aggregate_pick_high_count)
 
 
 # Aggregates samples with the same index, sums over all columns
@@ -29,6 +30,9 @@ def aggregate_mean(df: pd.DataFrame) -> pd.DataFrame:
 # Groups samples with the same index, computes the number of reads in each
 # sample, picks the sample with the highest read count in each group.
 def aggregate_pick_high_count(df: pd.DataFrame) -> pd.DataFrame:
-    grouped = df.groupby(lambda x: x)
-    print(grouped)
-    return grouped
+    df['read_count'] = df.sum(axis=1)
+    df = df.sort_values('read_count', ascending=False)\
+        .groupby(lambda x: x)\
+        .first()
+    df = df.drop(columns=['read_count'])
+    return df

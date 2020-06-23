@@ -7,66 +7,53 @@ import q2_mlab
 import pandas as pd
 import preprocessing_pipeline
 
+# Load sequence DataFrame
 biom_table = load_table("./dataset/biom/combined-genus.biom")
 table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
 df = table.view(pd.DataFrame)
-df = preprocessing_pipeline.fix_input(df, verbose=False)
-table = Artifact.import_data("FeatureTable[Frequency]", df)
 
+# Load metadata DataFrame
 metadata = Metadata.load('./dataset/metadata/iMSMS_1140samples_metadata.tsv')
-metadata = metadata.to_dataframe()
+meta_df = metadata.to_dataframe()
 
-# distance_matrix = Artifact.load(os.path.join(TEST_DIR, 'aitchison_distance_matrix.qza'))
+# Preprocess sequence dataframe
+df = preprocessing_pipeline.process_biom(df, meta_df.index, verbose=False)
+# Preprocess metadata dataframe
+meta_df = preprocessing_pipeline.process_metadata(meta_df, df.index, verbose=False)
 
-LinearSVR_grids = {'C': [1e-4, 1e-3, 1e-2, 1e-1, 1e1,
-                            1e2, 1e3, 1e4, 1e5, 1e6, 1e7],
-                    'epsilon':[1e-2, 1e-1, 0, 1],
-                    'loss': ['squared_epsilon_insensitive',
-                            'epsilon_insensitive'],
-                    'random_state': [2018]
-}
+# Convert necessary types for regression-benchmarking
+final_biom = Artifact.import_data("FeatureTable[Frequency]", df)\
+    .view(biom.Table)
+
+
+# LinearSVR_grids = {'C': [1e-4, 1e-3, 1e-2, 1e-1, 1e1,
+#                             1e2, 1e3, 1e4, 1e5, 1e6, 1e7],
+#                     'epsilon':[1e-2, 1e-1, 0, 1],
+#                     'loss': ['squared_epsilon_insensitive',
+#                             'epsilon_insensitive'],
+#                     'random_state': [2018]
+# }
 
 # RandomForestClassifier_grids: {
 #         # Define a grid here from sklearn api
 # }
 
-# LinearSVC_grids = {'penalty': {'l1', 'l2'},
-#                    'tol': [1e-4, 1e-2, 1e-1],
-#                    'loss': ['hinge', 'squared_hinge'],
-#                    'random_state': [2018]
-#                    }
+LinearSVC_grids = {'penalty': {'l1', 'l2'},
+                   'tol': [1e-4, 1e-2, 1e-1],
+                   'loss': ['hinge', 'squared_hinge'],
+                   'random_state': [2018]
+                   }
 
-reg_params = json.dumps(list(ParameterGrid(LinearSVR_grids))[0])
+reg_params = json.dumps(list(ParameterGrid(LinearSVC_grids))[0])
 
-final_biom = table.view(biom.Table)
 
 results = q2_mlab.unit_benchmark(
     table=final_biom,
-    metadata=metadata["age"],
-    algorithm="LinearSVR",
+    metadata=meta_df["age"],
+    algorithm="LinearSVC",
     params=reg_params,
     n_jobs=1,
     distance_matrix=None
 )
 
-# In[17]:
-
-
-table.view(biom.Table).shape
-
-# In[22]:
-
-
-results
-
-# In[25]:
-
-
-results.head(12)
-
-# In[29]:
-
-
-results.CV_IDX.value_counts()
-
-# In[ ]:
+print(results)

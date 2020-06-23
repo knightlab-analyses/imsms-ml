@@ -5,12 +5,12 @@ from qiime2 import Artifact, Metadata
 from sklearn.model_selection import ParameterGrid
 import q2_mlab
 import pandas as pd
-import util
+import preprocessing_pipeline
 
 biom_table = load_table("./dataset/biom/combined-genus.biom")
 table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
 df = table.view(pd.DataFrame)
-df = util.fix_input(df)
+df = preprocessing_pipeline.fix_input(df, verbose=False)
 table = Artifact.import_data("FeatureTable[Frequency]", df)
 
 metadata = Metadata.load('./dataset/metadata/iMSMS_1140samples_metadata.tsv')
@@ -39,7 +39,6 @@ LinearSVR_grids = {'C': [1e-4, 1e-3, 1e-2, 1e-1, 1e1,
 reg_params = json.dumps(list(ParameterGrid(LinearSVR_grids))[0])
 
 final_biom = table.view(biom.Table)
-print(final_biom)
 
 results = q2_mlab.unit_benchmark(
     table=final_biom,

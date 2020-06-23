@@ -49,7 +49,7 @@ reg_params = json.dumps(list(ParameterGrid(LinearSVC_grids))[0])
 
 results = q2_mlab.unit_benchmark(
     table=final_biom,
-    metadata=meta_df["age"],
+    metadata=meta_df["disease"],
     algorithm="LinearSVC",
     params=reg_params,
     n_jobs=1,

@@ -28,6 +28,25 @@ def process_biom(df: pd.DataFrame, valid_sample_ids, verbose=False):
         sample_filtering.build_shared_filter(valid_sample_ids),
         # Specifically remove samples that have no household matched pair
         sample_filtering.build_exact_filter(BAD_SAMPLE_IDS)
+
+        # TODO:  Some kind of normalization of rows in the dataframe
+        #  What are our options?:  CHOOSE 1 (2?)
+        #    Rarefaction such that row adds to X
+        #    Normalize such that row adds to X
+        #    Pseudocounts and Isometric Log Transform (sp?)
+        #      Read GNEISS and Fuller (sp?) papers
+        #      * AST? - https://huttenhower.sph.harvard.edu/maaslin/
+        #        Arc-sin transformation
+        #      * --ILR? - Yoshiki's Fave!--
+        #      * ALR?
+        #      * CLR?
+        #      https://en.wikipedia.org/wiki/Compositional_data#Linear_transformations
+        #
+
+
+
+        # TODO:  Ensure data is still paired by removing any samples that no
+        #  longer have matched pairs
     ]
     return _run_pipeline(df, steps, verbose)
 
@@ -38,6 +57,9 @@ def process_metadata(df: pd.DataFrame, valid_sample_ids, verbose=False):
         sample_filtering.build_shared_filter(valid_sample_ids),
         # Filter out a specific sample that had no matched household pairing
         sample_filtering.build_exact_filter(BAD_SAMPLE_IDS)
+
+        # TODO:  Ensure data is still paired by removing any samples that no
+        #  longer have matched pairs
     ]
     return _run_pipeline(df, steps, verbose)
 

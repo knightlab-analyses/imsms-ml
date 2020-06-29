@@ -25,26 +25,25 @@ meta_df = preprocessing_pipeline.process_metadata(meta_df, df.index, verbose=Fal
 final_biom = Artifact.import_data("FeatureTable[Frequency]", df)\
     .view(biom.Table)
 
-
-LinearSVR_grids = {'C': [1e-4, 1e-3, 1e-2, 1e-1, 1e1,
-                            1e2, 1e3, 1e4, 1e5, 1e6, 1e7],
-                    'epsilon':[1e-2, 1e-1, 0, 1],
-                    'loss': ['squared_epsilon_insensitive',
-                            'epsilon_insensitive'],
-                    'random_state': [2018]
-}
-
-# RandomForestClassifier_grids: {
-#         # Define a grid here from sklearn api
+# LinearSVR_grids = {'C': [1e-4, 1e-3, 1e-2, 1e-1, 1e1,
+#                             1e2, 1e3, 1e4, 1e5, 1e6, 1e7],
+#                     'epsilon':[1e-2, 1e-1, 0, 1],
+#                     'loss': ['squared_epsilon_insensitive',
+#                             'epsilon_insensitive'],
+#                     'random_state': [2018]
 # }
 
-# LinearSVC_grids = {'penalty': {'l1', 'l2'},
-#                    'tol': [1e-4, 1e-2, 1e-1],
-#                    'loss': ['hinge', 'squared_hinge'],
-#                    'random_state': [2018]
-#                    }
+RandomForestClassifier_grids = {
+        # Define a grid here from sklearn api
+}
 
-reg_params = json.dumps(list(ParameterGrid(LinearSVR_grids))[0])
+LinearSVC_grids = {'penalty': {'l2'},
+                   'tol': [1e-4, 1e-2, 1e-1],
+                   'loss': ['hinge', 'squared_hinge'],
+                   'random_state': [2018]
+                   }
+
+reg_params = json.dumps(list(ParameterGrid(RandomForestClassifier_grids))[0])
 
 target = meta_df.apply(lambda row: 1 if row["disease"] == "MS" else 0, axis=1)
 print(target)
@@ -52,10 +51,12 @@ print(target)
 results = q2_mlab.unit_benchmark(
     table=final_biom,
     metadata=target,
-    algorithm="LinearSVR",
+    algorithm="RandomForestClassifier",
     params=reg_params,
-    n_jobs=1,
     distance_matrix=None
 )
 
 print(results)
+print(results.columns)
+for col in ["ACCURACY", "AUPRC", "AUROC", "F1"]:
+    print("Max", col, ":", max(results[col]))

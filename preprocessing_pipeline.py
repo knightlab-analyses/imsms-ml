@@ -1,5 +1,6 @@
 import pandas as pd
-from preprocessing import id_parsing, sample_filtering, sample_aggregation
+from preprocessing import id_parsing, sample_filtering, sample_aggregation, \
+    normalization
 
 BAD_SAMPLE_PREFIXES = [
     'NA.',
@@ -23,7 +24,13 @@ def process_biom(df: pd.DataFrame, valid_sample_ids, verbose=False):
         id_parsing.build(),
         # Run some aggregation function when multiple ids map to the same
         # sample ID, (due to technical replicates)
-        sample_aggregation.build("pick"),
+        sample_aggregation.build("sum"),
+        # Apply some normalization strategy to deal with compositionality of
+        # the data, stemming from various sources - whether biological effects
+        # and sample coverage/amount or from aggregation of varying numbers of
+        # technical replicates.
+        # normalization.build("rarefy", 10000),
+        normalization.build("divide_total", 10000),
         # Filter to rows that match metadata sample ids
         sample_filtering.build_shared_filter(valid_sample_ids),
         # Specifically remove samples that have no household matched pair

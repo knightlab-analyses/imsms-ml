@@ -1,6 +1,6 @@
 import pandas as pd
 from preprocessing import id_parsing, sample_filtering, sample_aggregation, \
-    normalization
+    normalization, classifier_target
 
 BAD_SAMPLE_PREFIXES = [
     'NA.',
@@ -67,6 +67,16 @@ def process_metadata(df: pd.DataFrame, valid_sample_ids, verbose=False):
 
         # TODO:  Ensure data is still paired by removing any samples that no
         #  longer have matched pairs
+    ]
+    return _run_pipeline(df, steps, verbose)
+
+
+def build_target_column(df: pd.DataFrame,
+                        meta_df: pd.DataFrame,
+                        verbose=False):
+    steps = [
+        classifier_target.build("disease_state", meta_df)
+        # classifier_target.build("household_concat", meta_df)
     ]
     return _run_pipeline(df, steps, verbose)
 

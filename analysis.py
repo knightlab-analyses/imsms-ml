@@ -19,7 +19,19 @@ meta_df = metadata.to_dataframe()
 # Preprocess sequence dataframe
 df = preprocessing_pipeline.process_biom(df, meta_df.index, verbose=False)
 # Preprocess metadata dataframe
-meta_df = preprocessing_pipeline.process_metadata(meta_df, df.index, verbose=False)
+meta_df = preprocessing_pipeline.process_metadata(meta_df,
+                                                  df.index, verbose=False)
+# Build target column
+df = preprocessing_pipeline.build_target_column(df, meta_df, verbose=False)
+
+# Shuffle the data so the machine learning can't learn anything based on order
+df = df.sample(frac=1)
+
+# Split out the target column (order must match that of df in the current ver)
+target = df['target']
+
+# -REMOVE the target column from df, unless you want 100% accuracy :P-
+df = df.drop('target', axis=1)
 
 # Convert necessary types for regression-benchmarking
 final_biom = Artifact.import_data("FeatureTable[Frequency]", df)\
@@ -44,9 +56,6 @@ LinearSVC_grids = {'penalty': {'l2'},
                    }
 
 reg_params = json.dumps(list(ParameterGrid(RandomForestClassifier_grids))[0])
-
-target = meta_df.apply(lambda row: 1 if row["disease"] == "MS" else 0, axis=1)
-print(target)
 
 results = q2_mlab.unit_benchmark(
     table=final_biom,

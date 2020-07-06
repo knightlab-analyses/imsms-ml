@@ -12,7 +12,7 @@ BAD_SAMPLE_PREFIXES = [
     'Mag.Bead.Zymo.'
 ]
 
-BAD_SAMPLE_IDS = ["71601-0158", "71601-0158"]
+BAD_SAMPLE_IDS = ["71601-0158", "71602-0158"]
 
 
 def process_biom(df: pd.DataFrame, meta_df: pd.DataFrame, verbose=False):
@@ -81,9 +81,11 @@ def build_target_column(df: pd.DataFrame,
         #  column so it was the last thing before sending in the model
         #  But doing it before building target column doesn't seem to matter
         #  at all so maybe isn't valuable.
-        transformation.build_pca(20),
-        # classifier_target.build("disease_state", meta_df),
-        classifier_target.build("household_concat", meta_df)
+        #  Also can see that heavy dimensionality reduction reduces accuracy
+        #  so be careful.
+        # transformation.build_pca(20),
+        classifier_target.build("disease_state", meta_df),
+        # classifier_target.build("household_concat", meta_df)
     ]
     return _run_pipeline(df, steps, verbose)
 

@@ -11,6 +11,9 @@ def build(option, meta_df):
     if option == "disease_state":
         return NamedFunctor("Disease State",
                             lambda df: disease_state(df, meta_df))
+    if option == "site":
+        return NamedFunctor("Site",
+                            lambda df: site(df, meta_df))
 
 
 # concatenate rows corresponding to household.  Households are assumed to be
@@ -58,6 +61,15 @@ def _parse_household_id(sample_id: str):
 # Append a target column to df based on lookup of disease state in meta.
 def disease_state(df: pd.DataFrame, meta_df: pd.DataFrame):
     target = meta_df.apply(lambda row: 1 if row["disease"] == "MS" else 0,
+                           axis=1)
+    df['target'] = target
+    return df
+
+
+# Append a target column to df based on lookup of disease state in meta.
+def site(df: pd.DataFrame, meta_df: pd.DataFrame):
+    target = meta_df.apply(lambda row: 1 if row["site"] == "San Francisco"
+                           else 0,
                            axis=1)
     df['target'] = target
     return df

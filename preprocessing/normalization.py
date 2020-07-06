@@ -8,7 +8,8 @@ from common.named_functor import NamedFunctor
 
 def build(method_name, target_count):
     if method_name == 'rarefy':
-        return NamedFunctor("Rarefy", lambda df: rarefy_wrapper(df, target_count))
+        return NamedFunctor("Rarefy", lambda df: rarefy_wrapper(df,
+                                                                target_count))
     if method_name == 'divide_total':
         return NamedFunctor("Average Replicates",
                             lambda df: divide_total(df, target_count))

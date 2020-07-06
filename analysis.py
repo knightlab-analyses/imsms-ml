@@ -8,16 +8,19 @@ import pandas as pd
 import preprocessing_pipeline
 
 # Load sequence DataFrame
-biom_table = load_table("./dataset/biom/combined-genus.biom")
+biom_table = load_table("./dataset/biom/combined-reaction2pathway.biom")
 table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
 df = table.view(pd.DataFrame)
+
+# print(biom_table.metadata_to_dataframe(axis="observation"))
+# print(df)
 
 # Load metadata DataFrame
 metadata = Metadata.load('./dataset/metadata/iMSMS_1140samples_metadata.tsv')
 meta_df = metadata.to_dataframe()
 
 # Preprocess sequence dataframe
-df = preprocessing_pipeline.process_biom(df, meta_df.index, verbose=False)
+df = preprocessing_pipeline.process_biom(df, meta_df, verbose=False)
 # Preprocess metadata dataframe
 meta_df = preprocessing_pipeline.process_metadata(meta_df,
                                                   df.index, verbose=False)
@@ -46,7 +49,8 @@ final_biom = Artifact.import_data("FeatureTable[Frequency]", df)\
 # }
 
 RandomForestClassifier_grids = {
-        # Define a grid here from sklearn api
+    # Define a grid here from sklearn api
+    'random_state': [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
 }
 
 LinearSVC_grids = {'penalty': {'l2'},

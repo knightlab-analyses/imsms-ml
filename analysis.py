@@ -8,6 +8,8 @@ import pandas as pd
 import preprocessing_pipeline
 
 # Load sequence DataFrame
+from common import plotter
+
 biom_table = load_table("./dataset/biom/combined-species.biom")
 table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
 df = table.view(pd.DataFrame)
@@ -36,6 +38,8 @@ df = preprocessing_pipeline.build_target_column(df, meta_df, verbose=False)
 
 # Shuffle the data so the machine learning can't learn anything based on order
 df = df.sample(frac=1)
+
+# plotter.simple_swarm(df, meta_df, "239935", "disease")
 
 # Split out the target column (order must match that of df in the current ver)
 target = df['target']

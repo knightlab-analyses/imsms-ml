@@ -8,19 +8,26 @@ import pandas as pd
 import preprocessing_pipeline
 
 # Load sequence DataFrame
-biom_table = load_table("./dataset/biom/combined-reaction2pathway.biom")
+biom_table = load_table("./dataset/biom/combined-species.biom")
 table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
 df = table.view(pd.DataFrame)
 
-# print(biom_table.metadata_to_dataframe(axis="observation"))
-# print(df)
+column_labels = biom_table.metadata_to_dataframe(axis="observation")
+feature_set = pd.read_csv("./dataset/feature_sets/just_akkermansia.tsv",
+                          sep='\t',
+                          index_col='ID',
+                          dtype=str)
+feature_set.index = feature_set.index.astype(str)  # Dumb Panda ignores type
 
 # Load metadata DataFrame
 metadata = Metadata.load('./dataset/metadata/iMSMS_1140samples_metadata.tsv')
 meta_df = metadata.to_dataframe()
 
 # Preprocess sequence dataframe
-df = preprocessing_pipeline.process_biom(df, meta_df, verbose=False)
+df = preprocessing_pipeline.process_biom(df,
+                                         meta_df,
+                                         feature_set.index,
+                                         verbose=True)
 # Preprocess metadata dataframe
 meta_df = preprocessing_pipeline.process_metadata(meta_df,
                                                   df.index, verbose=False)

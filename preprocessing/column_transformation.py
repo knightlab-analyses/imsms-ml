@@ -11,6 +11,13 @@ def build_pca(num_components):
     )
 
 
+def build_column_filter(chosen_columns):
+    return NamedFunctor(
+        "Restrict to columns: " + str(chosen_columns),
+        lambda x: _restrict_columns(x, chosen_columns)
+    )
+
+
 # PCA probably isn't a legitimate operation in most spaces we're working in,
 # (Like probably all machine learning algorithms :D)
 # you might consider doing PCoA instead!
@@ -24,3 +31,7 @@ def _pca(df, num_components):
         new_df,
         columns=['PCA%i' % i for i in range(num_components)],
         index=df.index)
+
+
+def _restrict_columns(df, chosen_columns):
+    return df[chosen_columns]

@@ -1,6 +1,7 @@
 import pandas as pd
 from preprocessing import id_parsing, sample_filtering, sample_aggregation, \
-    normalization, classifier_target, transformation
+    normalization, classifier_target
+from preprocessing.column_transformation import build_column_filter
 
 BAD_SAMPLE_PREFIXES = [
     'NA.',
@@ -15,7 +16,10 @@ BAD_SAMPLE_PREFIXES = [
 BAD_SAMPLE_IDS = ["71601-0158", "71602-0158"]
 
 
-def process_biom(df: pd.DataFrame, meta_df: pd.DataFrame, verbose=False):
+def process_biom(df: pd.DataFrame,
+                 meta_df: pd.DataFrame,
+                 restricted_feature_set=None,
+                 verbose=False):
     steps = [
         # Filter out the bad samples (sample prefixes are based on pre-parsed
         # values. do not reorder below id_parsing)
@@ -57,6 +61,10 @@ def process_biom(df: pd.DataFrame, meta_df: pd.DataFrame, verbose=False):
         # normalization.build("rarefy", 10000),
         normalization.build("divide_total", 10000)
     ]
+
+    if restricted_feature_set is not None:
+        steps.append(build_column_filter(restricted_feature_set))
+
     return _run_pipeline(df, steps, verbose)
 
 
@@ -83,14 +91,14 @@ def build_target_column(df: pd.DataFrame,
         #  at all so maybe isn't valuable.
         #  Also can see that heavy dimensionality reduction reduces accuracy
         #  so be careful.
-        # transformation.build_pca(20),
+        # transformation.build_pca(20),  # TODO: 20 might actually be too few!!
         classifier_target.build("disease_state", meta_df),
         # classifier_target.build("household_concat", meta_df)
     ]
     return _run_pipeline(df, steps, verbose)
 
 
-def _run_pipeline(df, steps, verbose=True):
+def _run_pipeline(df, steps, verbose=False):
     if verbose:
         print("Input: ")
         print(df)

@@ -13,8 +13,8 @@ def build_pca(num_components):
 
 def build_column_filter(chosen_columns):
     return NamedFunctor(
-        "Restrict to columns: " + str(chosen_columns),
-        lambda x: _restrict_columns(x, chosen_columns)
+        "Restrict to columns (compositional): " + str(chosen_columns),
+        lambda x: _restrict_columns_compositional(x, chosen_columns)
     )
 
 
@@ -33,5 +33,10 @@ def _pca(df, num_components):
         index=df.index)
 
 
-def _restrict_columns(df, chosen_columns):
-    return df[chosen_columns]
+# Restricts the set of columns in df to chosen columns, then adds a new column
+# "remainder" containing the sum of dropped values, thus maintaining row sums.
+def _restrict_columns_compositional(df, chosen_columns):
+    restricted = df[chosen_columns]
+    remainder = df.drop(chosen_columns)
+    restricted['remainder'] = remainder.sum(axis=1)
+    return remainder

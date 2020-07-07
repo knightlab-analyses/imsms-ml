@@ -58,6 +58,15 @@ def _parse_household_id(sample_id: str):
     return sample_id[0:3] + sample_id[5:]
 
 
+def _target(df: pd.DataFrame, meta_df: pd.DataFrame,
+            meta_col_name: str, one_set: set):
+    target = meta_df.apply(
+        lambda row: 1 if row[meta_col_name] in one_set else 0,
+        axis=1)
+    df['target'] = target
+    return df
+
+
 # Append a target column to df based on lookup of disease state in meta.
 def disease_state(df: pd.DataFrame, meta_df: pd.DataFrame):
     target = meta_df.apply(lambda row: 1 if row["disease"] == "MS" else 0,

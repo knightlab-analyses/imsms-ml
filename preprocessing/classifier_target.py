@@ -3,6 +3,7 @@ import numpy as np
 
 from common.named_functor import NamedFunctor
 from state.pipeline_state import PipelineState
+from preprocessing.sample_filtering import _parse_household_id
 
 
 def build(meta_col_name: str, one_set: set, household_matched=False):
@@ -56,12 +57,6 @@ def matched_pair_concat(state: PipelineState,
     target = df['Rtarget']
     df = df.drop('Rtarget', axis=1)
     return state.update(target=target, df=df)
-
-
-def _parse_household_id(sample_id: str):
-    # Input of form Q.71401.0009.2016.02.23
-    # Output of form 71401-0009
-    return sample_id[0:3] + sample_id[5:]
 
 
 def _target(state: PipelineState, meta_col_name: str, one_set: set) \

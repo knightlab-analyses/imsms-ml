@@ -32,7 +32,8 @@ def process(state: PipelineState, restricted_feature_set=None, verbose=False):
     steps.append(sample_filtering.build_shared_filter())
     # Manually remove samples that have no household matched pair
     steps.append(sample_filtering.build_exact_filter(BAD_SAMPLE_IDS))
-    # Subset to rows with a particular metadata value
+    # Subset to household pairs whose individual samples are within particular
+    # metadata values.
     # steps.append(sample_filtering.build_whitelist_metadata_value(
     #     "treatment_status",
     #     ['Off', 'Control']

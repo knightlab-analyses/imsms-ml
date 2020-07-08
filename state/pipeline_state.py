@@ -35,6 +35,7 @@ class PipelineState:
         return self
 
     def __str__(self):
-        return "DF:\n" + str(self.df) + \
-               "META_DF:\n" + str(self.meta_df) + \
-               "TARGET:\n" + str(self.target)
+        return "---------------\nDF:\n" + str(self.df) + \
+               "\n\nMETA_DF:\n" + str(self.meta_df) + \
+               "\n\nTARGET:\n" + str(self.target) + \
+               "\n---------------"

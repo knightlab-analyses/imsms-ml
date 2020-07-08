@@ -2,6 +2,7 @@ import pandas as pd
 
 from common.named_functor import NamedFunctor
 from state.pipeline_state import PipelineState
+from collections import defaultdict
 
 
 # Filter out any samples that start with one of these prefixes
@@ -90,7 +91,8 @@ def _filter_by_shared_ids(state: PipelineState) -> PipelineState:
 
 
 def _filter_by_metadata(state: PipelineState,
-                        meta_col: str, meta_val: set):
+                        meta_col: str,
+                        meta_val: set) -> PipelineState:
     values = state.meta_df[meta_col]
 
     state.df = state.df.join(values)
@@ -98,4 +100,31 @@ def _filter_by_metadata(state: PipelineState,
     state.df = state.df.drop([meta_col], axis=1)
 
     state.meta_df = state.meta_df[state.meta_df[meta_col].isin(meta_val)]
-    return state
+    return _filter_to_matched_pairs(state)
+
+
+# Some sample filtering operations may break the matched pair nature of the
+# dataset.  This filters out samples whose matched pair has been removed.
+def _filter_to_matched_pairs(state: PipelineState) -> PipelineState:
+    household_map = defaultdict(list)
+    for key in state.df.index:
+        household_map[_parse_household_id(key)].append(key)
+
+    good_keys = []
+    for household in household_map:
+        sample_ids = household_map[household]
+        if len(sample_ids) == 2:
+            for sample_id in sample_ids:
+                good_keys.append(sample_id)
+
+    good_keys = set(good_keys)
+    return state.update(
+        df=state.df[state.df.index.isin(good_keys)],
+        meta_df=state.meta_df[state.meta_df.index.isin(good_keys)]
+    )
+
+
+def _parse_household_id(sample_id: str):
+    # Input of form Q.71401.0009.2016.02.23
+    # Output of form 71401-0009
+    return sample_id[0:3] + sample_id[5:]

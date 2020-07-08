@@ -1,13 +1,14 @@
 import pandas as pd
 from common.named_functor import NamedFunctor
+from state.pipeline_state import PipelineState
 
 
 def build():
     return NamedFunctor("Fix Sample IDs", fix_sample_ids)
 
 
-def fix_sample_ids(df: pd.DataFrame) -> pd.DataFrame:
-    return df.rename(mapper=_parse_sample_id)
+def fix_sample_ids(state: PipelineState) -> PipelineState:
+    return state.update_df(state.df.rename(mapper=_parse_sample_id))
 
 
 def _parse_sample_id(index: str):

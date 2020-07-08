@@ -1,6 +1,5 @@
-All Preprocessing steps take as input a pandas DataFrame and produce a pandas
-DataFrame.  That means that they can be configured and chained together by the
-researcher.
+All Preprocessing steps take a PipelineState and produce a PipelineState.
+That means that they can be configured and chained together by the researcher.
 
 Preprocessing steps are simple operations like
     * Filtering rows by some function of their index

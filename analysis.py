@@ -9,6 +9,7 @@ import preprocessing_pipeline
 
 # Load sequence DataFrame
 from common import plotter
+from state.pipeline_state import PipelineState
 
 biom_table = load_table("./dataset/biom/combined-species.biom")
 table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
@@ -25,27 +26,27 @@ feature_set.index = feature_set.index.astype(str)  # Dumb Panda ignores type
 metadata = Metadata.load('./dataset/metadata/iMSMS_1140samples_metadata.tsv')
 meta_df = metadata.to_dataframe()
 
-# Preprocess sequence dataframe
-df = preprocessing_pipeline.process_biom(df,
-                                         meta_df,
-                                         feature_set.index,
-                                         verbose=True)
-# Preprocess metadata dataframe
-meta_df = preprocessing_pipeline.process_metadata(meta_df,
-                                                  df.index, verbose=False)
-# Build target column
-df = preprocessing_pipeline.build_target_column(df, meta_df, verbose=False)
+state = PipelineState(df, meta_df, None)
+# Run Preprocessing
+state = preprocessing_pipeline.process(
+    state,
+    restricted_feature_set=None,
+    verbose=True
+)
+
+df = state.df
+meta_df = state.meta_df
+target = state.target
 
 # Shuffle the data so the machine learning can't learn anything based on order
 df = df.sample(frac=1)
 
-# plotter.simple_swarm(df, meta_df, "239935", "disease")
-
-# Split out the target column (order must match that of df in the current ver)
+# Target and df order must match.  Argh.
+df['target'] = target
 target = df['target']
+df = df.drop(['target'], axis=1)
 
-# -REMOVE the target column from df, unless you want 100% accuracy :P-
-df = df.drop('target', axis=1)
+# plotter.simple_swarm(df, meta_df, "239935", "disease")
 
 # Convert necessary types for regression-benchmarking
 final_biom = Artifact.import_data("FeatureTable[Frequency]", df)\
@@ -71,7 +72,6 @@ LinearSVC_grids = {'penalty': {'l2'},
                    }
 
 reg_params = json.dumps(list(ParameterGrid(RandomForestClassifier_grids))[0])
-
 results = q2_mlab.unit_benchmark(
     table=final_biom,
     metadata=target,

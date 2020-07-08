@@ -16,7 +16,8 @@ table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
 df = table.view(pd.DataFrame)
 
 column_labels = biom_table.metadata_to_dataframe(axis="observation")
-feature_set = pd.read_csv("./dataset/feature_sets/just_akkermansia.tsv",
+print(column_labels)
+feature_set = pd.read_csv("./dataset/feature_sets/just_austwickia.tsv",
                           sep='\t',
                           index_col='ID',
                           dtype=str)
@@ -30,8 +31,8 @@ state = PipelineState(df, meta_df, None)
 # Run Preprocessing
 state = preprocessing_pipeline.process(
     state,
-    restricted_feature_set=None,  # feature_set.index.tolist(),
-    verbose=True
+    restricted_feature_set=feature_set.index.tolist(),
+    verbose=False
 )
 
 df = state.df

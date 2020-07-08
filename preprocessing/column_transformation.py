@@ -39,8 +39,8 @@ def _restrict_columns_compositional(state: PipelineState,
                                     chosen_columns: list) \
         -> PipelineState:
     df = state.df
-    restricted = df[chosen_columns]
     remainder = df.drop(chosen_columns, axis=1)
-    restricted['remainder'] = remainder.sum(axis=1)
+    df['remainder'] = remainder.sum(axis=1)
+    restricted = df[chosen_columns + ['remainder']]
 
     return state.update_df(restricted)

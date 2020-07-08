@@ -35,11 +35,12 @@ def _pca(state: PipelineState, num_components) -> PipelineState:
 
 # Restricts the set of columns in df to chosen columns, then adds a new column
 # "remainder" containing the sum of dropped values, thus maintaining row sums.
-def _restrict_columns_compositional(state: PipelineState, chosen_columns) \
+def _restrict_columns_compositional(state: PipelineState,
+                                    chosen_columns: list) \
         -> PipelineState:
     df = state.df
     restricted = df[chosen_columns]
-    remainder = df.drop(chosen_columns)
+    remainder = df.drop(chosen_columns, axis=1)
     restricted['remainder'] = remainder.sum(axis=1)
 
     return state.update_df(restricted)

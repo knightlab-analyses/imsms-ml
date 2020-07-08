@@ -30,7 +30,7 @@ state = PipelineState(df, meta_df, None)
 # Run Preprocessing
 state = preprocessing_pipeline.process(
     state,
-    restricted_feature_set=None,
+    restricted_feature_set=None,  # feature_set.index.tolist(),
     verbose=True
 )
 

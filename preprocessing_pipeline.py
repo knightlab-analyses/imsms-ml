@@ -17,7 +17,9 @@ BAD_SAMPLE_PREFIXES = [
 BAD_SAMPLE_IDS = ["71601-0158", "71602-0158"]
 
 
-def process(state: PipelineState, restricted_feature_set=None, verbose=False):
+def process(state: PipelineState,
+            restricted_feature_set: list = None,
+            verbose=False):
     steps = []
 
     # Filter out the bad samples (sample prefixes are based on pre-parsed
@@ -33,7 +35,8 @@ def process(state: PipelineState, restricted_feature_set=None, verbose=False):
     # Manually remove samples that have no household matched pair
     steps.append(sample_filtering.build_exact_filter(BAD_SAMPLE_IDS))
     # Subset to household pairs whose individual samples are within particular
-    # metadata values.
+    # metadata values.  Can use these to determine if your model is detecting
+    # microbes correlating with confounding variables.
     # steps.append(sample_filtering.build_whitelist_metadata_value(
     #     "treatment_status",
     #     ['Off', 'Control']

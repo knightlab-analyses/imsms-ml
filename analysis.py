@@ -16,8 +16,7 @@ table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
 df = table.view(pd.DataFrame)
 
 column_labels = biom_table.metadata_to_dataframe(axis="observation")
-print(column_labels)
-feature_set = pd.read_csv("./dataset/feature_sets/just_austwickia.tsv",
+feature_set = pd.read_csv("./dataset/feature_sets/just_akkermansia.tsv",
                           sep='\t',
                           index_col='ID',
                           dtype=str)
@@ -29,15 +28,15 @@ meta_df = metadata.to_dataframe()
 
 state = PipelineState(df, meta_df, None)
 # Run Preprocessing
-state = preprocessing_pipeline.process(
+train_state, test_state = preprocessing_pipeline.process(
     state,
-    restricted_feature_set=feature_set.index.tolist(),
+    restricted_feature_set=None,  # feature_set.index.tolist(),
     verbose=False
 )
 
-df = state.df
-meta_df = state.meta_df
-target = state.target
+df = train_state.df
+meta_df = train_state.meta_df
+target = train_state.target
 
 # Shuffle the data so the machine learning can't learn anything based on order
 df = df.sample(frac=1)
@@ -73,7 +72,7 @@ LinearSVC_grids = {'penalty': {'l2'},
                    }
 
 reg_params = json.dumps(list(ParameterGrid(RandomForestClassifier_grids))[0])
-results = q2_mlab.unit_benchmark(
+results_table, best_model, best_accuracy = q2_mlab._unit_benchmark(
     table=final_biom,
     metadata=target,
     algorithm="RandomForestClassifier",
@@ -81,7 +80,45 @@ results = q2_mlab.unit_benchmark(
     distance_matrix=None
 )
 
-print(results)
-print(results.columns)
+print(results_table)
+print(results_table.columns)
 for col in ["ACCURACY", "AUPRC", "AUROC", "F1"]:
-    print("Max", col, ":", max(results[col]))
+    print("Max", col, ":", max(results_table[col]))
+
+print(best_accuracy)
+print(best_model)
+
+#######################################
+# BEGIN TEST
+#######################################
+
+
+def eval_model(model, state):
+    test_df = state.df
+    test_meta_df = state.meta_df
+    test_target = state.target
+
+    #  Shuffle the data so the machine learning can't learn
+    #  anything based on order
+    test_df = test_df.sample(frac=1)
+
+    # Target and df order must match.  Argh.
+    test_df['target'] = test_target
+    test_target = test_df['target']
+    test_df = test_df.drop(['target'], axis=1)
+
+    print("Indexes Match:")
+    print((test_df.index == test_target.index).all())
+
+    y = model.predict(test_df)
+    real = test_target
+
+    print("Accuracy")
+    print((y == real).value_counts()[True] / len(real))
+
+
+print("Real stats on test:")
+eval_model(best_model, test_state)
+
+print("Average validation accuracy:")
+print(results_table["ACCURACY"].unique().mean())

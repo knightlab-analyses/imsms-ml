@@ -3,24 +3,25 @@ import numpy as np
 
 from common.named_functor import NamedFunctor
 from state.pipeline_state import PipelineState
-from preprocessing.sample_filtering import _parse_household_id
+from preprocessing.id_parsing import _parse_household_id
 
 
 def build(meta_col_name: str, one_set: set, household_matched=False):
     if household_matched:
         return NamedFunctor(
             "Target: " + meta_col_name + "(Household)",
-            lambda x: matched_pair_concat(x, meta_col_name, one_set)
+            lambda state, mode:
+                matched_pair_concat(state, meta_col_name, one_set)
         )
     else:
         return NamedFunctor(
             "Target: " + meta_col_name,
-            lambda x: _target(x, meta_col_name, one_set)
+            lambda state, mode:
+                _target(state, meta_col_name, one_set)
         )
 
 
-# concatenate rows corresponding to household.  Households are assumed to be
-# consecutive pairs of rows in the dataframe.
+# concatenate rows corresponding to household.
 # Flip a coin to determine whether MS or control comes first within the row.
 # Set target = 0 if MS comes first, target = 1 if control comes first.
 def matched_pair_concat(state: PipelineState,

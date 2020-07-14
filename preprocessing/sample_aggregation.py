@@ -5,12 +5,15 @@ from state.pipeline_state import PipelineState
 
 def build(method_name):
     if method_name == 'sum':
-        return NamedFunctor("Sum Replicates", aggregate_sum)
+        return NamedFunctor("Sum Replicates",
+                            lambda state, mode: aggregate_sum(state))
     if method_name == 'mean':
-        return NamedFunctor("Average Replicates", aggregate_mean)
+        return NamedFunctor("Average Replicates",
+                            lambda state, mode: aggregate_mean(state))
     if method_name == 'pick':
         return NamedFunctor("Pick High Count Replicate",
-                            aggregate_pick_high_count)
+                            lambda state, mode:
+                                aggregate_pick_high_count(state))
 
 
 # Aggregates samples with the same index, sums over all columns

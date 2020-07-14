@@ -1,6 +1,7 @@
 import pandas as pd
 
 from common.named_functor import NamedFunctor
+from preprocessing.id_parsing import _parse_household_id
 from state.pipeline_state import PipelineState
 from collections import defaultdict
 
@@ -9,7 +10,7 @@ from collections import defaultdict
 def build_prefix_filter(bad_prefixes):
     return NamedFunctor(
         "Filter Samples By ID Prefix",
-        lambda x: _filter_out_sample_id_prefix(x, bad_prefixes)
+        lambda state, mode: _filter_out_sample_id_prefix(state, bad_prefixes)
     )
 
 
@@ -17,14 +18,15 @@ def build_prefix_filter(bad_prefixes):
 def build_exact_filter(bad_sample_ids):
     return NamedFunctor(
         "Remove Bad Samples",
-        lambda x: _filter_out_sample_ids(x, bad_sample_ids)
+        lambda state, mode: _filter_out_sample_ids(state, bad_sample_ids)
     )
 
 
 # Only keep samples with ids shared between df and meta_df
 def build_shared_filter():
     return NamedFunctor(
-        "Filter Samples To Shared IDs", _filter_by_shared_ids
+        "Filter Samples To Shared IDs",
+        lambda state, mode: _filter_by_shared_ids(state)
     )
 
 
@@ -124,7 +126,3 @@ def _filter_to_matched_pairs(state: PipelineState) -> PipelineState:
     )
 
 
-def _parse_household_id(sample_id: str):
-    # Input of form Q.71401.0009.2016.02.23
-    # Output of form 71401-0009
-    return sample_id[0:3] + sample_id[5:]

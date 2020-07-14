@@ -22,16 +22,23 @@ from state.pipeline_state import PipelineState
 #
 def build(method_name, target_count):
     if method_name == 'rarefy':
-        return NamedFunctor("Rarefy", lambda df: rarefy_wrapper(df,
-                                                                target_count))
+        return NamedFunctor("Rarefy",
+                            lambda state, mode: rarefy_wrapper(state,
+                                                               target_count))
     if method_name == 'divide_total':
-        return NamedFunctor("Average Replicates",
-                            lambda df: divide_total(df, target_count))
+        return NamedFunctor("Truncate Ray To Simplex",
+                            lambda state, mode: divide_total(state,
+                                                             target_count))
     if method_name == 'ILR':
+        # Existing functions for this in skbio
         raise NotImplemented()
     if method_name == 'CLR':
+        # Existing functions for this in skbio
         raise NotImplemented()
     if method_name == 'ALR':
+        # Existing functions for this in skbio
+        raise NotImplemented()
+    if method_name == 'AST':
         raise NotImplemented()
 
 

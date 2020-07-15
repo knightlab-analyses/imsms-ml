@@ -30,6 +30,14 @@ def build_shared_filter():
     )
 
 
+# Drop any samples with no data for this set of features
+def build_filter_out_empty_samples():
+    return NamedFunctor(
+        "Filter Empty Samples",
+        lambda state, mode: _filter_zero_sum(state)
+    )
+
+
 # Keep only samples with a particular metadata value
 # (Lets you subset your input data to filter by, for example, medication,
 # so that you aren't just seeing differences due to some drug
@@ -102,6 +110,15 @@ def _filter_by_metadata(state: PipelineState,
     state.df = state.df.drop([meta_col], axis=1)
 
     state.meta_df = state.meta_df[state.meta_df[meta_col].isin(meta_val)]
+    return _filter_to_matched_pairs(state)
+
+
+# Under some feature transforms, we pick up nothing at all, and are thus
+# unable to normalize the data.  This filter removes such samples.
+def _filter_zero_sum(state: PipelineState) -> PipelineState:
+    state.df['rowsum'] = state.df.sum(axis=1)
+    state.df = state.df[state.df['rowsum'] > 0]
+    state.df = state.df.drop(['rowsum'], axis=1)
     return _filter_to_matched_pairs(state)
 
 

@@ -10,18 +10,33 @@ TrainTest = collections.namedtuple('TrainTest', 'train test')
 #  maybe should be in a different folder?
 
 
-# Splits the pipeline into training and test sets by household,
-# households are assumed to be consecutive pairs of rows by index in the
-# dataframe.
-def split(state, fraction_train=.5, verbose=False) -> TrainTest:
-    state.df['household'] = state.df.index.map(_parse_household_id)
-    all_households = state.df.household.unique()
+def pick_training_households(household_series,
+                             fraction_train=.5,
+                             verbose=False):
+    all_households = household_series.unique()
     train_households = np.random.choice(
         all_households,
         int(len(all_households) * fraction_train),
         replace=False
     )
+    print(sorted(train_households.tolist()))
+    return train_households
 
+
+# Splits the pipeline into training and test sets by household,
+# households are assumed to be consecutive pairs of rows by index in the
+# dataframe.
+def split(state, fraction_train=.5, verbose=False) -> TrainTest:
+    household = state.df.index.map(_parse_household_id)
+    train_households = pick_training_households(household,
+                                                fraction_train,
+                                                verbose)
+
+    return split_fixed_set(state, train_households, verbose=False)
+
+
+def split_fixed_set(state, train_households, verbose=False):
+    state.df['household'] = state.df.index.map(_parse_household_id)
     train_df = state.df.loc[state.df['household'].isin(train_households)]
     test_df = state.df.loc[~state.df['household'].isin(train_households)]
 

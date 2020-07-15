@@ -10,6 +10,7 @@ import preprocessing_pipeline
 # Load sequence DataFrame
 from common import plotter
 from state.pipeline_state import PipelineState
+import pdb
 
 def eval_model(model, state):
     test_df = state.df
@@ -70,7 +71,7 @@ def run_analysis(analysis_name,
 
     # Shuffle the data so the machine learning can't learn anything based on
     # order
-    df = df.sample(frac=1)
+    df = df.sample(frac=1, random_state=110399473805677 % (2**32))
 
     # Target and df order must match.  Argh.
     df['target'] = target
@@ -93,9 +94,7 @@ def run_analysis(analysis_name,
 
     RandomForestClassifier_grids = {
         # Define a grid here from sklearn api
-        'random_state': [2018, 2019, 2020, 2021,
-                         2022, 2023, 2024, 2025,
-                         2026, 2027]
+        'random_state': list(range(2020, 2020+50))
     }
 
     # LinearSVC_grids = {'penalty': {'l2'},
@@ -144,10 +143,19 @@ def run_analysis(analysis_name,
     results = pd.DataFrame(test_acc_results, columns=["TestAccuracy"])
     results.to_csv("./results/" + analysis_name + ".csv")
 
-    return test_acc_results, mean_cross_val_results
+    return pd.Series(test_acc_results, name=analysis_name), \
+        pd.Series(mean_cross_val_results, name=analysis_name)
 
 
 if __name__ == "__main__":
+    test_accuracies = []
+
+    # test_acc, mean_cross_acc = run_analysis(
+    #     "TestingRandomStuff",
+    #     biom_filepath="./dataset/biom/combined-none.biom",
+    #     metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
+    #     restricted_feature_set_filepath=None
+    # )
 
     # test_acc, mean_cross_acc = run_analysis(
     #     "JustAkkermansia",
@@ -164,26 +172,53 @@ if __name__ == "__main__":
     #     restricted_feature_set_filepath=None
     # )
 
-    test_acc, mean_cross_acc = run_analysis(
-        "AST",
-        biom_filepath="./dataset/biom/combined-species.biom",
-        metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-        restricted_feature_set_filepath=
-        "./dataset/feature_sets/MS_associated_species_AST.tsv"
-    )
+    for biom_file in [
+                      "phylum", "class", "order",
+                      "family", "genus", "species",
+                      # "enzrxn2reaction",
+                      # "pathway2class",
+                      # "protein",
+                      # "reaction2pathway"
+        ]:
+        test_acc, mean_cross_acc = run_analysis(
+            "Raw-" + biom_file,
+            biom_filepath="./dataset/biom/combined-"+biom_file+".biom",
+            metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
+            restricted_feature_set_filepath=None
+        )
+        test_accuracies.append(test_acc)
 
-    test_acc, mean_cross_acc = run_analysis(
-        "CLR",
-        biom_filepath="./dataset/biom/combined-species.biom",
-        metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-        restricted_feature_set_filepath=
-        "./dataset/feature_sets/MS_associated_species_CLR.tsv"
-    )
 
-    test_acc, mean_cross_acc = run_analysis(
-        "TMM",
-        biom_filepath="./dataset/biom/combined-species.biom",
-        metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-        restricted_feature_set_filepath=
-        "./dataset/feature_sets/MS_associated_species_TMM.tsv"
-    )
+    # test_acc, mean_cross_acc = run_analysis(
+    #     "AST",
+    #     biom_filepath="./dataset/biom/combined-species.biom",
+    #     metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
+    #     restricted_feature_set_filepath=
+    #     "./dataset/feature_sets/MS_associated_species_AST.tsv"
+    # )
+    #
+    # test_acc, mean_cross_acc = run_analysis(
+    #     "CLR",
+    #     biom_filepath="./dataset/biom/combined-species.biom",
+    #     metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
+    #     restricted_feature_set_filepath=
+    #     "./dataset/feature_sets/MS_associated_species_CLR.tsv"
+    # )
+    #
+    # test_acc, mean_cross_acc = run_analysis(
+    #     "TMM",
+    #     biom_filepath="./dataset/biom/combined-species.biom",
+    #     metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
+    #     restricted_feature_set_filepath=
+    #     "./dataset/feature_sets/MS_associated_species_TMM.tsv"
+    # )
+
+    print(test_accuracies)
+    results_df = pd.concat(test_accuracies, axis=1)
+    results_df.to_csv("./results/all.csv")
+
+    summary_df = pd.concat([results_df.mean(), results_df.std()], axis=1)
+    summary_df.columns = ["Mean Test Acc", "Std Dev Test Acc"]
+    summary_df.to_csv("./results/summary.csv")
+
+    print(summary_df)

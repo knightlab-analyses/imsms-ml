@@ -1,4 +1,6 @@
 import pandas as pd
+
+from dataset.sample_sets.fixed_training_set import TRAINING_SET_HOUSEHOLDS
 from preprocessing import id_parsing, sample_filtering, sample_aggregation, \
     normalization, classifier_target, train_test_split
 from preprocessing.column_transformation import build_column_filter
@@ -48,6 +50,9 @@ def _filter_samples(state: PipelineState,
     steps.append(sample_filtering.build_shared_filter())
     # Manually remove samples that have no household matched pair
     steps.append(sample_filtering.build_exact_filter(BAD_SAMPLE_IDS))
+    # Filter out any samples that have row sum zero, these will be impossible
+    # to normalize later.
+    steps.append(sample_filtering.build_filter_out_empty_samples())
 
     return _run_pipeline(state, steps, verbose, mode='filter')
 
@@ -61,7 +66,9 @@ def _filter_samples(state: PipelineState,
 def _split_test_set(state: PipelineState,
                     fraction_train=.5,
                     verbose=False) -> TrainTest:
-    return train_test_split.split(state, fraction_train, verbose)
+    return train_test_split.split_fixed_set(state,
+                                            TRAINING_SET_HOUSEHOLDS,
+                                            verbose)
 
 
 def _apply_transforms(train_state: PipelineState,

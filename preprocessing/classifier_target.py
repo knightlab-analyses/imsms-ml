@@ -5,6 +5,8 @@ from common.named_functor import NamedFunctor
 from state.pipeline_state import PipelineState
 from preprocessing.id_parsing import _parse_household_id
 
+from numpy.random import default_rng
+
 
 def build(meta_col_name: str, one_set: set, household_matched=False):
     if household_matched:
@@ -20,6 +22,8 @@ def build(meta_col_name: str, one_set: set, household_matched=False):
                 _target(state, meta_col_name, one_set)
         )
 
+# TODO FIXME HACK:  Should I or should I not guarantee that matched_pair_concat
+#  is deterministic?
 
 # concatenate rows corresponding to household.
 # Flip a coin to determine whether MS or control comes first within the row.
@@ -27,12 +31,14 @@ def build(meta_col_name: str, one_set: set, household_matched=False):
 def matched_pair_concat(state: PipelineState,
                         meta_col_name: str,
                         one_set: set) -> PipelineState:
+    r = default_rng(1261399238688719593838)
+
     state = _target(state, meta_col_name, one_set)
     df = state.df
     df['target'] = state.target
     df = df.rename(index=_parse_household_id)
     df = df.sort_index()
-    splitter = np.random.randint(2, size=len(df.index) // 2)
+    splitter = r.integers(2, size=len(df.index) // 2)
     left_rows = []
     right_rows = []
     i = 0

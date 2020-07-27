@@ -21,12 +21,16 @@ BAD_SAMPLE_IDS = ["71601-0158", "71602-0158"]
 
 
 def process(state: PipelineState,
-            fraction_train=.5,
             restricted_feature_set: list = None,
-            verbose=False):
+            verbose=False,
+            paired=True):
     filtered = _filter_samples(state, verbose)
-    train, test = _split_test_set(filtered, fraction_train, verbose)
-    return _apply_transforms(train, test, restricted_feature_set, verbose)
+    train, test = _split_test_set(filtered, verbose)
+    return _apply_transforms(train,
+                             test,
+                             restricted_feature_set,
+                             verbose,
+                             paired=paired)
 
 
 # Run all steps required before we can split out the test set.  This must be
@@ -64,17 +68,20 @@ def _filter_samples(state: PipelineState,
 # must store its settings (ie, what column vectors to use) based on training
 # set data, then reuse those transformations on the test set.
 def _split_test_set(state: PipelineState,
-                    fraction_train=.5,
                     verbose=False) -> TrainTest:
     return train_test_split.split_fixed_set(state,
                                             TRAINING_SET_HOUSEHOLDS,
                                             verbose)
+    # return train_test_split.split(state,
+    #                               .5,
+    #                               verbose)
 
 
 def _apply_transforms(train_state: PipelineState,
                       test_state: PipelineState,
                       restricted_feature_set: list = None,
-                      verbose=False):
+                      verbose=False,
+                      paired=True):
     # noinspection PyListCreation
     steps = []
 
@@ -98,7 +105,7 @@ def _apply_transforms(train_state: PipelineState,
         classifier_target.build(
             "disease",
             {"MS"},
-            household_matched=True
+            household_matched=paired
         )
     )
     # Run PCA - This is a bit wonky in the simplex space,

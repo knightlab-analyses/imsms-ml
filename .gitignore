@@ -1,5 +1,5 @@
 # Don't upload your dataset to github
-/dataset/*/*
-/dataset/*
+/dataset/biom/*
+/dataset/metadata/*
 !/dataset/biom/README.txt
 !/dataset/metadata/README.txt

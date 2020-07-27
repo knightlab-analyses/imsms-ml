@@ -3,3 +3,4 @@
 /dataset/metadata/*
 !/dataset/biom/README.txt
 !/dataset/metadata/README.txt
+*.pyc 

@@ -200,39 +200,39 @@ if __name__ == "__main__":
     test_accuracies = []
 
     # Recapitulate Probstel 2018 list of important genera
-    all_important_genera = _build_restricted_feature_set(
-        "./dataset/feature_sets/literature_review_Probstel_Baranzini_2018.tsv"
-    )
-    important_genera = _build_restricted_feature_sets_individual(
-        "./dataset/feature_sets/literature_review_Probstel_Baranzini_2018.tsv"
-    )
-    test_acc, mean_cross_acc = run_analysis(
-        "Probstel-Important-Genera",
-        biom_filepath="./dataset/biom/combined-genus.biom",
-        metadata_filepath=
-        "./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-        feature_set_index=all_important_genera
-    )
-    test_accuracies.append(test_acc)
+    # all_important_genera = _build_restricted_feature_set(
+    #     "./dataset/feature_sets/literature_review_Probstel_Baranzini_2018.tsv"
+    # )
+    # important_genera = _build_restricted_feature_sets_individual(
+    #     "./dataset/feature_sets/literature_review_Probstel_Baranzini_2018.tsv"
+    # )
+    # test_acc, mean_cross_acc = run_analysis(
+    #     "Probstel-Important-Genera",
+    #     biom_filepath="./dataset/biom/combined-genus.biom",
+    #     metadata_filepath=
+    #     "./dataset/metadata/iMSMS_1140samples_metadata.tsv",
+    #     feature_set_index=all_important_genera
+    # )
+    # test_accuracies.append(test_acc)
 
-    test_acc, mean_cross_acc = run_analysis(
-        "All-Genera",
-        biom_filepath="./dataset/biom/combined-genus.biom",
-        metadata_filepath=
-        "./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-        feature_set_index=None
-    )
-    test_accuracies.append(test_acc)
+    # test_acc, mean_cross_acc = run_analysis(
+    #     "All-Genera",
+    #     biom_filepath="./dataset/biom/combined-genus.biom",
+    #     metadata_filepath=
+    #     "./dataset/metadata/iMSMS_1140samples_metadata.tsv",
+    #     feature_set_index=None
+    # )
+    # test_accuracies.append(test_acc)
 
-    for genus in important_genera:
-        test_acc, mean_cross_acc = run_analysis(
-            "Genus-" + genus[0],
-            biom_filepath="./dataset/biom/combined-genus.biom",
-            metadata_filepath=
-            "./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-            feature_set_index=genus
-        )
-        test_accuracies.append(test_acc)
+    # for genus in important_genera:
+    #     test_acc, mean_cross_acc = run_analysis(
+    #         "Genus-" + genus[0],
+    #         biom_filepath="./dataset/biom/combined-genus.biom",
+    #         metadata_filepath=
+    #         "./dataset/metadata/iMSMS_1140samples_metadata.tsv",
+    #         feature_set_index=genus
+    #     )
+    #     test_accuracies.append(test_acc)
 
 
     # test_acc, mean_cross_acc = run_analysis(
@@ -244,15 +244,15 @@ if __name__ == "__main__":
     # )
     # test_accuracies.append(test_acc)
 
-    # for i in range(10):
-    #     test_acc, mean_cross_acc = run_analysis(
-    #         "RawSpeciesPaired-RandomizedTestSet-" + str(i),
-    #         biom_filepath="./dataset/biom/combined-species.biom",
-    #         metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-    #         restricted_feature_set_filepath=None,
-    #         paired=True
-    #     )
-    #     test_accuracies.append(test_acc)
+    for i in range(10):
+        test_acc, mean_cross_acc = run_analysis(
+            "RawSpeciesPaired-RandomizedTestSet-" + str(i),
+            biom_filepath="./dataset/biom/combined-species.biom",
+            metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
+            feature_set_index=None,
+            paired=True
+        )
+        test_accuracies.append(test_acc)
     #
     # for i in range(10):
     #     test_acc, mean_cross_acc = run_analysis(

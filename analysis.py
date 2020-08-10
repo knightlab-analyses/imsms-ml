@@ -61,6 +61,7 @@ def run_analysis(analysis_name,
                  biom_filepath,
                  metadata_filepath,
                  feature_set_index=None,
+                 training_set_index=0,
                  paired=True):
     biom_table = load_table(biom_filepath)
     table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
@@ -108,6 +109,7 @@ def run_analysis(analysis_name,
     train_state, test_state = preprocessing_pipeline.process(
         state,
         restricted_feature_set=feature_set_index,
+        training_set_index=training_set_index,
         verbose=False,
         paired=paired
     )
@@ -234,25 +236,24 @@ if __name__ == "__main__":
     #     )
     #     test_accuracies.append(test_acc)
 
-
+    # akkermansia_feature_set_index = _build_restricted_feature_set("./dataset/feature_sets/just_akkermansia.tsv")
     # test_acc, mean_cross_acc = run_analysis(
-    #     "Akkermansia muciniphila",
+    #     "Akkermansia muciniphila-" + str(i),
     #     biom_filepath="./dataset/biom/combined-species.biom",
     #     metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-    #     restricted_feature_set_filepath=
-    #     "./dataset/feature_sets/just_akkermansia.tsv"
+    #     feature_set_index=akkermansia_feature_set_index
     # )
     # test_accuracies.append(test_acc)
 
-    for i in range(10):
-        test_acc, mean_cross_acc = run_analysis(
-            "RawSpeciesPaired-RandomizedTestSet-" + str(i),
-            biom_filepath="./dataset/biom/combined-species.biom",
-            metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-            feature_set_index=None,
-            paired=True
-        )
-        test_accuracies.append(test_acc)
+    # for i in range(10):
+    #     test_acc, mean_cross_acc = run_analysis(
+    #         "RawSpeciesPaired-RandomizedTestSet-" + str(i),
+    #         biom_filepath="./dataset/biom/combined-species.biom",
+    #         metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
+    #         feature_set_index=None,
+    #         paired=True
+    #     )
+    #     test_accuracies.append(test_acc)
     #
     # for i in range(10):
     #     test_acc, mean_cross_acc = run_analysis(
@@ -264,22 +265,25 @@ if __name__ == "__main__":
     #     )
     #     test_accuracies.append(test_acc)
 
-
-    # for biom_file in [
-    #                   "phylum", "class", "order",
-    #                   "family", "genus", "species",
-    #                   # "enzrxn2reaction",
-    #                   # "pathway2class",
-    #                   # "protein",
-    #                   # "reaction2pathway"
-    #     ]:
-    #     test_acc, mean_cross_acc = run_analysis(
-    #         "Raw-" + biom_file,
-    #         biom_filepath="./dataset/biom/combined-"+biom_file+".biom",
-    #         metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-    #         restricted_feature_set_filepath=None
-    #     )
-    #     test_accuracies.append(test_acc)
+    for i in range(25):
+        for biom_file in [
+                          # "phylum", "class", "order",
+                          # "family",
+                          "genus",
+                          "species",
+                          # "enzrxn2reaction",
+                          # "pathway2class",
+                          # "protein",
+                          # "reaction2pathway"
+            ]:
+            test_acc, mean_cross_acc = run_analysis(
+                "Raw-" + biom_file + str(i),
+                biom_filepath="./dataset/biom/combined-"+biom_file+".biom",
+                metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
+                feature_set_index=None,
+                training_set_index=i
+            )
+            test_accuracies.append(test_acc)
 
     # test_acc, mean_cross_acc = run_analysis(
     #     "AST",

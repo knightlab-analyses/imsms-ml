@@ -1,9 +1,13 @@
+import pandas as pd
+
 # There is variance in model predictiveness dependent on the exact training
 # and test set used.  This is a randomly determined subset of 50% of the
 # households determined with train_test_split.pick_training_households.
 # Use of this set to split training and test may reduce variation in model
 # predictiveness between experiments and/or runs.
 
+# This was the first randomly chosen set before moving to store these in csv
+# files
 TRAINING_SET_HOUSEHOLDS = \
     ['714-0001', '714-0004', '714-0011', '714-0013', '714-0022', '714-0024',
      '714-0032', '714-0033', '714-0034', '714-0039', '714-0040', '714-0047',
@@ -53,3 +57,9 @@ TRAINING_SET_HOUSEHOLDS = \
      '764-0029', '764-0035', '764-0037', '764-0038', '764-0040', '764-0042',
      '764-0045', '765-0001', '765-0005', '765-0007', '765-0020', '765-0021',
      '765-0039', '765-0043']
+
+
+def retrieve_training_set(i: int):
+    # df = pd.read_csv("fixed_training_sets.csv", index_col=0)
+    df = pd.read_csv("dataset/sample_sets/fixed_training_sets.csv", index_col=0)
+    return df[str(i)].tolist()

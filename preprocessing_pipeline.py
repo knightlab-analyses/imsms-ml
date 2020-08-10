@@ -1,6 +1,6 @@
 import pandas as pd
 
-from dataset.sample_sets.fixed_training_set import TRAINING_SET_HOUSEHOLDS
+from dataset.sample_sets.fixed_training_set import retrieve_training_set
 from preprocessing import id_parsing, sample_filtering, sample_aggregation, \
     normalization, classifier_target, train_test_split
 from preprocessing.column_transformation import build_column_filter
@@ -22,10 +22,13 @@ BAD_SAMPLE_IDS = ["71601-0158", "71602-0158"]
 
 def process(state: PipelineState,
             restricted_feature_set: list = None,
+            training_set_index: int = 0,
             verbose=False,
             paired=True):
     filtered = _filter_samples(state, verbose)
-    train, test = _split_test_set(filtered, verbose)
+    train, test = _split_test_set(filtered,
+                                  training_set_index,
+                                  verbose)
     return _apply_transforms(train,
                              test,
                              restricted_feature_set,
@@ -68,9 +71,11 @@ def _filter_samples(state: PipelineState,
 # must store its settings (ie, what column vectors to use) based on training
 # set data, then reuse those transformations on the test set.
 def _split_test_set(state: PipelineState,
+                    training_set_index=0,
                     verbose=False) -> TrainTest:
+    train_set_households = retrieve_training_set(training_set_index)
     return train_test_split.split_fixed_set(state,
-                                            TRAINING_SET_HOUSEHOLDS,
+                                            train_set_households,
                                             verbose)
     # return train_test_split.split(state,
     #                               .5,

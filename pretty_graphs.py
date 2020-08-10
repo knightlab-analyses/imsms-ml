@@ -80,62 +80,31 @@ import seaborn as sns
 # Randomized Test Set Tests
 df = pd.read_csv("./results/RandomizedTestSetsGenusAndSpecies_all.csv", sep=',')
 
-df = pd.melt(df,
-             value_vars=[
-                 "Raw-species0",
-                 "Raw-genus0",
-                 "Raw-species1",
-                 "Raw-genus1",
-                 "Raw-species2",
-                 "Raw-genus2",
-                 "Raw-species3",
-                 "Raw-genus3",
-                 "Raw-species4",
-                 "Raw-genus4",
-                 "Raw-species5",
-                 "Raw-genus5",
-                 "Raw-species6",
-                 "Raw-genus6",
-                 "Raw-species7",
-                 "Raw-genus7",
-                 "Raw-species8",
-                 "Raw-genus8",
-                 "Raw-species9",
-                 "Raw-genus9",
-                 "Raw-species10",
-                 "Raw-genus10",
-                 "Raw-species11",
-                 "Raw-genus11",
-                 "Raw-species12",
-                 "Raw-genus12",
-                 "Raw-species13",
-                 "Raw-genus13",
-                 "Raw-species14",
-                 "Raw-genus14",
-                 "Raw-species15",
-                 "Raw-genus15",
-                 "Raw-species16",
-                 "Raw-genus16",
-                 "Raw-species17",
-                 "Raw-genus17",
-                 "Raw-species18",
-                 "Raw-genus18",
-                 "Raw-species19",
-                 "Raw-genus19",
-                 "Raw-species20",
-                 "Raw-genus20",
-                 "Raw-species21",
-                 "Raw-genus21",
-                 "Raw-species22",
-                 "Raw-genus22",
-                 "Raw-species23",
-                 "Raw-genus23",
-                 "Raw-species24",
-                 "Raw-genus24",
+# Alternate species,genus
+value_vars1 = []
+for i in range(25):
+    value_vars1.append("Raw-species" + str(i))
+    value_vars1.append("Raw-genus" + str(i))
+# All species then all genus
+value_vars2 = []
+for i in range(25):
+    value_vars2.append("Raw-species" + str(i))
+for i in range(25):
+    value_vars2.append("Raw-genus" + str(i))
 
-             ],
+df = pd.melt(df,
+             value_vars=value_vars1,
+             # value_vars=value_vars2,
              var_name="Randomized Test Set",
              value_name="Accuracy")
+
+# df = pd.read_csv("./results/RandomizedTestSetsGenusAndSpecies_all.csv", sep=',')
+# value_vars1 = ["Raw-species0", "Raw-genus0"]
+# df = pd.melt(df,
+#              value_vars=value_vars1,
+#              # value_vars=value_vars2,
+#              var_name="Randomized Test Set",
+#              value_name="Accuracy")
 
 
 sns.set(style="ticks")

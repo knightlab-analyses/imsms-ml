@@ -9,6 +9,7 @@ import preprocessing_pipeline
 
 # Load sequence DataFrame
 from common import plotter
+from common.MetadataFilter import MetadataFilter
 from state.pipeline_state import PipelineState
 import pdb
 
@@ -62,7 +63,8 @@ def run_analysis(analysis_name,
                  metadata_filepath,
                  feature_set_index=None,
                  training_set_index=0,
-                 paired=True):
+                 paired=True,
+                 metadata_filter=None):
     biom_table = load_table(biom_filepath)
     table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
     df = table.view(pd.DataFrame)
@@ -111,7 +113,8 @@ def run_analysis(analysis_name,
         restricted_feature_set=feature_set_index,
         training_set_index=training_set_index,
         verbose=False,
-        paired=paired
+        paired=paired,
+        metadata_filter=metadata_filter
     )
 
     df = train_state.df
@@ -265,25 +268,67 @@ if __name__ == "__main__":
     #     )
     #     test_accuracies.append(test_acc)
 
-    for i in range(25):
-        for biom_file in [
-                          # "phylum", "class", "order",
-                          # "family",
-                          "genus",
-                          "species",
-                          # "enzrxn2reaction",
-                          # "pathway2class",
-                          # "protein",
-                          # "reaction2pathway"
-            ]:
-            test_acc, mean_cross_acc = run_analysis(
-                "Raw-" + biom_file + str(i),
-                biom_filepath="./dataset/biom/combined-"+biom_file+".biom",
-                metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-                feature_set_index=None,
-                training_set_index=i
-            )
-            test_accuracies.append(test_acc)
+    # for i in range(1):
+    #     for biom_file in [
+    #                       # "phylum", "class", "order",
+    #                       # "family",
+    #                       "genus",
+    #                       "species",
+    #                       # "enzrxn2reaction",
+    #                       # "pathway2class",
+    #                       # "protein",
+    #                       # "reaction2pathway"
+    #         ]:
+    #         test_acc, mean_cross_acc = run_analysis(
+    #             "Raw-" + biom_file + str(i),
+    #             biom_filepath="./dataset/biom/combined-"+biom_file+".biom",
+    #             metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
+    #             feature_set_index=None,
+    #             training_set_index=i
+    #         )
+    #         test_accuracies.append(test_acc)
+
+    # for m_filter in [
+    #     None,
+    #     MetadataFilter("disease_course", ["RRMS", "Control"]),
+    #     MetadataFilter("disease_course", ["PPMS", "Control"]),
+    #     MetadataFilter("disease_course", ["SPMS", "Control"])
+    # ]:
+    #     name = "Species"
+    #     if m_filter is not None:
+    #         name = name + m_filter.acceptable_values[0]
+    #     test_acc, mean_cross_acc = run_analysis(
+    #         name,
+    #         biom_filepath="./dataset/biom/combined-species.biom",
+    #         metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
+    #         feature_set_index=None,
+    #         training_set_index=0,
+    #         metadata_filter=m_filter
+    #     )
+    #     test_accuracies.append(test_acc)
+
+    # for m_filter in [
+    #     None,
+    #     MetadataFilter("site", ["San Sebastian", "Control"]),
+    #     MetadataFilter("site", ["San Francisco", "Control"]),
+    #     MetadataFilter("site", ["Pittsburgh", "Control"]),
+    #     MetadataFilter("site", ["New York", "Control"]),
+    #     MetadataFilter("site", ["Edinburgh", "Control"]),
+    #     MetadataFilter("site", ["Buenos Aires", "Control"]),
+    #     MetadataFilter("site", ["Boston", "Control"])
+    # ]:
+    #     name = "Species"
+    #     if m_filter is not None:
+    #         name = name + m_filter.acceptable_values[0]
+    #     test_acc, mean_cross_acc = run_analysis(
+    #         name,
+    #         biom_filepath="./dataset/biom/combined-species.biom",
+    #         metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
+    #         feature_set_index=None,
+    #         training_set_index=0,
+    #         metadata_filter=m_filter
+    #     )
+    #     test_accuracies.append(test_acc)
 
     # test_acc, mean_cross_acc = run_analysis(
     #     "AST",

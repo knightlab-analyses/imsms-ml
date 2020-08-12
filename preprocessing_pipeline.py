@@ -24,7 +24,8 @@ def process(state: PipelineState,
             restricted_feature_set: list = None,
             training_set_index: int = 0,
             verbose=False,
-            paired=True):
+            paired=True,
+            metadata_filter=None):
     filtered = _filter_samples(state, verbose)
     train, test = _split_test_set(filtered,
                                   training_set_index,
@@ -33,7 +34,8 @@ def process(state: PipelineState,
                              test,
                              restricted_feature_set,
                              verbose,
-                             paired=paired)
+                             paired=paired,
+                             metadata_filter=metadata_filter)
 
 
 # Run all steps required before we can split out the test set.  This must be
@@ -86,17 +88,19 @@ def _apply_transforms(train_state: PipelineState,
                       test_state: PipelineState,
                       restricted_feature_set: list = None,
                       verbose=False,
-                      paired=True):
+                      paired=True,
+                      metadata_filter=None):
     # noinspection PyListCreation
     steps = []
 
     # Subset to household pairs whose individual samples are within particular
     # metadata values.  Can use these to determine if your model is detecting
     # microbes correlating with confounding variables.
-    # steps.append(sample_filtering.build_whitelist_metadata_value(
-    #     "treatment_status",
-    #     ['Off', 'Control']
-    # ))
+    if metadata_filter is not None:
+        steps.append(sample_filtering.build_whitelist_metadata_value(
+            metadata_filter.column_name,
+            metadata_filter.acceptable_values
+        ))
     # Apply some normalization strategy to deal with compositionality of
     # the data, stemming from various sources - whether biological effects
     # and sample coverage/amount or from aggregation of varying numbers of

@@ -47,7 +47,7 @@ def build_whitelist_metadata_value(metadata_column, metadata_values):
     return NamedFunctor(
         "Subset Samples by " + metadata_column +
         " for " + str(metadata_values),
-        lambda x: _filter_by_metadata(
+        lambda x, mode: _filter_by_metadata(
             x,
             metadata_column,
             metadata_values

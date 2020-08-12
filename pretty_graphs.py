@@ -78,23 +78,29 @@ import seaborn as sns
 
 
 # Randomized Test Set Tests
-df = pd.read_csv("./results/RandomizedTestSetsGenusAndSpecies_all.csv", sep=',')
+# df = pd.read_csv("./results/RandomizedTestSetsGenusAndSpecies_all.csv", sep=',')
 
 # Alternate species,genus
-value_vars1 = []
-for i in range(25):
-    value_vars1.append("Raw-species" + str(i))
-    value_vars1.append("Raw-genus" + str(i))
-# All species then all genus
-value_vars2 = []
-for i in range(25):
-    value_vars2.append("Raw-species" + str(i))
-for i in range(25):
-    value_vars2.append("Raw-genus" + str(i))
+# value_vars1 = []
+# for i in range(25):
+#     value_vars1.append("Raw-species" + str(i))
+#     value_vars1.append("Raw-genus" + str(i))
+# # All species then all genus
+# value_vars2 = []
+# for i in range(25):
+#     value_vars2.append("Raw-species" + str(i))
+# for i in range(25):
+#     value_vars2.append("Raw-genus" + str(i))
+#
+# df = pd.melt(df,
+#              value_vars=value_vars1,
+#              # value_vars=value_vars2,
+#              var_name="Randomized Test Set",
+#              value_name="Accuracy")
 
+df = pd.read_csv("./results/disease_course_all.csv", sep=',')
 df = pd.melt(df,
-             value_vars=value_vars1,
-             # value_vars=value_vars2,
+             value_vars=df.columns.tolist()[1:],
              var_name="Randomized Test Set",
              value_name="Accuracy")
 

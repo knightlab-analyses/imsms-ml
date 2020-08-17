@@ -24,7 +24,7 @@ def process(state: PipelineState,
             restricted_feature_set: list = None,
             training_set_index: int = 0,
             verbose=False,
-            paired=True,
+            pair_strategy="household_concat",
             metadata_filter=None):
     filtered = _filter_samples(state, verbose)
     train, test = _split_test_set(filtered,
@@ -34,7 +34,7 @@ def process(state: PipelineState,
                              test,
                              restricted_feature_set,
                              verbose,
-                             paired=paired,
+                             pair_strategy=pair_strategy,
                              metadata_filter=metadata_filter)
 
 
@@ -88,7 +88,7 @@ def _apply_transforms(train_state: PipelineState,
                       test_state: PipelineState,
                       restricted_feature_set: list = None,
                       verbose=False,
-                      paired=True,
+                      pair_strategy="paired_concat",
                       metadata_filter=None):
     # noinspection PyListCreation
     steps = []
@@ -114,7 +114,7 @@ def _apply_transforms(train_state: PipelineState,
         classifier_target.build(
             "disease",
             {"MS"},
-            household_matched=paired
+            pair_strategy=pair_strategy
         )
     )
     # Run PCA - This is a bit wonky in the simplex space,

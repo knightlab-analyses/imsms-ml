@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 
 from common.named_functor import NamedFunctor
 from state.pipeline_state import PipelineState
@@ -7,15 +6,23 @@ from preprocessing.id_parsing import _parse_household_id
 
 from numpy.random import default_rng
 
+_CONCAT_RANDOM_SEED = 1261399238688719593838
 
-def build(meta_col_name: str, one_set: set, household_matched=False):
-    if household_matched:
+
+def build(meta_col_name: str, one_set: set, pair_strategy="paired_concat"):
+    if pair_strategy == "paired_concat":
         return NamedFunctor(
-            "Target: " + meta_col_name + "(Household)",
+            "Target: " + meta_col_name + "(HouseholdConcat)",
             lambda state, mode:
                 matched_pair_concat(state, meta_col_name, one_set)
         )
-    else:
+    elif pair_strategy == "paired_subtract":
+        return NamedFunctor(
+            "Target: " + meta_col_name + "(HouseholdSubtract)",
+            lambda state, mode:
+                matched_pair_subtract(state, meta_col_name, one_set)
+        )
+    elif pair_strategy == "unpaired":
         return NamedFunctor(
             "Target: " + meta_col_name,
             lambda state, mode:
@@ -31,7 +38,38 @@ def build(meta_col_name: str, one_set: set, household_matched=False):
 def matched_pair_concat(state: PipelineState,
                         meta_col_name: str,
                         one_set: set) -> PipelineState:
-    r = default_rng(1261399238688719593838)
+    (left, right) = _split_left_right(state, meta_col_name, one_set)
+
+    left = left.rename(columns=lambda name: "L"+name)
+    right = right.rename(columns=lambda name: "R"+name)
+
+    left = left.sort_index()
+    right = right.sort_index()
+    df = pd.concat([left, right], axis=1)
+    df = df.drop('Ltarget', axis=1)
+    target = df['Rtarget']
+    df = df.drop('Rtarget', axis=1)
+    return state.update(target=target, df=df)
+
+
+def matched_pair_subtract(state: PipelineState,
+                        meta_col_name: str,
+                        one_set: set) -> PipelineState:
+    (left, right) = _split_left_right(state, meta_col_name, one_set)
+
+    left = left.sort_index()
+    right = right.sort_index()
+    df = right - left
+
+    # TODO FIXME HACK:  Does target's type matter?  Do we need to
+    #  turn these into ints/booleans?
+    target = df['target'] / 2 + .5
+    df = df.drop('target', axis=1)
+    return state.update(target=target, df=df)
+
+
+def _split_left_right(state, meta_col_name, one_set):
+    r = default_rng(_CONCAT_RANDOM_SEED)
 
     state = _target(state, meta_col_name, one_set)
     df = state.df
@@ -54,17 +92,7 @@ def matched_pair_concat(state: PipelineState,
     left = df.iloc[left_rows]
     right = df.iloc[right_rows]
 
-    left = left.rename(columns=lambda name: "L"+name)
-    right = right.rename(columns=lambda name: "R"+name)
-
-    left = left.sort_index()
-    right = right.sort_index()
-    df = pd.concat([left, right], axis=1)
-    df = df.drop('Ltarget', axis=1)
-    target = df['Rtarget']
-    df = df.drop('Rtarget', axis=1)
-    return state.update(target=target, df=df)
-
+    return (left, right)
 
 def _target(state: PipelineState, meta_col_name: str, one_set: set) \
         -> PipelineState:

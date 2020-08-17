@@ -63,11 +63,12 @@ def run_analysis(analysis_name,
                  metadata_filepath,
                  feature_set_index=None,
                  training_set_index=0,
-                 paired=True,
+                 pair_strategy="paired_concat",
                  metadata_filter=None):
     biom_table = load_table(biom_filepath)
     table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
     df = table.view(pd.DataFrame)
+    print(df)
 
     # # Look up ids for genera
     # genera = biom_table.metadata_to_dataframe(axis="observation")
@@ -113,7 +114,7 @@ def run_analysis(analysis_name,
         restricted_feature_set=feature_set_index,
         training_set_index=training_set_index,
         verbose=False,
-        paired=paired,
+        pair_strategy=pair_strategy,
         metadata_filter=metadata_filter
     )
 
@@ -268,25 +269,27 @@ if __name__ == "__main__":
     #     )
     #     test_accuracies.append(test_acc)
 
-    # for i in range(1):
-    #     for biom_file in [
-    #                       # "phylum", "class", "order",
-    #                       # "family",
-    #                       "genus",
-    #                       "species",
-    #                       # "enzrxn2reaction",
-    #                       # "pathway2class",
-    #                       # "protein",
-    #                       # "reaction2pathway"
-    #         ]:
-    #         test_acc, mean_cross_acc = run_analysis(
-    #             "Raw-" + biom_file + str(i),
-    #             biom_filepath="./dataset/biom/combined-"+biom_file+".biom",
-    #             metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-    #             feature_set_index=None,
-    #             training_set_index=i
-    #         )
-    #         test_accuracies.append(test_acc)
+    for pair_strat in ["paired_concat", "paired_subtract", "unpaired"]:
+        for i in range(10):
+            for biom_file in [
+                              # "phylum", "class", "order",
+                              # "family",
+                              # "genus",
+                              "species",
+                              # "enzrxn2reaction",
+                              # "pathway2class",
+                              # "protein",
+                              # "reaction2pathway"
+                ]:
+                test_acc, mean_cross_acc = run_analysis(
+                    "Raw-" + biom_file + pair_strat + str(i),
+                    biom_filepath="./dataset/biom/combined-"+biom_file+".biom",
+                    metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
+                    pair_strategy=pair_strat,
+                    feature_set_index=None,
+                    training_set_index=i
+                )
+                test_accuracies.append(test_acc)
 
     # for m_filter in [
     #     None,

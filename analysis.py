@@ -9,9 +9,9 @@ import preprocessing_pipeline
 
 # Load sequence DataFrame
 from common import plotter
-from common.MetadataFilter import MetadataFilter
 from state.pipeline_state import PipelineState
 import pdb
+
 
 def eval_model(model, state):
     test_df = state.df
@@ -36,35 +36,24 @@ def eval_model(model, state):
     return (y == real).value_counts()[True] / len(real)
 
 
-def _build_restricted_feature_set(filepath=None):
-    if filepath is None:
-        return None
+def run_analysis(analysis_config):
+    analysis_name = analysis_config.analysis_name
+    biom_filepath = analysis_config.biom_filepath
+    metadata_filepath = analysis_config.metadata_filepath
+    feature_set_index = analysis_config.feature_set_index
+    if feature_set_index is not None:
+        feature_set_index = feature_set_index.features
+    training_set_index = analysis_config.training_set_index
+    if training_set_index is None:
+        training_set_index = 0
+    pair_strategy = analysis_config.pair_strategy
+    if pair_strategy is None:
+        pair_strategy = "paired_concat"
+    metadata_filter = analysis_config.metadata_filter
+    n_random_seeds = analysis_config.n_random_seeds
+    if n_random_seeds is None:
+        n_random_seeds = 50
 
-    feature_set = pd.read_csv(filepath,
-                              sep='\t',
-                              index_col='ID',
-                              dtype=str)
-    # Dumb Panda ignores type
-    feature_set.index = feature_set.index.astype(str)
-    feature_set_index = feature_set.index.tolist()
-
-    return feature_set_index
-
-
-def _build_restricted_feature_sets_individual(filepath=None):
-    feature_set_index = _build_restricted_feature_set(filepath)
-    if feature_set_index is None:
-        return None
-    return [[x] for x in feature_set_index]
-
-
-def run_analysis(analysis_name,
-                 biom_filepath,
-                 metadata_filepath,
-                 feature_set_index=None,
-                 training_set_index=0,
-                 pair_strategy="paired_concat",
-                 metadata_filter=None):
     biom_table = load_table(biom_filepath)
     table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
     df = table.view(pd.DataFrame)
@@ -148,7 +137,7 @@ def run_analysis(analysis_name,
 
     RandomForestClassifier_grids = {
         # Define a grid here from sklearn api
-        'random_state': list(range(2020, 2020+50))
+        'random_state': list(range(2020, 2020 + n_random_seeds))
         # 'random_state': [7]
     }
 
@@ -200,172 +189,3 @@ def run_analysis(analysis_name,
 
     return pd.Series(test_acc_results, name=analysis_name), \
         pd.Series(mean_cross_val_results, name=analysis_name)
-
-
-if __name__ == "__main__":
-    test_accuracies = []
-
-    # Recapitulate Probstel 2018 list of important genera
-    # all_important_genera = _build_restricted_feature_set(
-    #     "./dataset/feature_sets/literature_review_Probstel_Baranzini_2018.tsv"
-    # )
-    # important_genera = _build_restricted_feature_sets_individual(
-    #     "./dataset/feature_sets/literature_review_Probstel_Baranzini_2018.tsv"
-    # )
-    # test_acc, mean_cross_acc = run_analysis(
-    #     "Probstel-Important-Genera",
-    #     biom_filepath="./dataset/biom/combined-genus.biom",
-    #     metadata_filepath=
-    #     "./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-    #     feature_set_index=all_important_genera
-    # )
-    # test_accuracies.append(test_acc)
-
-    # test_acc, mean_cross_acc = run_analysis(
-    #     "All-Genera",
-    #     biom_filepath="./dataset/biom/combined-genus.biom",
-    #     metadata_filepath=
-    #     "./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-    #     feature_set_index=None
-    # )
-    # test_accuracies.append(test_acc)
-
-    # for genus in important_genera:
-    #     test_acc, mean_cross_acc = run_analysis(
-    #         "Genus-" + genus[0],
-    #         biom_filepath="./dataset/biom/combined-genus.biom",
-    #         metadata_filepath=
-    #         "./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-    #         feature_set_index=genus
-    #     )
-    #     test_accuracies.append(test_acc)
-
-    # akkermansia_feature_set_index = _build_restricted_feature_set("./dataset/feature_sets/just_akkermansia.tsv")
-    # test_acc, mean_cross_acc = run_analysis(
-    #     "Akkermansia muciniphila-" + str(i),
-    #     biom_filepath="./dataset/biom/combined-species.biom",
-    #     metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-    #     feature_set_index=akkermansia_feature_set_index
-    # )
-    # test_accuracies.append(test_acc)
-
-    # for i in range(10):
-    #     test_acc, mean_cross_acc = run_analysis(
-    #         "RawSpeciesPaired-RandomizedTestSet-" + str(i),
-    #         biom_filepath="./dataset/biom/combined-species.biom",
-    #         metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-    #         feature_set_index=None,
-    #         paired=True
-    #     )
-    #     test_accuracies.append(test_acc)
-    #
-    # for i in range(10):
-    #     test_acc, mean_cross_acc = run_analysis(
-    #         "RawSpeciesUnpaired-RandomizedTestSet-" + str(i),
-    #         biom_filepath="./dataset/biom/combined-species.biom",
-    #         metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-    #         restricted_feature_set_filepath=None,
-    #         paired=False
-    #     )
-    #     test_accuracies.append(test_acc)
-
-    for pair_strat in ["paired_concat", "paired_subtract", "unpaired"]:
-        for i in range(10):
-            for biom_file in [
-                              # "phylum", "class", "order",
-                              # "family",
-                              # "genus",
-                              "species",
-                              # "enzrxn2reaction",
-                              # "pathway2class",
-                              # "protein",
-                              # "reaction2pathway"
-                ]:
-                test_acc, mean_cross_acc = run_analysis(
-                    "Raw-" + biom_file + pair_strat + str(i),
-                    biom_filepath="./dataset/biom/combined-"+biom_file+".biom",
-                    metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-                    pair_strategy=pair_strat,
-                    feature_set_index=None,
-                    training_set_index=i
-                )
-                test_accuracies.append(test_acc)
-
-    # for m_filter in [
-    #     None,
-    #     MetadataFilter("disease_course", ["RRMS", "Control"]),
-    #     MetadataFilter("disease_course", ["PPMS", "Control"]),
-    #     MetadataFilter("disease_course", ["SPMS", "Control"])
-    # ]:
-    #     name = "Species"
-    #     if m_filter is not None:
-    #         name = name + m_filter.acceptable_values[0]
-    #     test_acc, mean_cross_acc = run_analysis(
-    #         name,
-    #         biom_filepath="./dataset/biom/combined-species.biom",
-    #         metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-    #         feature_set_index=None,
-    #         training_set_index=0,
-    #         metadata_filter=m_filter
-    #     )
-    #     test_accuracies.append(test_acc)
-
-    # for m_filter in [
-    #     None,
-    #     MetadataFilter("site", ["San Sebastian", "Control"]),
-    #     MetadataFilter("site", ["San Francisco", "Control"]),
-    #     MetadataFilter("site", ["Pittsburgh", "Control"]),
-    #     MetadataFilter("site", ["New York", "Control"]),
-    #     MetadataFilter("site", ["Edinburgh", "Control"]),
-    #     MetadataFilter("site", ["Buenos Aires", "Control"]),
-    #     MetadataFilter("site", ["Boston", "Control"])
-    # ]:
-    #     name = "Species"
-    #     if m_filter is not None:
-    #         name = name + m_filter.acceptable_values[0]
-    #     test_acc, mean_cross_acc = run_analysis(
-    #         name,
-    #         biom_filepath="./dataset/biom/combined-species.biom",
-    #         metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-    #         feature_set_index=None,
-    #         training_set_index=0,
-    #         metadata_filter=m_filter
-    #     )
-    #     test_accuracies.append(test_acc)
-
-    # test_acc, mean_cross_acc = run_analysis(
-    #     "AST",
-    #     biom_filepath="./dataset/biom/combined-species.biom",
-    #     metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-    #     restricted_feature_set_filepath=
-    #     "./dataset/feature_sets/MS_associated_species_AST.tsv"
-    # )
-    # test_accuracies.append(test_acc)
-    #
-    # test_acc, mean_cross_acc = run_analysis(
-    #     "CLR",
-    #     biom_filepath="./dataset/biom/combined-species.biom",
-    #     metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-    #     restricted_feature_set_filepath=
-    #     "./dataset/feature_sets/MS_associated_species_CLR.tsv"
-    # )
-    # test_accuracies.append(test_acc)
-    #
-    # test_acc, mean_cross_acc = run_analysis(
-    #     "TMM",
-    #     biom_filepath="./dataset/biom/combined-species.biom",
-    #     metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv",
-    #     restricted_feature_set_filepath=
-    #     "./dataset/feature_sets/MS_associated_species_TMM.tsv"
-    # )
-    # test_accuracies.append(test_acc)
-
-    print(test_accuracies)
-    results_df = pd.concat(test_accuracies, axis=1)
-    results_df.to_csv("./results/all.csv")
-
-    summary_df = pd.concat([results_df.mean(), results_df.std()], axis=1)
-    summary_df.columns = ["Mean Test Acc", "Std Dev Test Acc"]
-    summary_df.to_csv("./results/summary.csv")
-
-    print(summary_df)

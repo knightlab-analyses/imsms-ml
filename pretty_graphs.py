@@ -98,7 +98,7 @@ import seaborn as sns
 #              var_name="Randomized Test Set",
 #              value_name="Accuracy")
 
-df = pd.read_csv("./results/paired_multiple_test_sets.csv", sep=',')
+df = pd.read_csv("./results/all.csv", sep=',')
 df = pd.melt(df,
              value_vars=df.columns.tolist()[1:],
              var_name="Randomized Test Set",

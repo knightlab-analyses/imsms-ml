@@ -5,6 +5,7 @@ from common.analysis_config import AnalysisConfig
 from common.dimensionality_reduction import DimensionalityReduction
 from common.feature_set import FeatureSet
 from common.metadata_filter import MetadataFilter
+from common.normalization import Normalization
 
 
 class AnalysisFactory:
@@ -24,6 +25,7 @@ class AnalysisFactory:
         self.metadata_filter = None
         self.n_random_seeds = None
         self.dimensionality_reduction = None
+        self.normalization = None
 
     def with_feature_set(self, feature_set):
         if type(feature_set) == FeatureSet:
@@ -68,6 +70,12 @@ class AnalysisFactory:
             [DimensionalityReduction("UMAP", "umap")]
         return self
 
+    def with_normalization(self, normalization_method):
+        if type(normalization_method) == Normalization:
+            normalization_method = [normalization_method]
+        self.normalization = normalization_method
+        return self
+
     @staticmethod
     def _build_biom_file_path(biom_type: str) -> str:
         return "./dataset/biom/combined-" + biom_type + ".biom"
@@ -102,7 +110,8 @@ class AnalysisFactory:
                       self.pair_strategy,
                       self.metadata_filter,
                       self.n_random_seeds,
-                      self.dimensionality_reduction]
+                      self.dimensionality_reduction,
+                      self.normalization]
 
         for i in range(len(all_params)):
             if all_params[i] is None:
@@ -118,7 +127,7 @@ class AnalysisFactory:
                         yield result
 
         for chosen in _iterate(all_params, 0, []):
-            bt, fs, ts, ps, mf, num_seeds, dr = chosen
+            bt, fs, ts, ps, mf, num_seeds, dr, norm = chosen
             yield AnalysisConfig(
                 self._analysis_name_gen(all_params, chosen),
                 self._build_biom_file_path(bt),
@@ -128,7 +137,8 @@ class AnalysisFactory:
                 ps,
                 mf,
                 num_seeds,
-                dr
+                dr,
+                norm
             )
 
 

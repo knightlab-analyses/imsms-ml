@@ -2,6 +2,7 @@ import biom
 import pandas as pd
 from q2_feature_table import rarefy
 from qiime2 import Artifact
+from skbio.stats.composition import clr
 
 from common.named_functor import NamedFunctor
 from state.pipeline_state import PipelineState
@@ -20,7 +21,7 @@ from state.pipeline_state import PipelineState
 #      * CLR?
 #      https://en.wikipedia.org/wiki/Compositional_data#Linear_transformations
 #
-def build(method_name, target_count):
+def build(method_name, target_count=10000):
     if method_name == 'rarefy':
         return NamedFunctor("Rarefy",
                             lambda state, mode: rarefy_wrapper(state,
@@ -33,8 +34,7 @@ def build(method_name, target_count):
         # Existing functions for this in skbio
         raise NotImplemented()
     if method_name == 'CLR':
-        # Existing functions for this in skbio
-        raise NotImplemented()
+        return NamedFunctor("CLR Transform", lambda state, mode: clr_wrapper(state))
     if method_name == 'ALR':
         # Existing functions for this in skbio
         raise NotImplemented()
@@ -51,6 +51,12 @@ def rarefy_wrapper(state: PipelineState, target_count: int) -> PipelineState:
         .view(pd.DataFrame)
     return state.update_df(df)
 
+
+def clr_wrapper(state: PipelineState):
+    # Unfortunately, clr needs pseudocounts or it crashes out.
+    clr_data = clr(state.df.to_numpy() + 1)
+    new_df = pd.DataFrame(data=clr_data, index=state.df.index, columns=state.df.columns)
+    return state.update_df(new_df)
 
 # Divides each row by the total across that row,
 # then multiplies by target_count.  This normalizes the total read count of a

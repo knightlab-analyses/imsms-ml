@@ -54,6 +54,7 @@ def run_analysis(analysis_config):
     if n_random_seeds is None:
         n_random_seeds = 50
     dim_reduction = analysis_config.dimensionality_reduction
+    normalization = analysis_config.normalization
 
     biom_table = load_table(biom_filepath)
     table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
@@ -106,7 +107,8 @@ def run_analysis(analysis_config):
         verbose=False,
         pair_strategy=pair_strategy,
         metadata_filter=metadata_filter,
-        dim_reduction=dim_reduction
+        dim_reduction=dim_reduction,
+        normalization=normalization
     )
 
     df = train_state.df

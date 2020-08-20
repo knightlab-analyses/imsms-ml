@@ -1,5 +1,6 @@
 import pandas as pd
 
+from common.normalization import Normalization
 from dataset.sample_sets.fixed_training_set import retrieve_training_set
 from preprocessing import id_parsing, sample_filtering, sample_aggregation, \
     normalization, classifier_target, train_test_split, column_transformation
@@ -26,7 +27,8 @@ def process(state: PipelineState,
             verbose=False,
             pair_strategy="household_concat",
             metadata_filter=None,
-            dim_reduction=None):
+            dim_reduction=None,
+            normalization=None):
     filtered = _filter_samples(state, verbose)
     train, test = _split_test_set(filtered,
                                   training_set_index,
@@ -37,7 +39,8 @@ def process(state: PipelineState,
                              verbose,
                              pair_strategy=pair_strategy,
                              metadata_filter=metadata_filter,
-                             dim_reduction=dim_reduction)
+                             dim_reduction=dim_reduction,
+                             normalization_strategy=normalization)
 
 
 # Run all steps required before we can split out the test set.  This must be
@@ -92,7 +95,9 @@ def _apply_transforms(train_state: PipelineState,
                       verbose=False,
                       pair_strategy="paired_concat",
                       metadata_filter=None,
-                      dim_reduction=None):
+                      dim_reduction=None,
+                      normalization_strategy=Normalization.DEFAULT
+                      ):
     # noinspection PyListCreation
     steps = []
 
@@ -108,7 +113,8 @@ def _apply_transforms(train_state: PipelineState,
     # the data, stemming from various sources - whether biological effects
     # and sample coverage/amount or from aggregation of varying numbers of
     # technical replicates.
-    steps.append(normalization.build("divide_total", 10000))
+    steps.append(normalization.build(normalization_strategy.method,
+                                     **normalization_strategy.kwargs))
     if restricted_feature_set is not None:
         steps.append(build_column_filter(restricted_feature_set))
 

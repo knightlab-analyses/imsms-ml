@@ -2,6 +2,7 @@ from os import path
 from typing import Union
 
 from common.analysis_config import AnalysisConfig
+from common.dimensionality_reduction import DimensionalityReduction
 from common.feature_set import FeatureSet
 from common.metadata_filter import MetadataFilter
 
@@ -22,6 +23,7 @@ class AnalysisFactory:
         self.pair_strategy = None
         self.metadata_filter = None
         self.n_random_seeds = None
+        self.dimensionality_reduction = None
 
     def with_feature_set(self, feature_set):
         if type(feature_set) == FeatureSet:
@@ -47,6 +49,23 @@ class AnalysisFactory:
         if type(metadata_filter) == MetadataFilter:
             metadata_filter = [metadata_filter]
         self.metadata_filter = metadata_filter
+        return self
+
+    def with_pca(self, num_components):
+        if self.dimensionality_reduction is not None:
+            raise Exception("Can't set multiple dimensionality reductions")
+        if type(num_components) == int:
+            num_components = [num_components]
+        self.dimensionality_reduction = \
+            [DimensionalityReduction("PCA" + str(x), "pca", num_components=x)
+             for x in num_components]
+        return self
+
+    def with_umap(self):
+        if self.dimensionality_reduction is not None:
+            raise Exception("Can't set multiple dimensionality reductions")
+        self.dimensionality_reduction = \
+            [DimensionalityReduction("UMAP", "umap")]
         return self
 
     @staticmethod
@@ -82,7 +101,8 @@ class AnalysisFactory:
                       self.training_set,
                       self.pair_strategy,
                       self.metadata_filter,
-                      self.n_random_seeds]
+                      self.n_random_seeds,
+                      self.dimensionality_reduction]
 
         for i in range(len(all_params)):
             if all_params[i] is None:
@@ -98,7 +118,7 @@ class AnalysisFactory:
                         yield result
 
         for chosen in _iterate(all_params, 0, []):
-            bt, fs, ts, ps, mf, num_seeds = chosen
+            bt, fs, ts, ps, mf, num_seeds, dr = chosen
             yield AnalysisConfig(
                 self._analysis_name_gen(all_params, chosen),
                 self._build_biom_file_path(bt),
@@ -107,7 +127,8 @@ class AnalysisFactory:
                 ts,
                 ps,
                 mf,
-                num_seeds
+                num_seeds,
+                dr
             )
 
 

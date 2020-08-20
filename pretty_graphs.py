@@ -80,24 +80,31 @@ import seaborn as sns
 # Randomized Test Set Tests
 df = pd.read_csv("./plottedResults/RandomizedTestSetsGenusAndSpecies_all.csv", sep=',')
 
-# Alternate species,genus
-value_vars1 = []
-for i in range(25):
-    value_vars1.append("Raw-species" + str(i))
-    value_vars1.append("Raw-genus" + str(i))
-# All species then all genus
-value_vars2 = []
-for i in range(25):
-    value_vars2.append("Raw-species" + str(i))
-for i in range(25):
-    value_vars2.append("Raw-genus" + str(i))
+# # Alternate species,genus
+# value_vars1 = []
+# for i in range(25):
+#     value_vars1.append("Raw-species" + str(i))
+#     value_vars1.append("Raw-genus" + str(i))
+# # All species then all genus
+# value_vars2 = []
+# for i in range(25):
+#     value_vars2.append("Raw-species" + str(i))
+# for i in range(25):
+#     value_vars2.append("Raw-genus" + str(i))
+#
+# df = pd.melt(df,
+#              value_vars=value_vars1,
+#              # value_vars=value_vars2,
+#              var_name="Randomized Test Set",
+#              value_name="Accuracy")
+# df["hue"] = (["species"] * 50 + ["genus"] * 50) * 25
 
+df = pd.read_csv("./plottedResults/dim_reduction_all.csv", sep=',')
 df = pd.melt(df,
-             value_vars=value_vars1,
-             # value_vars=value_vars2,
+             value_vars=df.columns.tolist()[1:],
              var_name="Randomized Test Set",
              value_name="Accuracy")
-df["hue"] = (["species"] * 50 + ["genus"] * 50) * 25
+
 
 # df = pd.read_csv("./results/all.csv", sep=',')
 # df = pd.melt(df,
@@ -115,8 +122,8 @@ df["hue"] = (["species"] * 50 + ["genus"] * 50) * 25
 
 
 sns.set(style="ticks")
-# g = sns.catplot(x="Randomized Test Set", y="Accuracy", data=df)
-g = sns.catplot(x="Randomized Test Set", y="Accuracy", hue="hue", data=df)
+g = sns.catplot(x="Randomized Test Set", y="Accuracy", data=df)
+# g = sns.catplot(x="Randomized Test Set", y="Accuracy", hue="hue", data=df)
 ax = g.ax
 ax.set_xticklabels(ax.get_xticklabels(), rotation=40, ha="right")
 ax.axhline(.5, ls='--')

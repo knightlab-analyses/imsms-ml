@@ -4,9 +4,15 @@ from sklearn.decomposition import PCA
 from common.named_functor import NamedFunctor
 from state.pipeline_state import PipelineState
 
+import umap
+
 
 def build_pca(num_components):
     return PCAFunctor(num_components)
+
+
+def build_umap():
+    return UMAPFunctor()
 
 
 def build_column_filter(chosen_columns):
@@ -62,3 +68,38 @@ def _restrict_columns_compositional(state: PipelineState,
     restricted = df[chosen_columns + ['remainder']]
 
     return state.update_df(restricted)
+
+
+class UMAPFunctor:
+    def __init__(self):
+        self.name = "Run UMAP"
+        self.reducer = umap.UMAP(random_state=72519857125 % 2**32)
+
+    def __call__(self, state: PipelineState, mode: str):
+        new_df = None
+        if mode == 'train':
+            new_df = self.reducer.fit_transform(state.df)
+        elif mode == 'test':
+            new_df = self.reducer.transform(state.df)
+
+        # # Plot That Umap!
+        # print("MODE:", mode)
+        # from matplotlib import pyplot as plt
+        # plt.scatter(new_df[:, 0], new_df[:, 1])
+        # plt.title("UMAP")
+        # plt.xlabel("UMAP0")
+        # plt.ylabel("UMAP1")
+        # plt.show()
+        # plt.close()
+
+        return state.update_df(pd.DataFrame(
+            new_df,
+            columns=["UMAP1", "UMAP2"],
+            index=state.df.index)
+        )
+
+    def __str__(self):
+        return "Functor(" + self.name + ")"
+
+    def __repr__(self):
+        return "Functor(" + self.name + ")"

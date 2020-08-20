@@ -2,7 +2,7 @@ import pandas as pd
 
 from dataset.sample_sets.fixed_training_set import retrieve_training_set
 from preprocessing import id_parsing, sample_filtering, sample_aggregation, \
-    normalization, classifier_target, train_test_split
+    normalization, classifier_target, train_test_split, column_transformation
 from preprocessing.column_transformation import build_column_filter
 from preprocessing.train_test_split import TrainTest
 from state.pipeline_state import PipelineState
@@ -25,7 +25,8 @@ def process(state: PipelineState,
             training_set_index: int = 0,
             verbose=False,
             pair_strategy="household_concat",
-            metadata_filter=None):
+            metadata_filter=None,
+            dim_reduction=None):
     filtered = _filter_samples(state, verbose)
     train, test = _split_test_set(filtered,
                                   training_set_index,
@@ -35,7 +36,8 @@ def process(state: PipelineState,
                              restricted_feature_set,
                              verbose,
                              pair_strategy=pair_strategy,
-                             metadata_filter=metadata_filter)
+                             metadata_filter=metadata_filter,
+                             dim_reduction=dim_reduction)
 
 
 # Run all steps required before we can split out the test set.  This must be
@@ -89,7 +91,8 @@ def _apply_transforms(train_state: PipelineState,
                       restricted_feature_set: list = None,
                       verbose=False,
                       pair_strategy="paired_concat",
-                      metadata_filter=None):
+                      metadata_filter=None,
+                      dim_reduction=None):
     # noinspection PyListCreation
     steps = []
 
@@ -124,7 +127,13 @@ def _apply_transforms(train_state: PipelineState,
     # (With a separate learned feature per cross validation index!)
     # and applied on the test set (no learning PCA on the test data!)
     # So keep this disabled until we can rethink how to structure this.
-    # transformation.build_pca(20),  # TODO: 20 might actually be too few!
+    if dim_reduction is not None:
+        if dim_reduction.transform == "pca":
+            steps.append(column_transformation.build_pca(**dim_reduction.kwargs))  # TODO: 20 might actually be too few!
+        elif dim_reduction.transform == "umap":
+            steps.append(column_transformation.build_umap(**dim_reduction.kwargs))
+        else:
+            raise Exception("Unknown Transform:" + dim_reduction.transform)
 
     train, test = (
         _run_pipeline(train_state, steps, verbose, mode='train'),

@@ -1,5 +1,6 @@
 from typing import Optional
 
+from common.dimensionality_reduction import DimensionalityReduction
 from common.feature_set import FeatureSet
 from common.metadata_filter import MetadataFilter
 
@@ -13,7 +14,8 @@ class AnalysisConfig:
                  training_set_index: Optional[int],
                  pair_strategy=Optional[str],
                  metadata_filter=Optional[MetadataFilter],
-                 n_random_seeds=Optional[int]):
+                 n_random_seeds=Optional[int],
+                 dimensionality_reduction=Optional[DimensionalityReduction]):
         self.analysis_name = analysis_name
         self.biom_filepath = biom_filepath
         self.metadata_filepath = metadata_filepath
@@ -22,3 +24,4 @@ class AnalysisConfig:
         self.pair_strategy = pair_strategy
         self.metadata_filter = metadata_filter
         self.n_random_seeds = n_random_seeds
+        self.dimensionality_reduction = dimensionality_reduction

@@ -3,4 +3,5 @@
 /dataset/metadata/*
 !/dataset/biom/README.txt
 !/dataset/metadata/README.txt
-*.pyc 
+*.pyc
+.DS_Store

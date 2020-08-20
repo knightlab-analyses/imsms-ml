@@ -3,5 +3,6 @@
 /dataset/metadata/*
 !/dataset/biom/README.txt
 !/dataset/metadata/README.txt
+/plots/*
 *.pyc
 .DS_Store

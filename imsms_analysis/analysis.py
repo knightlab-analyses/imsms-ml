@@ -160,7 +160,7 @@ def run_analysis(analysis_config):
         results_table, best_model, best_accuracy = q2_mlab._unit_benchmark(
             table=final_biom,
             metadata=target,
-            algorithm="RandomForestClassifier",
+            algorithm="RandomForestSVD",
             params=reg_params,
             distance_matrix=None
         )

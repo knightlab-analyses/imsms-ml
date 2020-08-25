@@ -7,4 +7,5 @@ setup(
             'RandomForestPCA=imsms_analysis.custom_models:RandomForestPCA'
         ]
     },
+    install_requires=["umap-learn"]
 )

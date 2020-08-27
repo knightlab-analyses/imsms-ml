@@ -1,9 +1,9 @@
 from typing import Optional
 
-from common.dimensionality_reduction import DimensionalityReduction
-from common.feature_set import FeatureSet
-from common.metadata_filter import MetadataFilter
-from common.normalization import Normalization
+from imsms_analysis.common.dimensionality_reduction import DimensionalityReduction
+from imsms_analysis.common.feature_set import FeatureSet
+from imsms_analysis.common.metadata_filter import MetadataFilter
+from imsms_analysis.common.normalization import Normalization
 
 
 class AnalysisConfig:

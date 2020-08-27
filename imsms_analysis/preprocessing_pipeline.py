@@ -1,12 +1,12 @@
 import pandas as pd
 
-from common.normalization import Normalization
-from dataset.sample_sets.fixed_training_set import retrieve_training_set
-from preprocessing import id_parsing, sample_filtering, sample_aggregation, \
+from imsms_analysis.common.normalization import Normalization
+from imsms_analysis.dataset.sample_sets.fixed_training_set import retrieve_training_set
+from imsms_analysis.preprocessing import id_parsing, sample_filtering, sample_aggregation, \
     normalization, classifier_target, train_test_split, column_transformation
-from preprocessing.column_transformation import build_column_filter
-from preprocessing.train_test_split import TrainTest
-from state.pipeline_state import PipelineState
+from imsms_analysis.preprocessing.column_transformation import build_column_filter
+from imsms_analysis.preprocessing.train_test_split import TrainTest
+from imsms_analysis.state.pipeline_state import PipelineState
 
 BAD_SAMPLE_PREFIXES = [
     'NA.',

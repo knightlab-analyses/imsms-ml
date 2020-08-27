@@ -1,8 +1,8 @@
 # Try standard dimensionality reductions and embeddings.  If these retain
 # useful information, maybe we can visualize results.
-from analysis_runner import SerialRunner, DryRunner
-from common.analysis_factory import AnalysisFactory, MultiFactory
-from common.feature_set import FeatureSet
+from imsms_analysis.analysis_runner import SerialRunner, DryRunner
+from imsms_analysis.common.analysis_factory import AnalysisFactory, MultiFactory
+from imsms_analysis.common.feature_set import FeatureSet
 
 
 def configure():

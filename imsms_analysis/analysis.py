@@ -5,12 +5,12 @@ from qiime2 import Artifact, Metadata
 from sklearn.model_selection import ParameterGrid
 import q2_mlab
 import pandas as pd
-import preprocessing_pipeline
+from imsms_analysis import preprocessing_pipeline
 
 # Load sequence DataFrame
-from common import plotter
-from common.normalization import Normalization
-from state.pipeline_state import PipelineState
+from imsms_analysis.common.normalization import Normalization
+from imsms_analysis.common import plotter
+from imsms_analysis.state.pipeline_state import PipelineState
 import pdb
 
 
@@ -163,7 +163,7 @@ def run_analysis(analysis_config):
         results_table, best_model, best_accuracy = q2_mlab._unit_benchmark(
             table=final_biom,
             metadata=target,
-            algorithm="RandomForestClassifier",
+            algorithm="RandomForestSVD",
             params=reg_params,
             distance_matrix=None
         )

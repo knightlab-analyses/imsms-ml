@@ -1,8 +1,8 @@
 import pandas as pd
 
-from common.named_functor import NamedFunctor
-from state.pipeline_state import PipelineState
-from preprocessing.id_parsing import _parse_household_id
+from imsms_analysis.common.named_functor import NamedFunctor
+from imsms_analysis.state.pipeline_state import PipelineState
+from imsms_analysis.preprocessing.id_parsing import _parse_household_id
 
 from numpy.random import default_rng
 

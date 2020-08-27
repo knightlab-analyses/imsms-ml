@@ -1,8 +1,8 @@
-from preprocessing.id_parsing import _parse_household_id
+from imsms_analysis.preprocessing.id_parsing import _parse_household_id
 import numpy as np
 import collections
 
-from state.pipeline_state import PipelineState
+from imsms_analysis.state.pipeline_state import PipelineState
 
 TrainTest = collections.namedtuple('TrainTest', 'train test')
 

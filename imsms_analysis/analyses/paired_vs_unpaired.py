@@ -1,7 +1,7 @@
 # Examine pairing strategies (concat, subtract) vs unpaired classifier
 
-from analysis_runner import SerialRunner
-from common.analysis_factory import AnalysisFactory
+from imsms_analysis.analysis_runner import SerialRunner
+from imsms_analysis.common.analysis_factory import AnalysisFactory
 
 
 def configure():

@@ -1,7 +1,7 @@
 # Examine models trained at different levels of taxonomic assignment
 
-from analysis_runner import SerialRunner, DryRunner
-from common.analysis_factory import AnalysisFactory, MultiFactory
+from imsms_analysis.analysis_runner import SerialRunner, DryRunner
+from imsms_analysis.common.analysis_factory import AnalysisFactory, MultiFactory
 
 
 def configure():

@@ -1,8 +1,9 @@
 # Don't upload your dataset to github
-/dataset/biom/*
-/dataset/metadata/*
-!/dataset/biom/README.txt
-!/dataset/metadata/README.txt
-/plots/*
+imsms_analysis/dataset/biom/*
+imsms_analysis/dataset/metadata/*
+!imsms_analysis/dataset/biom/README.txt
+!imsms_analysis/dataset/metadata/README.txt
+imsms_analysis/plots/*
+imsms_analysis.egg-info
 *.pyc
 .DS_Store

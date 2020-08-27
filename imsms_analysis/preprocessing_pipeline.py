@@ -28,7 +28,7 @@ def process(state: PipelineState,
             pair_strategy="household_concat",
             metadata_filter=None,
             dim_reduction=None,
-            normalization=None):
+            normalization=Normalization.DEFAULT):
     filtered = _filter_samples(state, verbose)
     train, test = _split_test_set(filtered,
                                   training_set_index,
@@ -98,6 +98,8 @@ def _apply_transforms(train_state: PipelineState,
                       dim_reduction=None,
                       normalization_strategy=Normalization.DEFAULT
                       ):
+    print("STARTING")
+    print(normalization_strategy)
     # noinspection PyListCreation
     steps = []
 

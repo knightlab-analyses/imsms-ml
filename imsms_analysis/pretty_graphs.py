@@ -99,18 +99,18 @@ df = pd.read_csv("./plottedResults/RandomizedTestSetsGenusAndSpecies_all.csv", s
 #              value_name="Accuracy")
 # df["hue"] = (["species"] * 50 + ["genus"] * 50) * 25
 
-df = pd.read_csv("./plottedResults/dim_reduction_all.csv", sep=',')
-df = pd.melt(df,
-             value_vars=df.columns.tolist()[1:],
-             var_name="Randomized Test Set",
-             value_name="Accuracy")
-
-
-# df = pd.read_csv("./results/all.csv", sep=',')
+# df = pd.read_csv("./plottedResults/RandomizedTestSets.csv", sep=',')
 # df = pd.melt(df,
 #              value_vars=df.columns.tolist()[1:],
 #              var_name="Randomized Test Set",
 #              value_name="Accuracy")
+
+
+df = pd.read_csv("./results/all.csv", sep=',')
+df = pd.melt(df,
+             value_vars=df.columns.tolist()[1:],
+             var_name="Randomized Test Set",
+             value_name="Accuracy")
 
 # df = pd.read_csv("./results/RandomizedTestSetsGenusAndSpecies_all.csv", sep=',')
 # value_vars1 = ["Raw-species0", "Raw-genus0"]

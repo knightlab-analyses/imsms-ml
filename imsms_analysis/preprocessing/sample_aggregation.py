@@ -1,6 +1,6 @@
 import pandas as pd
-from common.named_functor import NamedFunctor
-from state.pipeline_state import PipelineState
+from imsms_analysis.common.named_functor import NamedFunctor
+from imsms_analysis.state.pipeline_state import PipelineState
 
 
 def build(method_name):

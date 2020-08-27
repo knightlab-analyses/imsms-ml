@@ -1,8 +1,8 @@
 # Try CLR, ALR, Rarefaction, AST, normalize to 10000 etc here to see if these
 # transforms affect how the model learns.
-from analysis_runner import SerialRunner, DryRunner
-from common.analysis_factory import AnalysisFactory, MultiFactory
-from common.normalization import Normalization
+from imsms_analysis.analysis_runner import SerialRunner, DryRunner
+from imsms_analysis.common.analysis_factory import AnalysisFactory, MultiFactory
+from imsms_analysis.common.normalization import Normalization
 
 
 def configure():

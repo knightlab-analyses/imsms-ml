@@ -1,7 +1,7 @@
 # Examine Akkermansia, the most often reported feature
-from analysis_runner import SerialRunner
-from common.analysis_factory import AnalysisFactory
-from common.feature_set import FeatureSet
+from imsms_analysis.analysis_runner import SerialRunner
+from imsms_analysis.common.analysis_factory import AnalysisFactory
+from imsms_analysis.common.feature_set import FeatureSet
 
 
 def configure():

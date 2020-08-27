@@ -1,8 +1,8 @@
 # See how well classifiers trained with a single collection site
 # can predict other samples within that same collection site
-from analysis_runner import SerialRunner, DryRunner
-from common.analysis_factory import AnalysisFactory
-from common.metadata_filter import MetadataFilter
+from imsms_analysis.analysis_runner import SerialRunner, DryRunner
+from imsms_analysis.common.analysis_factory import AnalysisFactory
+from imsms_analysis.common.metadata_filter import MetadataFilter
 
 def configure():
     metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv"

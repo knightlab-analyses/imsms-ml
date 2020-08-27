@@ -1,7 +1,7 @@
 import pandas as pd
 
-from common.analysis_factory import AnalysisFactory
-from analysis import run_analysis
+from imsms_analysis.common.analysis_factory import AnalysisFactory
+from imsms_analysis.analysis import run_analysis
 import traceback
 
 

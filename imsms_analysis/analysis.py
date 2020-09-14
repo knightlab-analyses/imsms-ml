@@ -58,6 +58,11 @@ def run_analysis(analysis_config):
     normalization = analysis_config.normalization
     if normalization is None:
         normalization = Normalization.DEFAULT
+    # TODO: Probably need to keep the config for the algorithm next to the algo
+    #  blahhh.
+    algorithm = analysis_config.mlab_algorithm
+    if algorithm is None:
+        algorithm = "RandomForestClassifier"
 
     biom_table = load_table(biom_filepath)
     table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
@@ -127,7 +132,6 @@ def run_analysis(analysis_config):
     target = df['target']
     df = df.drop(['target'], axis=1)
 
-
     # plotter.simple_swarm(df, meta_df, "239935", "disease")
 
     # Convert necessary types for regression-benchmarking
@@ -163,7 +167,7 @@ def run_analysis(analysis_config):
         results_table, best_model, best_accuracy = q2_mlab._unit_benchmark(
             table=final_biom,
             metadata=target,
-            algorithm="RandomForestSVD",
+            algorithm=algorithm,
             params=reg_params,
             distance_matrix=None
         )
@@ -174,6 +178,7 @@ def run_analysis(analysis_config):
             print("Max", col, ":", max(results_table[col]))
 
         print(best_accuracy)
+        print("MY MODEL:")
         print(best_model)
 
         #######################################

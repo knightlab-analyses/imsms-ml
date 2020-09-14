@@ -13,11 +13,12 @@ class AnalysisConfig:
                  metadata_filepath: str,
                  feature_set_index: Optional[FeatureSet],
                  training_set_index: Optional[int],
-                 pair_strategy=Optional[str],
-                 metadata_filter=Optional[MetadataFilter],
-                 n_random_seeds=Optional[int],
-                 dimensionality_reduction=Optional[DimensionalityReduction],
-                 normalization=Optional[Normalization]):
+                 pair_strategy: Optional[str],
+                 metadata_filter: Optional[MetadataFilter],
+                 n_random_seeds: Optional[int],
+                 dimensionality_reduction: Optional[DimensionalityReduction],
+                 normalization: Optional[Normalization],
+                 mlab_algorithm: Optional[str]):
         self.analysis_name = analysis_name
         self.biom_filepath = biom_filepath
         self.metadata_filepath = metadata_filepath
@@ -28,3 +29,4 @@ class AnalysisConfig:
         self.n_random_seeds = n_random_seeds
         self.dimensionality_reduction = dimensionality_reduction
         self.normalization = normalization
+        self.mlab_algorithm = mlab_algorithm

@@ -78,9 +78,9 @@ import seaborn as sns
 
 
 # Randomized Test Set Tests
-df = pd.read_csv("./plottedResults/RandomizedTestSetsGenusAndSpecies_all.csv", sep=',')
-
-# # Alternate species,genus
+# df = pd.read_csv("./plottedResults/RandomizedTestSetsGenusAndSpecies_all.csv", sep=',')
+#
+# # # Alternate species,genus
 # value_vars1 = []
 # for i in range(25):
 #     value_vars1.append("Raw-species" + str(i))
@@ -99,18 +99,25 @@ df = pd.read_csv("./plottedResults/RandomizedTestSetsGenusAndSpecies_all.csv", s
 #              value_name="Accuracy")
 # df["hue"] = (["species"] * 50 + ["genus"] * 50) * 25
 
-# df = pd.read_csv("./plottedResults/RandomizedTestSets.csv", sep=',')
+# df = pd.read_csv("./plottedResults/CLRvsDivide_all.csv", sep=',')
 # df = pd.melt(df,
 #              value_vars=df.columns.tolist()[1:],
 #              var_name="Randomized Test Set",
 #              value_name="Accuracy")
 
 
-df = pd.read_csv("./results/all.csv", sep=',')
+df = pd.read_csv("./plottedResults/ml_techniques_all.csv", sep=',')
 df = pd.melt(df,
              value_vars=df.columns.tolist()[1:],
-             var_name="Randomized Test Set",
+             var_name="ML Technique",
              value_name="Accuracy")
+
+
+# df = pd.read_csv("./results/all.csv", sep=',')
+# df = pd.melt(df,
+#              value_vars=df.columns.tolist()[1:],
+#              var_name="Randomized Test Set",
+#              value_name="Accuracy")
 
 # df = pd.read_csv("./results/RandomizedTestSetsGenusAndSpecies_all.csv", sep=',')
 # value_vars1 = ["Raw-species0", "Raw-genus0"]
@@ -122,7 +129,7 @@ df = pd.melt(df,
 
 
 sns.set(style="ticks")
-g = sns.catplot(x="Randomized Test Set", y="Accuracy", data=df)
+g = sns.catplot(x="ML Technique", y="Accuracy", data=df)
 # g = sns.catplot(x="Randomized Test Set", y="Accuracy", hue="hue", data=df)
 ax = g.ax
 ax.set_xticklabels(ax.get_xticklabels(), rotation=40, ha="right")

@@ -26,6 +26,7 @@ class AnalysisFactory:
         self.n_random_seeds = None
         self.dimensionality_reduction = None
         self.normalization = None
+        self.mlab_algorithm = None
 
     def with_feature_set(self, feature_set):
         if type(feature_set) == FeatureSet:
@@ -76,6 +77,12 @@ class AnalysisFactory:
         self.normalization = normalization_method
         return self
 
+    def with_algorithm(self, algorithm):
+        if type(algorithm) == str:
+            algorithm = [algorithm]
+        self.mlab_algorithm = algorithm
+        return self
+
     @staticmethod
     def _build_biom_file_path(biom_type: str) -> str:
         return "./dataset/biom/combined-" + biom_type + ".biom"
@@ -111,7 +118,8 @@ class AnalysisFactory:
                       self.metadata_filter,
                       self.n_random_seeds,
                       self.dimensionality_reduction,
-                      self.normalization]
+                      self.normalization,
+                      self.mlab_algorithm]
 
         for i in range(len(all_params)):
             if all_params[i] is None:
@@ -127,7 +135,7 @@ class AnalysisFactory:
                         yield result
 
         for chosen in _iterate(all_params, 0, []):
-            bt, fs, ts, ps, mf, num_seeds, dr, norm = chosen
+            bt, fs, ts, ps, mf, num_seeds, dr, norm, algo = chosen
             yield AnalysisConfig(
                 self._analysis_name_gen(all_params, chosen),
                 self._build_biom_file_path(bt),
@@ -138,7 +146,8 @@ class AnalysisFactory:
                 mf,
                 num_seeds,
                 dr,
-                norm
+                norm,
+                algo
             )
 
 

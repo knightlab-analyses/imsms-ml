@@ -4,6 +4,8 @@ from imsms_analysis.common.dimensionality_reduction import DimensionalityReducti
 from imsms_analysis.common.feature_set import FeatureSet
 from imsms_analysis.common.metadata_filter import MetadataFilter
 from imsms_analysis.common.normalization import Normalization
+from imsms_analysis.dataset.feature_transforms.feature_transformer import \
+    FeatureTransformer
 
 
 class AnalysisConfig:
@@ -18,7 +20,8 @@ class AnalysisConfig:
                  n_random_seeds: Optional[int],
                  dimensionality_reduction: Optional[DimensionalityReduction],
                  normalization: Optional[Normalization],
-                 mlab_algorithm: Optional[str]):
+                 mlab_algorithm: Optional[str],
+                 feature_transform: Optional[FeatureTransformer]):
         self.analysis_name = analysis_name
         self.biom_filepath = biom_filepath
         self.metadata_filepath = metadata_filepath
@@ -30,3 +33,4 @@ class AnalysisConfig:
         self.dimensionality_reduction = dimensionality_reduction
         self.normalization = normalization
         self.mlab_algorithm = mlab_algorithm
+        self.feature_transform = feature_transform

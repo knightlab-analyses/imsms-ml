@@ -2,6 +2,8 @@ import pandas as pd
 from sklearn.decomposition import PCA
 
 from imsms_analysis.common.named_functor import NamedFunctor
+from imsms_analysis.dataset.feature_transforms.feature_transformer import \
+    FeatureTransformer
 from imsms_analysis.state.pipeline_state import PipelineState
 
 import umap
@@ -13,6 +15,20 @@ def build_pca(num_components):
 
 def build_umap():
     return UMAPFunctor()
+
+
+def build_feature_set_transform(transformer):
+    return NamedFunctor(
+        transformer.name,
+        lambda state, mode: _apply_feature_transform(state, transformer)
+    )
+
+
+def sum_columns():
+    return NamedFunctor(
+        "Sum All Columns",
+        lambda state, mode: _sum_columns(state)
+    )
 
 
 def build_column_filter(chosen_columns):
@@ -103,3 +119,14 @@ class UMAPFunctor:
 
     def __repr__(self):
         return "Functor(" + self.name + ")"
+
+
+def _apply_feature_transform(state: PipelineState,
+                             transformer: FeatureTransformer):
+    return state.update_df(transformer.transform_df(state.df))
+
+
+def _sum_columns(state: PipelineState):
+    series = state.df.sum(axis=1)
+    series.name = "score"
+    return state.update_df(series.to_frame())

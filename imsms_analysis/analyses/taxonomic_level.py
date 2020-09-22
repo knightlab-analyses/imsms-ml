@@ -11,7 +11,7 @@ def configure():
         metadata_filepath
     )
     woltka_transforms = AnalysisFactory(
-        ["enzrxn2reaction", "none", "pathway2class", "reaction2pathway"],
+        ["none", "kegg", "enzrxn2reaction", "pathway2class", "reaction2pathway"],
         metadata_filepath
     )
 

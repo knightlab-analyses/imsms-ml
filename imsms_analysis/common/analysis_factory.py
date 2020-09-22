@@ -6,6 +6,8 @@ from imsms_analysis.common.dimensionality_reduction import DimensionalityReducti
 from imsms_analysis.common.feature_set import FeatureSet
 from imsms_analysis.common.metadata_filter import MetadataFilter
 from imsms_analysis.common.normalization import Normalization
+from imsms_analysis.dataset.feature_transforms.feature_transformer import \
+    FeatureTransformer
 
 
 class AnalysisFactory:
@@ -27,6 +29,7 @@ class AnalysisFactory:
         self.dimensionality_reduction = None
         self.normalization = None
         self.mlab_algorithm = None
+        self.feature_transform = None
 
     def with_feature_set(self, feature_set):
         if type(feature_set) == FeatureSet:
@@ -83,6 +86,12 @@ class AnalysisFactory:
         self.mlab_algorithm = algorithm
         return self
 
+    def with_feature_transform(self, feature_transform):
+        if type(feature_transform) == FeatureTransformer:
+            feature_transform = [feature_transform]
+        self.feature_transform = feature_transform
+        return self
+
     @staticmethod
     def _build_biom_file_path(biom_type: str) -> str:
         return "./dataset/biom/combined-" + biom_type + ".biom"
@@ -119,7 +128,8 @@ class AnalysisFactory:
                       self.n_random_seeds,
                       self.dimensionality_reduction,
                       self.normalization,
-                      self.mlab_algorithm]
+                      self.mlab_algorithm,
+                      self.feature_transform]
 
         for i in range(len(all_params)):
             if all_params[i] is None:
@@ -135,7 +145,7 @@ class AnalysisFactory:
                         yield result
 
         for chosen in _iterate(all_params, 0, []):
-            bt, fs, ts, ps, mf, num_seeds, dr, norm, algo = chosen
+            bt, fs, ts, ps, mf, num_seeds, dr, norm, algo, ft = chosen
             yield AnalysisConfig(
                 self._analysis_name_gen(all_params, chosen),
                 self._build_biom_file_path(bt),
@@ -147,7 +157,8 @@ class AnalysisFactory:
                 num_seeds,
                 dr,
                 norm,
-                algo
+                algo,
+                ft
             )
 
 

@@ -58,6 +58,7 @@ def run_analysis(analysis_config):
     normalization = analysis_config.normalization
     if normalization is None:
         normalization = Normalization.DEFAULT
+    feature_transform = analysis_config.feature_transform
     # TODO: Probably need to keep the config for the algorithm next to the algo
     #  blahhh.
     algorithm = analysis_config.mlab_algorithm
@@ -67,7 +68,6 @@ def run_analysis(analysis_config):
     biom_table = load_table(biom_filepath)
     table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
     df = table.view(pd.DataFrame)
-    print(df)
 
     # # Look up ids for genera
     # genera = biom_table.metadata_to_dataframe(axis="observation")
@@ -116,7 +116,8 @@ def run_analysis(analysis_config):
         pair_strategy=pair_strategy,
         metadata_filter=metadata_filter,
         dim_reduction=dim_reduction,
-        normalization=normalization
+        normalization=normalization,
+        feature_transform=feature_transform
     )
 
     df = train_state.df
@@ -132,7 +133,9 @@ def run_analysis(analysis_config):
     target = df['target']
     df = df.drop(['target'], axis=1)
 
+    # print(df.columns)
     # plotter.simple_swarm(df, meta_df, "239935", "disease")
+    # return
 
     # Convert necessary types for regression-benchmarking
     final_biom = Artifact.import_data("FeatureTable[Frequency]", df)\

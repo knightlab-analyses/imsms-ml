@@ -4,7 +4,7 @@ from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.dataset.sample_sets.fixed_training_set import retrieve_training_set
 from imsms_analysis.preprocessing import id_parsing, sample_filtering, sample_aggregation, \
     normalization, classifier_target, train_test_split, column_transformation
-from imsms_analysis.preprocessing.column_transformation import build_column_filter
+from imsms_analysis.preprocessing.column_transformation import build_column_filter, build_feature_set_transform, sum_columns
 from imsms_analysis.preprocessing.train_test_split import TrainTest
 from imsms_analysis.state.pipeline_state import PipelineState
 
@@ -28,7 +28,8 @@ def process(state: PipelineState,
             pair_strategy="household_concat",
             metadata_filter=None,
             dim_reduction=None,
-            normalization=Normalization.DEFAULT):
+            normalization=Normalization.DEFAULT,
+            feature_transform=None):
     filtered = _filter_samples(state, verbose)
     train, test = _split_test_set(filtered,
                                   training_set_index,
@@ -40,7 +41,8 @@ def process(state: PipelineState,
                              pair_strategy=pair_strategy,
                              metadata_filter=metadata_filter,
                              dim_reduction=dim_reduction,
-                             normalization_strategy=normalization)
+                             normalization_strategy=normalization,
+                             feature_transform=feature_transform)
 
 
 # Run all steps required before we can split out the test set.  This must be
@@ -96,10 +98,9 @@ def _apply_transforms(train_state: PipelineState,
                       pair_strategy="paired_concat",
                       metadata_filter=None,
                       dim_reduction=None,
-                      normalization_strategy=Normalization.DEFAULT
+                      normalization_strategy=Normalization.DEFAULT,
+                      feature_transform=None
                       ):
-    print("STARTING")
-    print(normalization_strategy)
     # noinspection PyListCreation
     steps = []
 
@@ -119,6 +120,12 @@ def _apply_transforms(train_state: PipelineState,
                                      **normalization_strategy.kwargs))
     if restricted_feature_set is not None:
         steps.append(build_column_filter(restricted_feature_set))
+
+    # Run any feature transformations
+    if feature_transform is not None:
+        steps.append(build_feature_set_transform(feature_transform))
+        # Try a summed univariate feature set (not so good with RF)
+        # steps.append(sum_columns())
 
     # Build target series
     steps.append(

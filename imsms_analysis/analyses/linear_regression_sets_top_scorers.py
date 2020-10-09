@@ -9,54 +9,40 @@ from imsms_analysis.common.feature_set import FeatureSet
 
 def configure():
     metadata_filepath = "./dataset/metadata/iMSMS_1140samples_metadata.tsv"
-    fset1 = FeatureSet.build_feature_set("Test0", "./dataset/feature_sets/fixed_training_set_MS_associated_species_AST_fdr0.05.tsv")
-    fsets = FeatureSet.build_feature_sets("./dataset/feature_sets/MS_associated_species_fdr0.05_in_10_training_set.csv")
 
-    # print(fset1.features)
-    # print(fsets[0].features)
-
+    # We split the data into 10 50/50 train/test sets (the ten divisions overlap)
+    # We ran linear regression on all training sets (see phyloseq)
+    # We took top hits that pass fdr threshold
+    # We looked at how frequently each species appeared in these top lists
+    # The four most frequent appeared in 8 out of 10 lists.
+    # See dataset/feature_sets/MS_associated_species_fdr0.05_in_10_training_set.csv
+    # Ruthenibacterium lactatiformans
+    # Peptococcus niger
+    # Coprococcus comes
+    # Dorea longicatena
+    fset_top_scorers = FeatureSet("TopScorers", ["1550024", "2741", "410072", "88431"])
+    fset_combos = fset_top_scorers.create_all_combos()
     facts = []
-    for i in range(10):
-        linreg = AnalysisFactory(
+
+    facts.append(
+        AnalysisFactory(
             ["species"],
             metadata_filepath,
-            "TestSet" + str(i)
-        ).with_feature_set(fsets[i]).with_training_set(i)
-        facts.append(linreg)
-
-    species = AnalysisFactory(
-        ["species"],
-        metadata_filepath,
-        "species"
+            "species"
+        )
     )
-    facts.append(species)
+    # TODO FIXME HACK:  There is no held out test set that these top scorers
+    #  haven't seen before.  So I'm a little worried that we are cheating
+    #  here.  If this shows promise, can redo the train set generation to
+    #  ensure there is a set that is completely held out from all training sets
+    facts.append(
+        AnalysisFactory(
+            ['species'],
+            metadata_filepath
+        ).with_feature_set(fset_combos)
+    )
 
     return MultiFactory(facts)
-
-    # linreg = AnalysisFactory(
-    #     ["species"],
-    #     metadata_filepath
-    # ).with_feature_set([
-    #     FeatureSet.build_feature_set(
-    #         "TrainSet0-FDR0.05",
-    #         "./dataset/feature_sets/fixed_training_set_MS_associated_species_AST_fdr0.05.tsv"
-    #     ),
-    #     FeatureSet.build_feature_set(
-    #         "TrainSet0-P0.05",
-    #         "./dataset/feature_sets/fixed_training_set_MS_associated_species_AST_p0.05.tsv"
-    #     ),
-    #     FeatureSet.build_feature_set(
-    #         "FullDataLinearRegression(Cheating)",
-    #         "./dataset/feature_sets/MS_associated_species_AST.tsv"
-    #     )
-    # ])
-
-    # species = AnalysisFactory(
-    #     ["species"],
-    #     metadata_filepath,
-    #     "species"
-    # )
-    # return MultiFactory([linreg, species])
 
 
 if __name__ == "__main__":

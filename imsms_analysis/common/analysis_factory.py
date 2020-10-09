@@ -30,6 +30,7 @@ class AnalysisFactory:
         self.normalization = None
         self.mlab_algorithm = None
         self.feature_transform = None
+        self.allele_info = None
 
     def with_feature_set(self, feature_set):
         if type(feature_set) == FeatureSet:
@@ -39,6 +40,10 @@ class AnalysisFactory:
 
     def with_num_training_sets(self, n):
         self.training_set = range(n)
+        return self
+
+    def with_training_set(self, i):
+        self.training_set = [i]
         return self
 
     def with_num_seeds(self, n):
@@ -92,6 +97,12 @@ class AnalysisFactory:
         self.feature_transform = feature_transform
         return self
 
+    def with_allele_info(self, allele_info):
+        if type(allele_info) == str:
+            allele_info = [allele_info]
+        self.allele_info = allele_info
+        return self
+
     @staticmethod
     def _build_biom_file_path(biom_type: str) -> str:
         return "./dataset/biom/combined-" + biom_type + ".biom"
@@ -129,7 +140,8 @@ class AnalysisFactory:
                       self.dimensionality_reduction,
                       self.normalization,
                       self.mlab_algorithm,
-                      self.feature_transform]
+                      self.feature_transform,
+                      self.allele_info]
 
         for i in range(len(all_params)):
             if all_params[i] is None:
@@ -145,7 +157,7 @@ class AnalysisFactory:
                         yield result
 
         for chosen in _iterate(all_params, 0, []):
-            bt, fs, ts, ps, mf, num_seeds, dr, norm, algo, ft = chosen
+            bt, fs, ts, ps, mf, num_seeds, dr, norm, algo, ft, ai = chosen
             yield AnalysisConfig(
                 self._analysis_name_gen(all_params, chosen),
                 self._build_biom_file_path(bt),
@@ -158,7 +170,8 @@ class AnalysisFactory:
                 dr,
                 norm,
                 algo,
-                ft
+                ft,
+                ai
             )
 
 

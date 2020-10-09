@@ -6,6 +6,7 @@ from imsms_analysis.dataset.feature_transforms.feature_transformer import \
     FeatureTransformer
 from imsms_analysis.state.pipeline_state import PipelineState
 
+import numpy as np
 import umap
 
 
@@ -18,9 +19,12 @@ def build_umap():
 
 
 def build_feature_set_transform(transformer):
+    def wrapped(state, mode):
+        return _apply_feature_transform(state, transformer)
+
     return NamedFunctor(
         transformer.name,
-        lambda state, mode: _apply_feature_transform(state, transformer)
+        wrapped
     )
 
 
@@ -78,8 +82,18 @@ class PCAFunctor:
 def _restrict_columns_compositional(state: PipelineState,
                                     chosen_columns: list) \
         -> PipelineState:
+
+    print(chosen_columns)
+    print("Grr")
+    print(state.df.columns)
+
     df = state.df
     remainder = df.drop(chosen_columns, axis=1)
+
+    print(remainder)
+    print("VS")
+    print(len(chosen_columns))
+
     df['remainder'] = remainder.sum(axis=1)
     restricted = df[chosen_columns + ['remainder']]
 
@@ -89,7 +103,7 @@ def _restrict_columns_compositional(state: PipelineState,
 class UMAPFunctor:
     def __init__(self):
         self.name = "Run UMAP"
-        self.reducer = umap.UMAP(random_state=72519857125 % 2**32)
+        self.reducer = umap.UMAP(random_state=72519857125 % 2 ** 32)
 
     def __call__(self, state: PipelineState, mode: str):
         new_df = None

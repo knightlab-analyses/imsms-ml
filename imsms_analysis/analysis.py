@@ -69,6 +69,13 @@ def run_analysis(analysis_config):
     table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
     df = table.view(pd.DataFrame)
 
+    # print("RAGE")
+    # print(biom_filepath)
+    # print(df.columns)
+    # print(df['88431'])
+    # print(df['411462'])
+    # print("END RAGE")
+
     # # Look up ids for genera
     # genera = biom_table.metadata_to_dataframe(axis="observation")
     # genera = genera[genera["Name"].isin([

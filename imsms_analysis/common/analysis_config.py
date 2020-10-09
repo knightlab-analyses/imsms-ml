@@ -21,7 +21,8 @@ class AnalysisConfig:
                  dimensionality_reduction: Optional[DimensionalityReduction],
                  normalization: Optional[Normalization],
                  mlab_algorithm: Optional[str],
-                 feature_transform: Optional[FeatureTransformer]):
+                 feature_transform: Optional[FeatureTransformer],
+                 allele_info: Optional[str]):
         self.analysis_name = analysis_name
         self.biom_filepath = biom_filepath
         self.metadata_filepath = metadata_filepath
@@ -34,3 +35,4 @@ class AnalysisConfig:
         self.normalization = normalization
         self.mlab_algorithm = mlab_algorithm
         self.feature_transform = feature_transform
+        self.allele_info = allele_info

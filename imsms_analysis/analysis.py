@@ -162,6 +162,22 @@ def run_analysis(analysis_config):
         # 'random_state': [7]
     }
 
+    # Optimal parameters determined from grid search, rated by cross validation
+    # performance.
+    # Note: Many more estimators and no bootstrapping, this makes it take
+    # substantially longer to run.
+    # RandomForestClassifier_grids = {
+    #     'bootstrap': [False],
+    #     'criterion': ['gini'],
+    #     'max_depth': [3],
+    #     'max_features': ['log2'],
+    #     'max_samples': [0.75],
+    #     'min_samples_split': [2],
+    #     'min_samples_leaf': [0.21],
+    #     'n_estimators': [5000],
+    #     'random_state': list(range(2020, 2020 + n_random_seeds))
+    # }
+
     # LinearSVC_grids = {'penalty': {'l2'},
     #                    'tol': [1e-4, 1e-2, 1e-1],
     #                    'loss': ['hinge', 'squared_hinge'],

@@ -1,5 +1,6 @@
 import pandas as pd
 from sklearn.decomposition import PCA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 
 from imsms_analysis.common.named_functor import NamedFunctor
 from imsms_analysis.dataset.feature_transforms.feature_transformer import \
@@ -12,6 +13,10 @@ import umap
 
 def build_pca(num_components):
     return PCAFunctor(num_components)
+
+
+def build_lda(num_components):
+    return LDAFunctor(num_components)
 
 
 def build_umap():
@@ -67,6 +72,33 @@ class PCAFunctor:
         return state.update_df(pd.DataFrame(
             new_df,
             columns=['PCA%i' % i for i in range(self.num_components)],
+            index=state.df.index)
+        )
+
+    def __str__(self):
+        return "Functor(" + self.name + ")"
+
+    def __repr__(self):
+        return "Functor(" + self.name + ")"
+
+
+class LDAFunctor:
+    def __init__(self, num_components):
+        self.name = "Run LDA"
+        self.num_components = num_components
+        print("NUM COMPONENTS:", num_components)
+        self._lda = LinearDiscriminantAnalysis(n_components=num_components)
+
+    def __call__(self, state: PipelineState, mode: str):
+        new_df = None
+        if mode == 'train':
+            new_df = self._lda.fit_transform(state.df, state.target)
+        elif mode == 'test':
+            new_df = self._lda.transform(state.df)
+
+        return state.update_df(pd.DataFrame(
+            new_df,
+            columns=['LDA%i' % i for i in range(self.num_components)],
             index=state.df.index)
         )
 

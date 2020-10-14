@@ -125,7 +125,7 @@ def _apply_transforms(train_state: PipelineState,
         steps.append(build_column_filter(restricted_feature_set))
 
     # Show correlation matrix heatmap for debugging
-    steps.append(visualization.plot_correlation_matrix())
+    # steps.append(visualization.plot_correlation_matrix())
 
     # Run any feature transformations
     if feature_transform is not None:
@@ -151,10 +151,15 @@ def _apply_transforms(train_state: PipelineState,
     if dim_reduction is not None:
         if dim_reduction.transform == "pca":
             steps.append(column_transformation.build_pca(**dim_reduction.kwargs))  # TODO: 20 might actually be too few!
+        elif dim_reduction.transform == "lda":
+            steps.append(column_transformation.build_lda(
+                **dim_reduction.kwargs))
         elif dim_reduction.transform == "umap":
             steps.append(column_transformation.build_umap(**dim_reduction.kwargs))
         else:
             raise Exception("Unknown Transform:" + dim_reduction.transform)
+        # steps.append(visualization.plot_scatter())
+        # steps.append(visualization.plot_category())
 
     train, test = (
         _run_pipeline(train_state, steps, verbose, mode='train'),

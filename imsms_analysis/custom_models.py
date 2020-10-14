@@ -2,6 +2,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.decomposition import TruncatedSVD
 
+
 class RandomForestSVD:
 
     # Set estimator type for this class as one of either:

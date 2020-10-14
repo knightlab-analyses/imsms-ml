@@ -7,11 +7,20 @@ from imsms_analysis.common.analysis_factory import AnalysisFactory, MultiFactory
 def configure():
     metadata_filepath = "./dataset/metadata/iMSMS_1140samples_metadata.tsv"
     woltka_levels = AnalysisFactory(
-        ["phylum", "class", "order", "family", "genus", "species"],
+        ["phylum",
+         "class",
+         "order",
+         "family",
+         "genus",
+         "species"],
         metadata_filepath
     )
     woltka_transforms = AnalysisFactory(
-        ["none", "kegg", "enzrxn2reaction", "pathway2class", "reaction2pathway"],
+        ["none",
+         "kegg",
+         "enzrxn2reaction",
+         "pathway2class",
+         "reaction2pathway"],
         metadata_filepath
     )
 

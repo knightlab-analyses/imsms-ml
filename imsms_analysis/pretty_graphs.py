@@ -106,7 +106,7 @@ import seaborn as sns
 #              value_name="Accuracy")
 
 
-df = pd.read_csv("./plottedResults/linreg_all_combo.csv", sep=',')
+df = pd.read_csv("./plottedResults/phylogeny_level_all.csv", sep=',')
 df = pd.melt(df,
              value_vars=df.columns.tolist()[1:],
              var_name="Randomized Test Set",

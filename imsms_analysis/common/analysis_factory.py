@@ -72,6 +72,16 @@ class AnalysisFactory:
              for x in num_components]
         return self
 
+    def with_lda(self, num_components):
+        if self.dimensionality_reduction is not None:
+            raise Exception("Can't set multiple dimensionality reductions")
+        if type(num_components) == int:
+            num_components = [num_components]
+        self.dimensionality_reduction = \
+            [DimensionalityReduction("LDA" + str(x), "lda", num_components=x)
+             for x in num_components]
+        return self
+
     def with_umap(self):
         if self.dimensionality_reduction is not None:
             raise Exception("Can't set multiple dimensionality reductions")

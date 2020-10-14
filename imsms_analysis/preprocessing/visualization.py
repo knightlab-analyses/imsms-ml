@@ -1,17 +1,28 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-
 from imsms_analysis.common.named_functor import NamedFunctor
+import seaborn as sns
 
 
 def plot_correlation_matrix():
     return NamedFunctor("Plot Correlation Heatmap",
-                        lambda state, mode: _plot_correlation_matrix_deluxe(state.df))
+                        lambda state, mode: _plot_correlation_matrix_deluxe(state))
+
+
+def plot_scatter():
+    return NamedFunctor("Plot Scatter",
+                        _plot_scatter)
+
+
+def plot_category():
+    return NamedFunctor("Plot Category",
+                        _plot_categorical)
 
 
 # See https://stackoverflow.com/questions/29432629/plot-correlation-matrix-using-pandas
 # answer by Dick Fox
-def _plot_correlation_matrix_deluxe(df):
+def _plot_correlation_matrix_deluxe(state):
+    df = state.df
     print("Building Correlation Matrix")
     cor = df.corr()
     print("Showing Correlation Matrix")
@@ -25,3 +36,43 @@ def _plot_correlation_matrix_deluxe(df):
 
     print("Done")
     plt.show()
+    plt.close()
+
+    return state
+
+
+def _plot_scatter(state, mode):
+    # Stupid workaround for LDA only producing one component
+    X = state.df.iloc[:,0]
+    label_x = state.df.columns[0]
+    if len(state.df.columns) >= 2:
+        Y = state.df.iloc[:,1]
+        label_y = state.df.columns[1]
+    else:
+        Y = state.target
+        label_y = "Target"
+
+    plt.scatter(X,Y, c=state.target)
+    plt.title("Dim Reduction (" + str(mode) + ")")
+    plt.xlabel(label_x)
+    plt.ylabel(label_y)
+    plt.show()
+    plt.close()
+
+    return state
+
+
+def _plot_categorical(state, mode):
+    df = state.df
+    target = state.target
+
+    df["target"] = target.astype("category")
+
+    ax = sns.violinplot(data=df,
+                        x=df.columns[0],
+                        y="target",
+                        hue="target")
+    plt.title("Mode:" + str(mode))
+    plt.show()
+
+    return state

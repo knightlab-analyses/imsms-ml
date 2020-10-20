@@ -31,10 +31,10 @@ def configure():
         metadata_filepath,
         "LDA(1)"
     ).with_lda([1])\
-        .with_num_seeds(5)\
         .with_normalization([Normalization.DEFAULT, Normalization("CLR", "CLR")])\
-        .with_pair_strategy(["paired_subtract"])\
-        .with_num_training_sets(5)
+        .with_pair_strategy(["unpaired", "paired_concat", "paired_subtract"])\
+        # .with_training_set(7) \
+        # .with_num_seeds(5) \
 
     # raw = AnalysisFactory(
     #     "species",

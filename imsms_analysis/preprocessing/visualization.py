@@ -61,18 +61,41 @@ def _plot_scatter(state, mode):
 
     return state
 
-
+PLOT_HACK = 1
 def _plot_categorical(state, mode):
     df = state.df
     target = state.target
+    global PLOT_HACK
 
     df["target"] = target.astype("category")
 
+    plt.subplot(6, 2, PLOT_HACK)
     ax = sns.violinplot(data=df,
                         x=df.columns[0],
                         y="target",
                         hue="target")
-    plt.title("Mode:" + str(mode))
-    plt.show()
+    ax.set_title(str(mode))
+
+    titles = [
+        "",
+        "Unpaired Divide10000 Train",
+        "Unpaired Divide10000 Test",
+        "Unpaired CLR Train",
+        "Unpaired CLR Test",
+        "PairedConcat Divide10000 Train",
+        "PairedConcat Divide10000 Test",
+        "PairedConcat CLR Train",
+        "PairedConcat CLR Test",
+        "PairedSubtract Divide10000 Train",
+        "PairedSubtract Divide10000 Test",
+        "PairedSubtract CLR Train",
+        "PairedSubtract CLR Test"
+    ]
+
+    plt.title(titles[PLOT_HACK])
+    PLOT_HACK = PLOT_HACK + 1
+    if PLOT_HACK == 13:
+        PLOT_HACK = 1
+        plt.show()
 
     return state

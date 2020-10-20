@@ -54,9 +54,12 @@ def rarefy_wrapper(state: PipelineState, target_count: int) -> PipelineState:
 
 def clr_wrapper(state: PipelineState):
     # Unfortunately, clr needs pseudocounts or it crashes out.
-    clr_data = clr(state.df.to_numpy() + 1)
+    clr_data = clr(state.df.to_numpy() + .5)
     new_df = pd.DataFrame(data=clr_data, index=state.df.index, columns=state.df.columns)
     return state.update_df(new_df)
+
+
+#ADD Robust CLR from qiime2 here
 
 # Divides each row by the total across that row,
 # then multiplies by target_count.  This normalizes the total read count of a

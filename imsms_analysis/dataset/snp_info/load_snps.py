@@ -18,9 +18,9 @@ df_control = df.filter(axis=1, regex="....2.....")
 print(df_ms.columns.tolist())
 print(df_control.columns.tolist())
 
-# df = df[df.index.str.startswith("Akkermansia_muciniphila_55290")]
-# print(df)
-# print(df.columns.tolist())
+df = df[df.index.str.startswith("Akkermansia_muciniphila_55290")]
+print(df)
+print(df.columns.tolist())
 
 df["sum"] = df.sum(axis=1)
 print(df)
@@ -31,14 +31,32 @@ print(df)
 df.hist(column="sum", bins=df["sum"].max())
 plt.show()
 
-df = df[df["sum"] > 5]
-print(df)
+# df = df[df["sum"] > 5]
+# print(df)
 
-df = df[df["sum"] > 10]
-print(df)
-
+# df = df[df["sum"] > 10]
+# print(df)
+#
 df = df[df["sum"] > 20]
 print(df)
 
-# sns.clustermap(df, metric="hamming")
-# plt.show()
+df = df.drop(["sum"], axis=1)
+
+df = df.transpose()
+df["sum"] = df.sum(axis=1)
+df = df[df["sum"] > 0]
+print(df)
+df = df.drop(["sum"], axis=1)
+
+cluster_grid = sns.clustermap(df, metric="hamming")
+
+print("Col")
+print(cluster_grid.dendrogram_col.dendrogram)
+print("Linkage")
+print(cluster_grid.dendrogram_col.linkage)
+print("Row")
+print(cluster_grid.dendrogram_row.dendrogram)
+print("Linkage")
+print(cluster_grid.dendrogram_row.linkage)
+plt.show()
+

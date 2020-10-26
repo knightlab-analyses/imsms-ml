@@ -37,17 +37,17 @@ def configure():
     #     .with_normalization(Normalization("CLR", "CLR"))\
     #     .with_pair_strategy("paired_subtract")
 
-    # facts = []
-    # for i in range(10):
-    #     linreg = AnalysisFactory(
-    #         ["species"],
-    #         metadata_filepath,
-    #         "TestSet" + str(i)
-    #     ).with_lda([1]).with_feature_set(fsets[i])\
-    #         .with_training_set(i)\
-    #         .with_normalization([Normalization("CLR", "CLR")])\
-    #         .with_pair_strategy(["paired_subtract"])
-    #     facts.append(linreg)
+    facts = []
+    for i in range(10):
+        linreg = AnalysisFactory(
+            ["species"],
+            metadata_filepath,
+            "TestSet" + str(i)
+        ).with_lda([1]).with_feature_set(fsets[i])\
+            .with_training_set(i)\
+            .with_normalization([Normalization("CLR", "CLR")])\
+            .with_pair_strategy(["paired_subtract"])
+        facts.append(linreg)
 
     # lda = AnalysisFactory(
     #     "genus",

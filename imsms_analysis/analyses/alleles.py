@@ -23,4 +23,4 @@ if __name__ == "__main__":
     # Pretend all scripts are run from root of repo for file paths.
     import os
     os.chdir("..")
-    SerialRunner.run(configure())
+    SerialRunner().run(configure())

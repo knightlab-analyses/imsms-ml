@@ -30,4 +30,4 @@ if __name__ == "__main__":
     import os
     os.chdir("..")
 
-    SerialRunner.run(configure())
+    SerialRunner().run(configure())

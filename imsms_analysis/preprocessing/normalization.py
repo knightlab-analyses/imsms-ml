@@ -22,6 +22,10 @@ from imsms_analysis.state.pipeline_state import PipelineState
 #      https://en.wikipedia.org/wiki/Compositional_data#Linear_transformations
 #
 def build(method_name, target_count=10000):
+    if method_name == 'none':
+        return NamedFunctor("No Normalization (WARN: IGNORES COMPOSITIONALITY",
+                            lambda state, mode: state)
+
     if method_name == 'rarefy':
         return NamedFunctor("Rarefy",
                             lambda state, mode: rarefy_wrapper(state,

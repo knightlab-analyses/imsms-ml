@@ -4,6 +4,8 @@ from imsms_analysis.common.analysis_factory import AnalysisFactory
 from imsms_analysis.analysis import run_analysis
 import traceback
 
+from imsms_analysis.events.analysis_callbacks import AnalysisCallbacks
+
 
 def _check_unique_names(factory):
     # Check that output files will be uniquely named
@@ -34,8 +36,11 @@ class DryRunner:
 
 
 class SerialRunner:
-    @staticmethod
-    def run(factory):
+
+    def __init__(self):
+        self.callbacks = AnalysisCallbacks()
+
+    def run(self, factory):
         # Validation stops us from failing after running tests for 100 hours :D
 
         # Validate files will be found
@@ -44,9 +49,12 @@ class SerialRunner:
 
         # Run test
         test_accuracies = []
-        for config in factory.gen_configurations():
+        configs = [x for x in factory.gen_configurations()]
+
+        self.callbacks.batch_info(configs)
+        for config in configs:
             try:
-                test_acc, mean_cross_acc = run_analysis(config)
+                test_acc, mean_cross_acc = run_analysis(config, self.callbacks)
                 test_accuracies.append(test_acc)
             except Exception as e:
                 print("TEST FAILURE.  CONFIG: " + config.analysis_name)

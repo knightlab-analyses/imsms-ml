@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from imsms_analysis.common.named_functor import NamedFunctor
 import seaborn as sns
+import numpy as np
 
 
 def plot_correlation_matrix():
@@ -14,9 +15,9 @@ def plot_scatter():
                         _plot_scatter)
 
 
-def plot_category():
-    return NamedFunctor("Plot Category",
-                        _plot_categorical)
+# def plot_category():
+#     return NamedFunctor("Plot Category",
+#                         _plot_categorical)
 
 
 # See https://stackoverflow.com/questions/29432629/plot-correlation-matrix-using-pandas
@@ -24,10 +25,12 @@ def plot_category():
 def _plot_correlation_matrix_deluxe(state):
     df = state.df
     print("Building Correlation Matrix")
-    cor = df.corr()
+    cor = df.corr(method="pearson")
     print("Showing Correlation Matrix")
     f = plt.figure(figsize=(19, 15))
     plt.matshow(cor, fignum=f.number)
+    for (i, j), z in np.ndenumerate(cor):
+        plt.text(j, i, '{:0.1f}'.format(z), ha='center', va='center')
     plt.xticks(range(df.shape[1]), df.columns, fontsize=14, rotation=45)
     plt.yticks(range(df.shape[1]), df.columns, fontsize=14)
     cb = plt.colorbar()
@@ -61,41 +64,22 @@ def _plot_scatter(state, mode):
 
     return state
 
-PLOT_HACK = 1
-def _plot_categorical(state, mode):
+
+def plot_categorical(state, mode, title):
     df = state.df
     target = state.target
-    global PLOT_HACK
 
     df["target"] = target.astype("category")
 
-    plt.subplot(6, 2, PLOT_HACK)
     ax = sns.violinplot(data=df,
                         x=df.columns[0],
                         y="target",
                         hue="target")
     ax.set_title(str(mode))
+    # This would be a classifier that divides at 0, but I think LDA actually
+    # divides at intercept_ (and along the coef_ axis, rather than the
+    # scalings_ axis used for transformation)
+    # plt.axvline(color="grey", linestyle="--")
 
-    titles = [
-        "",
-        "Unpaired Divide10000 Train",
-        "Unpaired Divide10000 Test",
-        "Unpaired CLR Train",
-        "Unpaired CLR Test",
-        "PairedConcat Divide10000 Train",
-        "PairedConcat Divide10000 Test",
-        "PairedConcat CLR Train",
-        "PairedConcat CLR Test",
-        "PairedSubtract Divide10000 Train",
-        "PairedSubtract Divide10000 Test",
-        "PairedSubtract CLR Train",
-        "PairedSubtract CLR Test"
-    ]
-
-    plt.title(titles[PLOT_HACK])
-    PLOT_HACK = PLOT_HACK + 1
-    if PLOT_HACK == 13:
-        PLOT_HACK = 1
-        plt.show()
-
+    plt.title(title)
     return state

@@ -86,7 +86,6 @@ class LDAFunctor:
     def __init__(self, num_components):
         self.name = "Run LDA"
         self.num_components = num_components
-        print("NUM COMPONENTS:", num_components)
         self._lda = LinearDiscriminantAnalysis(n_components=num_components)
 
     def __call__(self, state: PipelineState, mode: str):

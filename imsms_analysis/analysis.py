@@ -10,6 +10,7 @@ from imsms_analysis import preprocessing_pipeline
 # Load sequence DataFrame
 from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.common import plotter
+from imsms_analysis.events.analysis_callbacks import AnalysisCallbacks
 from imsms_analysis.state.pipeline_state import PipelineState
 import pdb
 
@@ -37,7 +38,9 @@ def eval_model(model, state):
     return (y == real).value_counts()[True] / len(real)
 
 
-def run_analysis(analysis_config):
+def run_analysis(analysis_config, callbacks: AnalysisCallbacks):
+    callbacks.start_analysis(analysis_config)
+
     analysis_name = analysis_config.analysis_name
     biom_filepath = analysis_config.biom_filepath
     metadata_filepath = analysis_config.metadata_filepath
@@ -116,7 +119,9 @@ def run_analysis(analysis_config):
     state = PipelineState(df, meta_df, None)
     # Run Preprocessing
     train_state, test_state = preprocessing_pipeline.process(
+        analysis_config,
         state,
+        callbacks,
         restricted_feature_set=feature_set_index,
         training_set_index=training_set_index,
         verbose=False,

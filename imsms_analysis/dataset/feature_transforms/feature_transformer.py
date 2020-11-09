@@ -5,7 +5,7 @@ import numpy as np
 
 
 class FeatureTransformer:
-    def __init__(self, name, transform_file):
+    def __init__(self, name, transform_file, shuffle_seed=None):
         self.genome_to_mimics = defaultdict(list)
         self.name = name
         self.all_mimics = set([])
@@ -22,6 +22,8 @@ class FeatureTransformer:
         self.mimic_to_pos = {}
         for i in range(len(self.all_mimics)):
             self.mimic_to_pos[self.all_mimics[i]] = i
+
+        self.shuffle_seed = shuffle_seed
 
     def _map_genome_id(self, genome_id):
         mimics = self.genome_to_mimics[genome_id]
@@ -51,6 +53,15 @@ class FeatureTransformer:
         # Then we multiply
 
         transform_mat = self._build_transform_mat(df.columns)
+
+        # To enable permutation testing, if shuffle_seed is set, we will
+        # shuffle rows in our transform matrix.
+        if self.shuffle_seed:
+            rand = np.random.default_rng(self.shuffle_seed)
+            indices = transform_mat.index.tolist()
+            rand.shuffle(indices)
+            transform_mat.index = indices
+
         return df.dot(transform_mat)
 
     def __str__(self):

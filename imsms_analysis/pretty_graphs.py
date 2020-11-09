@@ -106,25 +106,25 @@ import seaborn as sns
 #              value_name="Accuracy")
 
 
-# df = pd.read_csv("./plottedResults/ml_techniques_all.csv", sep=',')
-# df = pd.melt(df,
-#              value_vars=df.columns.tolist()[1:],
-#              var_name="ML Technique",
-#              value_name="Accuracy")
+df = pd.read_csv("./plottedResults/phylogeny_level_all.csv", sep=',')
+df = pd.melt(df,
+             value_vars=df.columns.tolist()[1:],
+             var_name="Randomized Test Set",
+             value_name="Accuracy")
 
 
-# df = pd.read_csv("./plottedResults/mbp_scores_all.csv", sep=',')
+# df = pd.read_csv("./results/all.csv", sep=',')
 # df = pd.melt(df,
 #              value_vars=df.columns.tolist()[1:],
 #              var_name="Randomized Test Set",
 #              value_name="Accuracy")
 
 
-df = pd.read_csv("./results/all.csv", sep=',')
-df = pd.melt(df,
-             value_vars=df.columns.tolist()[1:],
-             var_name="Randomized Test Set",
-             value_name="Accuracy")
+# df = pd.read_csv("./results/all.csv", sep=',')
+# df = pd.melt(df,
+#              value_vars=df.columns.tolist()[1:],
+#              var_name="Randomized Test Set",
+#              value_name="Accuracy")
 
 # df = pd.read_csv("./results/RandomizedTestSetsGenusAndSpecies_all.csv", sep=',')
 # value_vars1 = ["Raw-species0", "Raw-genus0"]

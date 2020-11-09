@@ -1,0 +1,107 @@
+ID,Name,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,Occurence
+1550024,Ruthenibacterium lactatiformans,1,1,,,1,1,1,1,1,1,8
+2741,Peptococcus niger,1,1,,1,1,1,1,1,,1,8
+410072,Coprococcus comes,1,1,,1,1,1,,1,1,1,8
+88431,Dorea longicatena,1,,1,1,1,1,,1,1,1,8
+1150298,Fusicatenibacter saccharivorans,,1,,1,1,1,,1,1,1,7
+1226323,Oscillibacter sp. KLE 1745,1,1,,,1,1,,1,1,1,7
+1262757,Blautia sp. CAG:37,,1,,1,1,1,,1,1,1,7
+1673721,Intestinimonas massiliensis,,1,,,1,1,1,1,1,1,7
+1896976,Blautia sp. CAG:37_48_57,,1,,1,1,1,,1,1,1,7
+39490,Eubacterium ramulus,1,,,1,1,1,,1,1,1,7
+1263108,Ruminococcus torques CAG:61,1,,,,1,1,,1,1,1,6
+154046,Hungatella hathewayi,,1,,,1,1,,1,1,1,6
+1638783,Akkermansia sp. UNK.MGS-1,,,,1,1,1,1,1,1,,6
+1855376,Lachnospiraceae bacterium NLAE-zl-G231,,1,,,1,1,,1,1,1,6
+239935,Akkermansia muciniphila,,1,,,1,1,1,1,1,,6
+1263034,Akkermansia muciniphila CAG:154,,,,1,1,,1,1,1,,5
+1432052,Eisenbergiella tayi,,1,,,1,,,1,1,1,5
+1828554,Butyricicoccus sp. K4410.MGS-46,1,,,,1,1,,1,1,,5
+1896967,Akkermansia sp. 54_46,,,,1,1,,1,1,1,,5
+1896996,Coprococcus sp. 43_8,,1,,1,1,,,,1,1,5
+1929996,Akkermansia sp. Phil8,,,,1,1,,1,1,1,,5
+33039,[Ruminococcus] torques,,,,,1,1,,1,1,1,5
+729,Haemophilus parainfluenzae,,1,,,,1,1,1,1,,5
+1262845,Clostridium sp. CAG:91,,,,,1,,1,1,1,,4
+333367,[Clostridium] asparagiforme,,,1,1,,,1,1,,,4
+1226325,Clostridium sp. KLE 1755,,,,,1,1,,,1,,3
+1262925,Prevotella sp. CAG:386,,,,,1,1,1,,,,3
+1262954,Ruminococcus sp. CAG:330,,,1,,,1,,1,,,3
+1263021,Firmicutes bacterium CAG:41,,,,,1,1,,1,,,3
+1386092,Cellulomonas carbonis,,1,,,,,1,1,,,3
+1871025,Ndongobacter massiliensis,,,,,1,,1,1,,,3
+1871336,Criibacterium bergeronii,,1,,,,,1,1,,,3
+28123,Porphyromonas asaccharolytica,1,,,,,1,,1,,,3
+40520,Blautia obeum,,,,1,,,,1,1,,3
+77768,Prevotella albensis,,1,,,,,1,1,,,3
+1226324,Blautia sp. KLE 1732,,,,,1,,,,,1,2
+1262842,Clostridium sp. CAG:81,,1,,,1,,,,,,2
+1262921,Prevotella sp. CAG:1185,,1,,,,,,,1,,2
+1263005,Firmicutes bacterium CAG:145,,1,,,,,,,1,,2
+1263014,Firmicutes bacterium CAG:270,1,,,,,,,,1,,2
+1263045,Bacteroides finegoldii CAG:203,,1,,,1,,,,,,2
+1297617,Intestinimonas butyriciproducens,,1,,,1,,,,,,2
+1381,Atopobium minutum,,,,,,,1,1,,,2
+166486,Roseburia intestinalis,,,,,,1,,1,,,2
+1897006,Faecalibacterium sp. CAG:82-related_59_9,,,,1,1,,,,,,2
+2051,Mobiluncus curtisii,,,,,1,,1,,,,2
+2173,Methanobrevibacter smithii,,1,,,,1,,,,,2
+358743,[Clostridium] citroniae,,,,,,,1,,1,,2
+360807,Roseburia inulinivorans,,1,,,,1,,,,,2
+52227,Prevotella dentalis,,,,,,,1,1,,,2
+853,Faecalibacterium prausnitzii,,,,,,,,1,1,,2
+1111134,Peptoniphilus sp. BV3C26,,,,,,,,1,,,1
+1118061,Alistipes obesi,,1,,,,,,,,,1
+1197717,Cloacibacillus porcorum,,1,,,,,,,,,1
+1262691,Akkermansia sp. CAG:344,,,,,1,,,,,,1
+1262741,Bacteroides sp. CAG:530,,,,,,,,1,,,1
+1262783,Clostridium sp. CAG:242,,,,,,,,,1,,1
+1262953,Ruminococcus sp. CAG:254,,1,,,,,,,,,1
+1262969,Staphylococcus sp. CAG:324,,,,,,1,,,,,1
+1262981,Erysipelotrichaceae bacterium CAG:64,,,,,1,,,,,,1
+1262993,Firmicutes bacterium CAG:791,,,,,1,,,,,,1
+1262994,Firmicutes bacterium CAG:65,,1,,,,,,,,,1
+1263042,Bacteroides dorei CAG:222,,,,,,,1,,,,1
+1263064,Clostridium bolteae CAG:59,,,,,,,,1,,,1
+1263088,Methanobrevibacter smithii CAG:186,,1,,,,,,,,,1
+1263094,Parabacteroides merdae CAG:48,,,,,,,,,1,,1
+1392486,Prevotella sp. HUN102,,,,,,1,,,,,1
+1470347,Alistipes ihumii,,1,,,,,,,,,1
+1501392,Coprobacter secundus,,,,1,,,,,,,1
+156978,Corynebacterium imitans,,,,,,,,1,,,1
+1602169,Prevotella sp. P4-76,,,,,,,,1,,,1
+160404,[Clostridium] lactatifermentans,,,,,,1,,,,,1
+165179,Prevotella copri,,,,,,,,1,,,1
+1689303,Lagierella massiliensis,,,,,1,,,,,,1
+1703332,Lachnospiraceae bacterium TF01-11,,,,,,,,1,,,1
+1720300,Ruminococcus sp. AT10,,,,,1,,,,,,1
+1776384,Emergencia timonensis,,1,,,,,,,,,1
+1776392,Massiliomicrobiota timonensis,,,,,1,,,,,,1
+1834207,Erysipelotrichaceae bacterium I46,,,,,1,,,,,,1
+1852370,Prevotellamassilia timonensis,,1,,,,,,,,,1
+1871030,Merdibacter massiliensis,,1,,,,,,,,,1
+1896208,Fibrobacter sp. UWCM,,1,,,,,,,,,1
+1896999,Dorea sp. 42_8,,,,,,,,,1,,1
+1930002,Alistipes sp. Zagget8,,1,,,,,,,,,1
+1930012,Christensenellaceae bacterium Phil1,,,,,1,,,,,,1
+1930013,Christensenellaceae bacterium Phil7,,1,,,,,,,,,1
+1930014,Christensenellaceae bacterium Phil10,,,,,,,1,,,,1
+270498,Catabacter hongkongensis,,1,,,,,,,,,1
+292800,Flavonifractor plautii,,,,,1,,,,,,1
+301301,Roseburia hominis,,,,,1,,,,,,1
+328812,Parabacteroides goldsteinii,,,,,,,,1,,,1
+328814,Alistipes shahii,,,,,,,,,1,,1
+39486,Dorea formicigenerans,,,,,,,,1,,,1
+39491,[Eubacterium] rectale,,,,,1,,,,,,1
+411489,Clostridium sp. L2-50,,1,,,,,,,,,1
+43771,Corynebacterium urealyticum,,,,,,,,1,,,1
+457415,Synergistes sp. 3_1_syn1,,,,,,,,1,,,1
+471189,Gordonibacter pamelaeae,,,,,,,,,1,,1
+479117,Brevibacterium ravenspurgense,,1,,,,,,,,,1
+501496,Porphyromonas bennonis,,,,,1,,,,,,1
+508460,Cloacibacillus evryensis,,,,,,,,1,,,1
+53363,Brevibacterium mcbrellneri,,1,,,,,,,,,1
+556262,Coprobacillus sp. D6,,1,,,,,,,,,1
+592978,Ruminococcus faecis,,,,,,,,,1,,1
+658657,Erysipelotrichaceae bacterium 21_3,,,,,1,,,,,,1
+84030,[Clostridium] saccharolyticum,,,,,,,,1,,,1

@@ -10,6 +10,7 @@ from imsms_analysis import preprocessing_pipeline
 # Load sequence DataFrame
 from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.common import plotter
+from imsms_analysis.events.analysis_callbacks import AnalysisCallbacks
 from imsms_analysis.state.pipeline_state import PipelineState
 import pdb
 
@@ -42,7 +43,9 @@ def make_mlab_dirs():
     return
 
 
-def run_analysis(analysis_config):
+def run_analysis(analysis_config, callbacks: AnalysisCallbacks):
+    callbacks.start_analysis(analysis_config)
+
     analysis_name = analysis_config.analysis_name
     biom_filepath = analysis_config.biom_filepath
     metadata_filepath = analysis_config.metadata_filepath
@@ -73,6 +76,13 @@ def run_analysis(analysis_config):
     biom_table = load_table(biom_filepath)
     table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
     df = table.view(pd.DataFrame)
+
+    # print("RAGE")
+    # print(biom_filepath)
+    # print(df.columns)
+    # print(df['88431'])
+    # print(df['411462'])
+    # print("END RAGE")
 
     # # Look up ids for genera
     # genera = biom_table.metadata_to_dataframe(axis="observation")
@@ -114,7 +124,9 @@ def run_analysis(analysis_config):
     state = PipelineState(df, meta_df, None)
     # Run Preprocessing
     train_state, test_state = preprocessing_pipeline.process(
+        analysis_config,
         state,
+        callbacks,
         restricted_feature_set=feature_set_index,
         training_set_index=training_set_index,
         verbose=False,
@@ -159,6 +171,22 @@ def run_analysis(analysis_config):
         'random_state': list(range(2020, 2020 + n_random_seeds))
         # 'random_state': [7]
     }
+
+    # Optimal parameters determined from grid search, rated by cross validation
+    # performance.
+    # Note: Many more estimators and no bootstrapping, this makes it take
+    # substantially longer to run.
+    # RandomForestClassifier_grids = {
+    #     'bootstrap': [False],
+    #     'criterion': ['gini'],
+    #     'max_depth': [3],
+    #     'max_features': ['log2'],
+    #     'max_samples': [0.75],
+    #     'min_samples_split': [2],
+    #     'min_samples_leaf': [0.21],
+    #     'n_estimators': [5000],
+    #     'random_state': list(range(2020, 2020 + n_random_seeds))
+    # }
 
     # LinearSVC_grids = {'penalty': {'l2'},
     #                    'tol': [1e-4, 1e-2, 1e-1],

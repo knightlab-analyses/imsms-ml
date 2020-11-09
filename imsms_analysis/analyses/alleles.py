@@ -1,5 +1,4 @@
-# Try out a couple mlab models and custom pipelines
-from q2_mlab import ClassificationTask
+# Examine models trained at different levels of taxonomic assignment
 
 from imsms_analysis.analysis_runner import SerialRunner, DryRunner
 from imsms_analysis.common.analysis_factory import AnalysisFactory, MultiFactory
@@ -7,10 +6,17 @@ from imsms_analysis.common.analysis_factory import AnalysisFactory, MultiFactory
 
 def configure():
     metadata_filepath = "./dataset/metadata/iMSMS_1140samples_metadata.tsv"
-    return AnalysisFactory(
+    woltka_levels = AnalysisFactory(
         ["species"],
         metadata_filepath
-    ).with_algorithm(list(ClassificationTask.algorithms.keys()) + ["RandomForestSVD"])
+    )
+
+    alleles = AnalysisFactory(
+        ["Dump"],
+        metadata_filepath
+    )
+
+    return MultiFactory([woltka_levels, ])
 
 
 if __name__ == "__main__":

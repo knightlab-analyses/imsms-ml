@@ -1,9 +1,13 @@
 import pandas as pd
 
+from imsms_analysis.common.analysis_config import AnalysisConfig
 from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.dataset.sample_sets.fixed_training_set import retrieve_training_set
-from imsms_analysis.preprocessing import id_parsing, sample_filtering, sample_aggregation, \
-    normalization, classifier_target, train_test_split, column_transformation
+from imsms_analysis.events.analysis_callbacks import AnalysisCallbacks
+from imsms_analysis.preprocessing import id_parsing, sample_filtering, \
+    sample_aggregation, \
+    normalization, classifier_target, train_test_split, column_transformation, \
+    visualization
 from imsms_analysis.preprocessing.column_transformation import build_column_filter, build_feature_set_transform, sum_columns
 from imsms_analysis.preprocessing.train_test_split import TrainTest
 from imsms_analysis.state.pipeline_state import PipelineState
@@ -21,7 +25,9 @@ BAD_SAMPLE_PREFIXES = [
 BAD_SAMPLE_IDS = ["71601-0158", "71602-0158"]
 
 
-def process(state: PipelineState,
+def process(analysis_config: AnalysisConfig,
+            state: PipelineState,
+            callbacks: AnalysisCallbacks,
             restricted_feature_set: list = None,
             training_set_index: int = 0,
             verbose=False,
@@ -30,26 +36,31 @@ def process(state: PipelineState,
             dim_reduction=None,
             normalization=Normalization.DEFAULT,
             feature_transform=None):
-    filtered = _filter_samples(state, verbose)
+    filtered = _filter_samples(analysis_config, state, callbacks, verbose)
     train, test = _split_test_set(filtered,
                                   training_set_index,
                                   verbose)
-    return _apply_transforms(train,
+    return _apply_transforms(analysis_config,
+                             train,
                              test,
+                             callbacks,
                              restricted_feature_set,
                              verbose,
                              pair_strategy=pair_strategy,
                              metadata_filter=metadata_filter,
                              dim_reduction=dim_reduction,
                              normalization_strategy=normalization,
-                             feature_transform=feature_transform)
+                             feature_transform=feature_transform,
+                             )
 
 
 # Run all steps required before we can split out the test set.  This must be
 # restricted to operations that can be done at the level of individual samples
 # (or technically paired samples of households), so as to avoid any interaction
 # between test data and training data.
-def _filter_samples(state: PipelineState,
+def _filter_samples(analysis_config: AnalysisConfig,
+                    state: PipelineState,
+                    callbacks: AnalysisCallbacks,
                     verbose=False):
     # noinspection PyListCreation
     steps = []
@@ -70,7 +81,7 @@ def _filter_samples(state: PipelineState,
     # to normalize later.
     steps.append(sample_filtering.build_filter_out_empty_samples())
 
-    return _run_pipeline(state, steps, verbose, mode='filter')
+    return _run_pipeline(analysis_config, state, callbacks, steps, verbose, mode='filter')
 
 
 # The test set must be split out at the level of household pairs.  This should
@@ -91,8 +102,10 @@ def _split_test_set(state: PipelineState,
     #                               verbose)
 
 
-def _apply_transforms(train_state: PipelineState,
+def _apply_transforms(analysis_config: AnalysisConfig,
+                      train_state: PipelineState,
                       test_state: PipelineState,
+                      callbacks: AnalysisCallbacks,
                       restricted_feature_set: list = None,
                       verbose=False,
                       pair_strategy="paired_concat",
@@ -121,6 +134,9 @@ def _apply_transforms(train_state: PipelineState,
     if restricted_feature_set is not None:
         steps.append(build_column_filter(restricted_feature_set))
 
+    # Show correlation matrix heatmap for debugging
+    # steps.append(visualization.plot_correlation_matrix())
+
     # Run any feature transformations
     if feature_transform is not None:
         steps.append(build_feature_set_transform(feature_transform))
@@ -145,19 +161,24 @@ def _apply_transforms(train_state: PipelineState,
     if dim_reduction is not None:
         if dim_reduction.transform == "pca":
             steps.append(column_transformation.build_pca(**dim_reduction.kwargs))  # TODO: 20 might actually be too few!
+        elif dim_reduction.transform == "lda":
+            steps.append(column_transformation.build_lda(
+                **dim_reduction.kwargs))
         elif dim_reduction.transform == "umap":
             steps.append(column_transformation.build_umap(**dim_reduction.kwargs))
         else:
             raise Exception("Unknown Transform:" + dim_reduction.transform)
+        # steps.append(visualization.plot_scatter())
+        # steps.append(visualization.plot_category())
 
     train, test = (
-        _run_pipeline(train_state, steps, verbose, mode='train'),
-        _run_pipeline(test_state, steps, verbose, mode='test')
+        _run_pipeline(analysis_config, train_state, callbacks, steps, verbose, mode='train'),
+        _run_pipeline(analysis_config, test_state, callbacks, steps, verbose, mode='test')
     )
     return train, test
 
 
-def _run_pipeline(state, steps, verbose=False, mode='train'):
+def _run_pipeline(analysis_config, state, callbacks, steps, verbose=False, mode='train'):
     if verbose:
         print("Input: ")
         print(state)
@@ -165,8 +186,10 @@ def _run_pipeline(state, steps, verbose=False, mode='train'):
     for s in steps:
         if verbose:
             print("Begin Step:", s)
+        callbacks.before_preprocess_step(analysis_config, s, state, mode)
         state = s(state, mode)
         if verbose:
             print("Result After:", s)
             print(state)
+        callbacks.after_preprocess_step(analysis_config, s, state, mode)
     return state

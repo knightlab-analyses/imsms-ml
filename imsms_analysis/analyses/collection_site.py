@@ -27,4 +27,4 @@ if __name__ == "__main__":
     import os
     os.chdir("..")
 
-    DryRunner.run(configure())
+    SerialRunner().run(configure())

@@ -1,6 +1,8 @@
 # Don't upload your dataset to github
 imsms_analysis/dataset/biom/*
 imsms_analysis/dataset/metadata/*
+imsms_analysis/dataset/allele_info/*
+imsms_analysis/dataset/snp_info/*
 !imsms_analysis/dataset/biom/README.txt
 !imsms_analysis/dataset/metadata/README.txt
 imsms_analysis/plots/*

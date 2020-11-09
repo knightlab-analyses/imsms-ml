@@ -36,6 +36,11 @@ def eval_model(model, state):
 
     return (y == real).value_counts()[True] / len(real)
 
+def make_mlab_dirs():
+    # TODO call this when analysis config asks for 
+    # barnacle runner
+    return
+
 
 def run_analysis(analysis_config):
     analysis_name = analysis_config.analysis_name

@@ -63,6 +63,13 @@ class SerialRunner:
         summary_df.to_csv("./results/summary.csv")
         print(summary_df)
 
+# TODO
+class BarnacleRunner():
+
+    @staticmethod 
+    def run(factory):
+        
+        # Generates a bunch of bash scripts necessary to run on barnacle
 
 # class ParallelRunner:
 #     # TODO: Something something queue some jobs

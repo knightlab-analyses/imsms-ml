@@ -33,6 +33,14 @@ def build_feature_set_transform(transformer):
     )
 
 
+def build_meta_encoder(col_name, encoder):
+    def wrapped(state, mode):
+        state.df[col_name] = state.meta_df[col_name].apply(encoder)
+        return state.update_df(state.df)
+
+    return NamedFunctor("Include " + col_name, wrapped)
+
+
 def sum_columns():
     return NamedFunctor(
         "Sum All Columns",
@@ -128,6 +136,9 @@ def _restrict_columns_compositional(state: PipelineState,
     df['remainder'] = remainder.sum(axis=1)
     restricted = df[chosen_columns + ['remainder']]
 
+    # ###################DONOTCOMMIT MEEEEE######################
+    # restricted = restricted.drop(["remainder"], axis=1)
+    # #######################################################
     return state.update_df(restricted)
 
 

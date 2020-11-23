@@ -2,6 +2,7 @@ from typing import Optional
 
 from imsms_analysis.common.dimensionality_reduction import DimensionalityReduction
 from imsms_analysis.common.feature_set import FeatureSet
+from imsms_analysis.common.meta_encoder import MetaEncoder
 from imsms_analysis.common.metadata_filter import MetadataFilter
 from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.dataset.feature_transforms.feature_transformer import \
@@ -22,7 +23,8 @@ class AnalysisConfig:
                  normalization: Optional[Normalization],
                  mlab_algorithm: Optional[str],
                  feature_transform: Optional[FeatureTransformer],
-                 allele_info: Optional[str]):
+                 allele_info: Optional[str],
+                 meta_encoder: Optional[MetaEncoder]):
         self.analysis_name = analysis_name
         self.biom_filepath = biom_filepath
         self.metadata_filepath = metadata_filepath
@@ -36,3 +38,4 @@ class AnalysisConfig:
         self.mlab_algorithm = mlab_algorithm
         self.feature_transform = feature_transform
         self.allele_info = allele_info
+        self.meta_encoder = meta_encoder

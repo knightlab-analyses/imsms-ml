@@ -105,25 +105,25 @@ import seaborn as sns
 #              var_name="Randomized Test Set",
 #              value_name="Accuracy")
 
-
-df = pd.read_csv("./plottedResults/phylogeny_level_all.csv", sep=',')
+#
+df = pd.read_csv("./plottedResults/mbp30_shuffle.csv", sep=',')
 df = pd.melt(df,
              value_vars=df.columns.tolist()[1:],
-             var_name="Randomized Test Set",
+             var_name="Permutation",
              value_name="Accuracy")
 
 
 # df = pd.read_csv("./results/all.csv", sep=',')
 # df = pd.melt(df,
 #              value_vars=df.columns.tolist()[1:],
-#              var_name="Randomized Test Set",
+#              var_name="Pairing Procedure",
 #              value_name="Accuracy")
 
 
-# df = pd.read_csv("./results/all.csv", sep=',')
+# df = pd.read_csv("./results/lda_all.csv", sep=',')
 # df = pd.melt(df,
 #              value_vars=df.columns.tolist()[1:],
-#              var_name="Randomized Test Set",
+#              var_name="Feature Set",
 #              value_name="Accuracy")
 
 # df = pd.read_csv("./results/RandomizedTestSetsGenusAndSpecies_all.csv", sep=',')
@@ -136,11 +136,12 @@ df = pd.melt(df,
 
 
 sns.set(style="ticks")
-g = sns.catplot(x="Randomized Test Set", y="Accuracy", data=df)
+g = sns.catplot(x="Permutation", y="Accuracy", data=df)
 # g = sns.catplot(x="Randomized Test Set", y="Accuracy", hue="hue", data=df)
 ax = g.ax
 ax.set_xticklabels(ax.get_xticklabels(), rotation=40, ha="right")
 ax.axhline(.5, ls='--')
 # ax2.axhline(30, ls='--')
 plt.tight_layout()
+plt.title("MBP True and Permuted Transforms")
 plt.show()

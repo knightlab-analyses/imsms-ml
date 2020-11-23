@@ -27,5 +27,5 @@ def _parse_sample_id(index: str):
 
 def _parse_household_id(sample_id: str):
     # Input of form Q.71401.0009.2016.02.23
-    # Output of form 71401-0009
+    # Output of form 714-0009
     return sample_id[0:3] + sample_id[5:]

@@ -35,7 +35,8 @@ def process(analysis_config: AnalysisConfig,
             metadata_filter=None,
             dim_reduction=None,
             normalization=Normalization.DEFAULT,
-            feature_transform=None):
+            feature_transform=None,
+            meta_encoder=None):
     filtered = _filter_samples(analysis_config, state, callbacks, verbose)
     train, test = _split_test_set(filtered,
                                   training_set_index,
@@ -51,6 +52,7 @@ def process(analysis_config: AnalysisConfig,
                              dim_reduction=dim_reduction,
                              normalization_strategy=normalization,
                              feature_transform=feature_transform,
+                             meta_encoder=meta_encoder
                              )
 
 
@@ -112,7 +114,8 @@ def _apply_transforms(analysis_config: AnalysisConfig,
                       metadata_filter=None,
                       dim_reduction=None,
                       normalization_strategy=Normalization.DEFAULT,
-                      feature_transform=None
+                      feature_transform=None,
+                      meta_encoder=None
                       ):
     # noinspection PyListCreation
     steps = []
@@ -133,6 +136,12 @@ def _apply_transforms(analysis_config: AnalysisConfig,
                                      **normalization_strategy.kwargs))
     if restricted_feature_set is not None:
         steps.append(build_column_filter(restricted_feature_set))
+
+    if meta_encoder is not None:
+        steps.append(column_transformation.build_meta_encoder(
+            meta_encoder.col_name,
+            meta_encoder.encoder)
+        )
 
     # Show correlation matrix heatmap for debugging
     # steps.append(visualization.plot_correlation_matrix())

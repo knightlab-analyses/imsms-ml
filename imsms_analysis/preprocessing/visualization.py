@@ -65,16 +65,20 @@ def _plot_scatter(state, mode):
     return state
 
 
-def plot_categorical(state, mode, title):
+def plot_categorical(state, mode, title, colors=None):
     df = state.df
     target = state.target
 
     df["target"] = target.astype("category")
 
+    if colors:
+        sns.set_palette(sns.color_palette(colors))
+
     ax = sns.violinplot(data=df,
                         x=df.columns[0],
                         y="target",
                         hue="target")
+    ax.legend_.remove()
     ax.set_title(str(mode))
     # This would be a classifier that divides at 0, but I think LDA actually
     # divides at intercept_ (and along the coef_ axis, rather than the

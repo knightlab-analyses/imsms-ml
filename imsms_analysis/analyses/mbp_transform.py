@@ -4,6 +4,7 @@ from q2_mlab import ClassificationTask
 from imsms_analysis.analysis_runner import SerialRunner, DryRunner
 from imsms_analysis.common.analysis_factory import AnalysisFactory, MultiFactory
 from imsms_analysis.common.metadata_filter import MetadataFilter
+from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.dataset.feature_transforms.feature_transformer import \
     FeatureTransformer
 
@@ -32,13 +33,13 @@ def configure():
 
     meta_households = [hh[:3] + hh[4:] for hh in hla_drb1_1501_households]
 
-    mbp_shuffle = AnalysisFactory(
-        ["none"],
-        metadata_filepath
-    ).with_feature_transform(
-        [FeatureTransformer("MBP30_Shuffle"+str(x), mbp30, shuffle_seed=x)
-         for x in range(10)]
-    )
+    # mbp_shuffle = AnalysisFactory(
+    #     ["none"],
+    #     metadata_filepath
+    # ).with_feature_transform(
+    #     [FeatureTransformer("MBP30_Shuffle"+str(x), mbp30, shuffle_seed=x)
+    #      for x in range(10)]
+    # )
 
     woltka_transforms = AnalysisFactory(
         ["none"],
@@ -46,17 +47,17 @@ def configure():
     ).with_feature_transform(
         [FeatureTransformer("MBP25", mbp25),
          FeatureTransformer("MBP30", mbp30),
-         FeatureTransformer("MBP35", mbp35)])
-         # FeatureTransformer("MOG25", mog25),
-         # FeatureTransformer("MOG30", mog30),
-         # FeatureTransformer("MOG35", mog35)])
-    # .with_metadata_filter(
-    #     MetadataFilter(
-    #         "DRB1_1501",
-    #         "household",
-    #         meta_households
-    #     )
-    # )
+         FeatureTransformer("MBP35", mbp35)])\
+     .with_normalization(Normalization("CLR", "CLR"))\
+     .with_pair_strategy("paired_subtract")\
+     .with_metadata_filter([
+            None,
+            MetadataFilter(
+                "DRB1_1501",
+                "household",
+                meta_households
+            )
+        ])
 
     # woltka_raw = AnalysisFactory(
     #     ["species", "none"],
@@ -70,7 +71,7 @@ def configure():
     #     )
     # )
 
-    return MultiFactory([woltka_transforms, mbp_shuffle])
+    return MultiFactory([woltka_transforms])
     # return MultiFactory([woltka_transforms, woltka_raw])
 
 
@@ -78,4 +79,5 @@ if __name__ == "__main__":
     # Pretend all scripts are run from root of repo for file paths.
     import os
     os.chdir("..")
+    DryRunner().run(configure())
     SerialRunner().run(configure())

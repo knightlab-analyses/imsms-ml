@@ -10,8 +10,7 @@ def configure():
         "species",
         metadata_filepath
     )\
-        .with_num_training_sets(10)\
-        .with_pair_strategy(["paired_concat", "paired_subtract", "unpaired"])
+        .with_pair_strategy(["unpaired", "paired_concat", "paired_subtract"])
 
 
 if __name__ == "__main__":

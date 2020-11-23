@@ -5,6 +5,7 @@
 from imsms_analysis.analysis_runner import SerialRunner, DryRunner
 from imsms_analysis.common.analysis_factory import AnalysisFactory, MultiFactory
 from imsms_analysis.common.feature_set import FeatureSet
+from imsms_analysis.common.normalization import Normalization
 
 
 def configure():
@@ -16,21 +17,24 @@ def configure():
     # print(fsets[0].features)
 
     facts = []
-    for i in range(10):
+    for i in range(1):
         linreg = AnalysisFactory(
             ["species"],
             metadata_filepath,
             "TestSet" + str(i)
-        ).with_feature_set(fsets[i]).with_training_set(i)
+        ).with_feature_set(fsets[i])\
+            .with_training_set(i)\
+            .with_normalization(Normalization("CLR", "CLR"))\
+            .with_pair_strategy(["paired_subtract", "paired_subtract_sex_balanced"])
         facts.append(linreg)
 
-    species = AnalysisFactory(
-        ["species"],
-        metadata_filepath,
-        "species"
-    )
-    facts.append(species)
-
+    # species = AnalysisFactory(
+    #     ["species"],
+    #     metadata_filepath,
+    #     "species"
+    # )
+    # facts.append(species)
+    #
     return MultiFactory(facts)
 
     # linreg = AnalysisFactory(

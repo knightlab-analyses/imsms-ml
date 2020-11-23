@@ -3,12 +3,20 @@ from itertools import chain, combinations
 
 
 class FeatureSet:
-    def __init__(self, name, features):
+    def __init__(self, name, features, feature_names=None):
         self.name = name
         self.features = features
+        self.feature_names = feature_names
 
     def create_univariate_sets(self, name_prefix=""):
-        return [FeatureSet(name_prefix + str(f), [f]) for f in self.features]
+        ret_val = []
+        for i in range(len(self.features)):
+            f = self.features[i]
+            fn = ""
+            if self.feature_names is not None:
+                fn = self.feature_names[i]
+            ret_val.append(FeatureSet(name_prefix + fn + str(f), [f], [fn]))
+        return ret_val
 
     def create_all_combos(self, name_prefix=""):
         # See
@@ -39,7 +47,7 @@ class FeatureSet:
         feature_set.index = feature_set.index.astype(str)
         feature_set_index = feature_set.index.tolist()
 
-        return FeatureSet(name, feature_set_index)
+        return FeatureSet(name, feature_set_index, feature_set["Name"].tolist())
 
     @classmethod
     def build_feature_sets(cls, filepath):

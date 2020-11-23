@@ -129,7 +129,8 @@ def run_analysis(analysis_config, callbacks: AnalysisCallbacks):
         metadata_filter=metadata_filter,
         dim_reduction=dim_reduction,
         normalization=normalization,
-        feature_transform=feature_transform
+        feature_transform=feature_transform,
+        meta_encoder=analysis_config.meta_encoder
     )
 
     df = train_state.df

@@ -30,15 +30,23 @@ class BiomTable(TableInfo):
 
 
 class CSVTable(TableInfo):
-    def __init__(self, csv_filepath, **read_kwargs):
+    def __init__(self, csv_filepath, table_name=None, on_load_transform=None, **read_kwargs):
+        self.table_name=table_name
         self.csv_filepath = csv_filepath
         self.read_kwargs = read_kwargs
+        self.on_load_transform = on_load_transform
 
     def load_dataframe(self):
-        csv_table = pd.read_csv(self.filepath, **self.read_kwargs)
+        csv_table = pd.read_csv(self.csv_filepath, **self.read_kwargs)
+
+        if self.on_load_transform is not None:
+            csv_table = self.on_load_transform(csv_table)
+
         return csv_table
 
     def __str__(self):
+        if self.table_name is not None:
+            return self.table_name
         return self.csv_filepath
 
 

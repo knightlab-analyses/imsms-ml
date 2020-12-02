@@ -2,6 +2,7 @@ import pandas as pd
 
 from imsms_analysis.common.analysis_config import AnalysisConfig
 from imsms_analysis.common.normalization import Normalization
+from imsms_analysis.common.table_info import BiomTable
 from imsms_analysis.dataset.sample_sets.fixed_training_set import retrieve_training_set
 from imsms_analysis.events.analysis_callbacks import AnalysisCallbacks
 from imsms_analysis.preprocessing import id_parsing, sample_filtering, \
@@ -67,11 +68,12 @@ def _filter_samples(analysis_config: AnalysisConfig,
     # noinspection PyListCreation
     steps = []
 
-    # Filter out the bad samples (sample prefixes are based on pre-parsed
-    # values. do not reorder below id_parsing)
-    steps.append(sample_filtering.build_prefix_filter(BAD_SAMPLE_PREFIXES))
-    # Parse the IDs and rename to match metadata
-    steps.append(id_parsing.build())
+    if isinstance(analysis_config.table_info, BiomTable):
+        # Filter out the bad samples (sample prefixes are based on pre-parsed
+        # values. do not reorder below id_parsing)
+        steps.append(sample_filtering.build_prefix_filter(BAD_SAMPLE_PREFIXES))
+        # Parse the IDs and rename to match metadata
+        steps.append(id_parsing.build())
     # Run some aggregation function when multiple ids map to the same
     # sample ID, (due to technical replicates)
     steps.append(sample_aggregation.build("sum"))

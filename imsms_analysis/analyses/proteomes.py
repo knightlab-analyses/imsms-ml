@@ -3,6 +3,8 @@ from analysis_runner import SerialRunner, DryRunner
 from common.analysis_factory import AnalysisFactory, MultiFactory
 from common.feature_set import FeatureSet
 
+from imsms_analysis.common.table_info import BiomTable
+
 
 def configure():
     metadata_filepath = "./dataset/metadata/iMSMS_1140samples_metadata.tsv"
@@ -12,7 +14,7 @@ def configure():
     )
 
     return AnalysisFactory(
-        "none",
+        BiomTable("none"),
         metadata_filepath
     ).with_feature_set([None, proteome_avail])
 

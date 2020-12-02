@@ -1,10 +1,10 @@
 # Try standard dimensionality reductions and embeddings.  If these retain
 # useful information, maybe we can visualize results.
 from imsms_analysis.analysis_runner import SerialRunner, DryRunner
-from imsms_analysis.common import biom_util
 from imsms_analysis.common.analysis_factory import AnalysisFactory, MultiFactory
 from imsms_analysis.common.feature_set import FeatureSet
 from imsms_analysis.common.normalization import Normalization
+from imsms_analysis.common.table_info import BiomTable
 from imsms_analysis.dataset.feature_transforms.feature_transformer import \
     FeatureTransformer
 from imsms_analysis.events.plot_lda import LDAPlot
@@ -26,7 +26,7 @@ def configure():
 
     fsets = FeatureSet.build_feature_sets("./dataset/feature_sets/MS_associated_species_fdr0.05_in_10_training_set.csv")
 
-    species_meta = biom_util.read_biom_metadata("./dataset/biom/combined-species.biom")
+    species_meta = BiomTable("species").read_biom_metadata()
     fset_species = FeatureSet("SPECIES",
                               species_meta.index.astype(str).tolist(),
                               species_meta["Name"].tolist())
@@ -81,7 +81,7 @@ def configure():
         # FeatureSet("C", ["572511", "33042", "216851"])]
 
     raw = AnalysisFactory(
-        "species",
+        BiomTable("species"),
         metadata_filepath,
         "Species"
     )\
@@ -91,7 +91,7 @@ def configure():
         .with_feature_set([fset_species] + fset_species.create_univariate_sets() + fsets)
 
     probstel_lda = AnalysisFactory(
-        "genus",
+        BiomTable("genus"),
         metadata_filepath
     )\
         .with_lda(1)\

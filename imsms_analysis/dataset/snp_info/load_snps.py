@@ -6,6 +6,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 
+# Check 4 clusters of Akkermansia muciniphila reference genomes
+
+
+
 NUM_CLUSTERS = {
     "Akkermansia_muciniphila_55290": 4,
     "Alistipes_onderdonkii_55464": 5,
@@ -55,6 +59,7 @@ def overlay_clusters(ax, seaborn_cluster_order, cluster_df):
         print("Divider:", sum)
 
 
+# Can change MIN_SAMPLES_PER_SNP to 11 and see changes.
 def draw_clustermap(name, df, MIN_SAMPLES_PER_SNP=21, MIN_SNPS_PER_SAMPLE=1):
     """
     Filter df for snps that appear in at least MIN_SAMPLES_PER_SNP samples,

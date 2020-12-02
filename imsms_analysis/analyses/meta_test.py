@@ -3,6 +3,7 @@ from imsms_analysis.common.analysis_factory import AnalysisFactory, MultiFactory
 from imsms_analysis.common.feature_set import FeatureSet
 from imsms_analysis.common.meta_encoder import MetaEncoder
 from imsms_analysis.common.normalization import Normalization
+from imsms_analysis.common.table_info import BiomTable
 from imsms_analysis.dataset.feature_transforms.feature_transformer import \
     FeatureTransformer
 from imsms_analysis.events.plot_lda import LDAPlot
@@ -16,7 +17,7 @@ def configure():
     )
 
     raw = AnalysisFactory(
-        "genus",
+        BiomTable("genus"),
         metadata_filepath,
         "Probstel"
     ).with_feature_set(probstel)\
@@ -31,7 +32,7 @@ def configure():
         # ])
 
     meta_only = AnalysisFactory(
-        "genus",
+        BiomTable("genus"),
         metadata_filepath,
         "Meta(sex)"
     ) \

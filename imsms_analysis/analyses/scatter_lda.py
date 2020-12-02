@@ -1,10 +1,10 @@
 # Try standard dimensionality reductions and embeddings.  If these retain
 # useful information, maybe we can visualize results.
 from imsms_analysis.analysis_runner import SerialRunner, DryRunner
-from imsms_analysis.common import biom_util
 from imsms_analysis.common.analysis_factory import AnalysisFactory, MultiFactory
 from imsms_analysis.common.feature_set import FeatureSet
 from imsms_analysis.common.normalization import Normalization
+from imsms_analysis.common.table_info import BiomTable
 from imsms_analysis.dataset.feature_transforms.feature_transformer import \
     FeatureTransformer
 from imsms_analysis.events.plot_lda import LDAPlot
@@ -19,7 +19,7 @@ def configure():
     )
 
     lda = AnalysisFactory(
-        "species",
+        BiomTable("species"),
         metadata_filepath
     ).with_lda([1]) \
         .with_pair_strategy(["paired_subtract"])\
@@ -27,6 +27,7 @@ def configure():
         .with_feature_set([fset_species])
 
     return lda
+
 
 if __name__ == "__main__":
     # Pretend all scripts are run from root of repo for file paths.

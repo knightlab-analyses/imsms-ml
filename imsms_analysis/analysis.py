@@ -8,6 +8,7 @@ import pandas as pd
 from imsms_analysis import preprocessing_pipeline
 
 # Load sequence DataFrame
+from imsms_analysis.common.analysis_config import AnalysisConfig
 from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.common import plotter
 from imsms_analysis.events.analysis_callbacks import AnalysisCallbacks
@@ -38,11 +39,10 @@ def eval_model(model, state):
     return (y == real).value_counts()[True] / len(real)
 
 
-def run_analysis(analysis_config, callbacks: AnalysisCallbacks):
+def run_analysis(analysis_config: AnalysisConfig, callbacks: AnalysisCallbacks):
     callbacks.start_analysis(analysis_config)
 
     analysis_name = analysis_config.analysis_name
-    biom_filepath = analysis_config.biom_filepath
     metadata_filepath = analysis_config.metadata_filepath
     feature_set_index = analysis_config.feature_set_index
     if feature_set_index is not None:
@@ -68,9 +68,7 @@ def run_analysis(analysis_config, callbacks: AnalysisCallbacks):
     if algorithm is None:
         algorithm = "RandomForestClassifier"
 
-    biom_table = load_table(biom_filepath)
-    table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
-    df = table.view(pd.DataFrame)
+    df = analysis_config.table_info.load_dataframe()
 
     # print("RAGE")
     # print(biom_filepath)

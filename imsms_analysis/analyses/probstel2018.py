@@ -2,6 +2,7 @@
 from imsms_analysis.analysis_runner import SerialRunner, DryRunner
 from imsms_analysis.common.analysis_factory import AnalysisFactory, MultiFactory
 from imsms_analysis.common.feature_set import FeatureSet
+from imsms_analysis.common.table_info import BiomTable
 
 
 def configure():
@@ -12,13 +13,13 @@ def configure():
     metadata_filepath = "./dataset/metadata/iMSMS_1140samples_metadata.tsv"
 
     all_genera = AnalysisFactory(
-        "genus",
+        BiomTable("genus"),
         metadata_filepath,
         "All-Genera"
     )
 
     probstel_features = AnalysisFactory(
-        "genus",
+        BiomTable("genus"),
         metadata_filepath,
     ).with_feature_set([probstel] + probstel.create_univariate_sets("Univariate-"))
 

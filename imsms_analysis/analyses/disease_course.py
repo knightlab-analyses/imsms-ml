@@ -2,6 +2,7 @@
 from imsms_analysis.analysis_runner import SerialRunner
 from imsms_analysis.common.analysis_factory import AnalysisFactory
 from imsms_analysis.common.metadata_filter import MetadataFilter
+from imsms_analysis.common.table_info import BiomTable
 
 
 def configure():
@@ -15,7 +16,7 @@ def configure():
     ]
 
     return AnalysisFactory(
-        "species",
+        BiomTable("species"),
         metadata_filepath
     ).with_metadata_filter(filters)
 

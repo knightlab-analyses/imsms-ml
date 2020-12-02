@@ -5,6 +5,7 @@
 from imsms_analysis.analysis_runner import SerialRunner, DryRunner
 from imsms_analysis.common.analysis_factory import AnalysisFactory, MultiFactory
 from imsms_analysis.common.feature_set import FeatureSet
+from imsms_analysis.common.table_info import BiomTable
 
 
 def configure():
@@ -26,7 +27,7 @@ def configure():
 
     facts.append(
         AnalysisFactory(
-            ["species"],
+            [BiomTable("species")],
             metadata_filepath,
             "species"
         )
@@ -37,7 +38,7 @@ def configure():
     #  ensure there is a set that is completely held out from all training sets
     facts.append(
         AnalysisFactory(
-            ['species'],
+            [BiomTable('species')],
             metadata_filepath
         ).with_feature_set(fset_combos)
     )

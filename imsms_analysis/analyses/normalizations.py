@@ -3,13 +3,14 @@
 from imsms_analysis.analysis_runner import SerialRunner, DryRunner
 from imsms_analysis.common.analysis_factory import AnalysisFactory, MultiFactory
 from imsms_analysis.common.normalization import Normalization
+from imsms_analysis.common.table_info import BiomTable
 
 
 def configure():
     metadata_filepath = "./dataset/metadata/iMSMS_1140samples_metadata.tsv"
 
     return AnalysisFactory(
-        "species",
+        BiomTable("species"),
         metadata_filepath
     ).with_normalization([Normalization("CLR", "CLR"),
                           Normalization("rarefy", "rarefy", target_count=10000),

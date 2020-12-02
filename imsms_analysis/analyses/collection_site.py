@@ -3,6 +3,8 @@
 from imsms_analysis.analysis_runner import SerialRunner, DryRunner
 from imsms_analysis.common.analysis_factory import AnalysisFactory
 from imsms_analysis.common.metadata_filter import MetadataFilter
+from imsms_analysis.common.table_info import BiomTable
+
 
 def configure():
     metadata_filepath="./dataset/metadata/iMSMS_1140samples_metadata.tsv"
@@ -17,10 +19,10 @@ def configure():
         MetadataFilter("Boston", "site", ["Boston", "Control"])
     ]
     return AnalysisFactory(
-        "species",
+        BiomTable("species"),
         metadata_filepath,
     ).with_metadata_filter(filters)
-
+()
 
 if __name__ == "__main__":
     # Pretend all scripts are run from root of repo for file paths.

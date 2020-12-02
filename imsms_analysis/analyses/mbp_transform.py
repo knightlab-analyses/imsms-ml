@@ -5,6 +5,7 @@ from imsms_analysis.analysis_runner import SerialRunner, DryRunner
 from imsms_analysis.common.analysis_factory import AnalysisFactory, MultiFactory
 from imsms_analysis.common.metadata_filter import MetadataFilter
 from imsms_analysis.common.normalization import Normalization
+from imsms_analysis.common.table_info import BiomTable
 from imsms_analysis.dataset.feature_transforms.feature_transformer import \
     FeatureTransformer
 
@@ -42,7 +43,7 @@ def configure():
     # )
 
     woltka_transforms = AnalysisFactory(
-        ["none"],
+        [BiomTable("none")],
         metadata_filepath,
     ).with_feature_transform(
         [FeatureTransformer("MBP25", mbp25),
@@ -60,7 +61,7 @@ def configure():
         ])
 
     # woltka_raw = AnalysisFactory(
-    #     ["species", "none"],
+    #     [BiomTable("species"), BiomTable("none")],
     #     metadata_filepath,
     # )
     # .with_metadata_filter(

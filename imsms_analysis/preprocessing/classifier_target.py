@@ -115,7 +115,7 @@ def matched_pair_subtract_sex_balanced(state: PipelineState,
 
     # Pick a subset
     r = default_rng(_CHOICE_RANDOM_SEED)
-    accept_set = r.choice(list(FM_hh), len(MF_hh), replace=False).tolist()
+    accept_set = r.choice(sorted(list(FM_hh)), len(MF_hh), replace=False).tolist()
 
     accept_set = accept_set + list(FF_hh) + list(MM_hh) + list(MF_hh)
     print("ACCEPT SET: ", len(accept_set))

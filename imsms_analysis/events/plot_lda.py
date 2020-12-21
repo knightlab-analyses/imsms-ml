@@ -5,6 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 from imsms_analysis.analysis_runner import SerialRunner
 from imsms_analysis.common.analysis_config import AnalysisConfig
 from imsms_analysis.common.named_functor import NamedFunctor
+from imsms_analysis.preprocessing.column_transformation import LDAFunctor
 from imsms_analysis.state.pipeline_state import PipelineState
 from imsms_analysis.preprocessing.visualization import plot_categorical
 import matplotlib.pyplot as plt
@@ -13,7 +14,7 @@ import pandas as pd
 
 
 class LDAPlot:
-    def __init__(self, rows=-1):
+    def __init__(self, rows=-1, enable_plots=True):
         self.rows = rows
         self.cols = -1
         self.plot_index = -1
@@ -23,6 +24,7 @@ class LDAPlot:
         self.score2 = None
         self.acc_val_titles = []
         self.acc_val_values = []
+        self.enable_plots = enable_plots
 
     def hook_events(self, runner: SerialRunner):
         def _batch_info(configs: list):
@@ -53,27 +55,31 @@ class LDAPlot:
             acc2 = (last_step._lda.score(self.df_before, state.target))
             print("LDA Acc:", acc2)
 
-            plt.subplot(self.rows+1, self.cols, self.plot_index)
-            print(self.df_before)
-            plot_data(last_step._lda,
-                self.df_before.to_numpy(),
-                state.target.to_numpy(),
-                last_step._lda.predict(self.df_before.to_numpy()),
-                mode
-            )
+            # Cool 2d plot but only works for 2d data, muck with subplot
+            # to make it show up
+            # plt.subplot(self.rows+1, self.cols, self.plot_index)
+            # print(self.df_before)
+            # plot_data(last_step._lda,
+            #     self.df_before.to_numpy(),
+            #     state.target.to_numpy(),
+            #     last_step._lda.predict(self.df_before.to_numpy()),
+            #     mode
+            # )
 
-            plt.subplot(self.rows+1, self.cols, self.plot_index+2)
             self.plot_index = self.plot_index + 1
-
             title = config.analysis_name + "-" + mode
-            plot_categorical(state, mode, "", colors=["#FF4C4C", "#4C4CFF"])
-            plt.text(0, .5, "Accuracy " + str(int(acc2 * 100)) + "%")
+
+            if self.enable_plots:
+                plt.subplot(self.rows, self.cols, self.plot_index - 1)
+                plot_categorical(state, mode, "", colors=["#FF4C4C", "#4C4CFF"])
+                plt.text(0, .5, "Accuracy " + str(int(acc2 * 100)) + "%")
 
             self.ldas.append(last_step._lda.coef_)
 
             if self.plot_index == self.rows * self.cols + 1:
                 self.plot_index = 1
-                plt.show()
+                if self.enable_plots:
+                    plt.show()
 
             if self.plot_index % 2 == 1:
                 self.acc_val_titles.append(title)

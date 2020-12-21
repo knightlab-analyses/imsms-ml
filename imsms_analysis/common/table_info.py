@@ -62,7 +62,9 @@ class MergeTable(TableInfo):
         for i in range(1, len(self.table_list)):
             df = df.join(self.table_list[i].load_dataframe(),
                          how="outer",
-                         rsuffix=self.col_prefix_list[i])
+                         rsuffix=self.col_suffix_list[i])
+        df = df.fillna(0)
+        df['sum'] = df.sum(axis=0)
         print(df)
         return df
 

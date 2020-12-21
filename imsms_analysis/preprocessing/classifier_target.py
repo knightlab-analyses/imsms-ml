@@ -8,6 +8,9 @@ from numpy.random import default_rng
 import numpy as np
 
 _CONCAT_RANDOM_SEED = 1261399238688719593838
+
+# The LDA accuracy results are all over the place depending on this random seed
+# maybe we don't have enough samples to properly subsample for sex bias?
 _CHOICE_RANDOM_SEED = 2116932983867891958383
 
 

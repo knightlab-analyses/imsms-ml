@@ -106,7 +106,7 @@ import seaborn as sns
 #              value_name="Accuracy")
 
 #
-df = pd.read_csv("./plottedResults/mbp30_shuffle.csv", sep=',')
+df = pd.read_csv("./plottedResults/human2-pathabundance.csv", sep=',')
 df = pd.melt(df,
              value_vars=df.columns.tolist()[1:],
              var_name="Permutation",
@@ -143,5 +143,5 @@ ax.set_xticklabels(ax.get_xticklabels(), rotation=40, ha="right")
 ax.axhline(.5, ls='--')
 # ax2.axhline(30, ls='--')
 plt.tight_layout()
-plt.title("MBP True and Permuted Transforms")
+plt.title("Pathway and Species Specific Pathways vs Species")
 plt.show()

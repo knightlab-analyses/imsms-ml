@@ -37,15 +37,10 @@ def eval_model(model, state):
 
     return (y == real).value_counts()[True] / len(real)
 
-def make_mlab_dirs():
-    # TODO call this when analysis config asks for 
-    # barnacle runner
-    return
 
-
-def run_analysis(analysis_config, callbacks: AnalysisCallbacks):
+def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
     callbacks.start_analysis(analysis_config)
-
+    
     analysis_name = analysis_config.analysis_name
     biom_filepath = analysis_config.biom_filepath
     metadata_filepath = analysis_config.metadata_filepath
@@ -59,9 +54,6 @@ def run_analysis(analysis_config, callbacks: AnalysisCallbacks):
     if pair_strategy is None:
         pair_strategy = "paired_concat"
     metadata_filter = analysis_config.metadata_filter
-    n_random_seeds = analysis_config.n_random_seeds
-    if n_random_seeds is None:
-        n_random_seeds = 50
     dim_reduction = analysis_config.dimensionality_reduction
     normalization = analysis_config.normalization
     if normalization is None:
@@ -69,9 +61,6 @@ def run_analysis(analysis_config, callbacks: AnalysisCallbacks):
     feature_transform = analysis_config.feature_transform
     # TODO: Probably need to keep the config for the algorithm next to the algo
     #  blahhh.
-    algorithm = analysis_config.mlab_algorithm
-    if algorithm is None:
-        algorithm = "RandomForestClassifier"
 
     biom_table = load_table(biom_filepath)
     table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
@@ -157,6 +146,25 @@ def run_analysis(analysis_config, callbacks: AnalysisCallbacks):
     # Convert necessary types for regression-benchmarking
     final_biom = Artifact.import_data("FeatureTable[Frequency]", df)\
         .view(biom.Table)
+    
+    return final_biom, train_state, test_state
+
+def run_analysis(analysis_config, callbacks: AnalysisCallbacks):
+    
+    (
+    final_biom,
+    train_state,
+    test_state
+    ) = run_preprocessing(analysis_config, callbacks)
+
+    target = train_state.target
+    analysis_name = analysis_config.analysis_name
+    n_random_seeds = analysis_config.n_random_seeds
+    if n_random_seeds is None:
+        n_random_seeds = 50
+    algorithm = analysis_config.mlab_algorithm
+    if algorithm is None:
+        algorithm = "RandomForestClassifier"
 
     # LinearSVR_grids = {'C': [1e-4, 1e-3, 1e-2, 1e-1, 1e1,
     #                             1e2, 1e3, 1e4, 1e5, 1e6, 1e7],

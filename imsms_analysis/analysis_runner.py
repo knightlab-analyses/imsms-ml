@@ -7,6 +7,7 @@ from q2_mlab import orchestrate_hyperparameter_search
 from imsms_analysis.events.analysis_callbacks import AnalysisCallbacks
 from os import path, getcwd, makedirs
 from qiime2 import Artifact, Metadata
+import subprocess
 
 
 def _check_unique_names(factory):
@@ -102,9 +103,9 @@ class ParallelRunner:
                 
                 # Run this custom preprocessing
                 (
-                final_biom,
-                train_state,
-                test_state
+                final_biom, 
+                target, 
+                _, _
                 ) = run_preprocessing(config, self.callbacks)
 
                 base_dir = "dataset"
@@ -131,7 +132,6 @@ class ParallelRunner:
                     "FeatureTable[Frequency]", 
                     final_biom
                 )
-                print("current working directory: ", getcwd())
                 table_artifact.save(table_fp)
 
                 metadata_fp = path.join(
@@ -139,10 +139,17 @@ class ParallelRunner:
                     "filtered_metadata.qza"
                 )
                 metadata_artifact = Artifact.import_data(
-                    "SampleData[Target]", train_state.target
+                    "SampleData[Target]", target
                 )
                 metadata_artifact.save(metadata_fp)
+                
 
+                # run job indices 1...10 inclusive, letting 5 jobs run at once
+                # each job has 100 parameter sets, for a total of 1000 parameter sets
+                start = 1
+                end = 10
+                n_concurrent_jobs = 5
+                chunk_size = 100
                 (
                     script_fp,
                     params_fp,
@@ -157,13 +164,16 @@ class ParallelRunner:
                     ppn=4,  # processors per node
                     memory=32,  # memory in GB
                     wall=50,  # walltime  in hours
-                    chunk_size=100,  # num parameter sets to run per job
+                    chunk_size=chunk_size,  # num parameter sets to run per job
                     randomize=True,  # randomly shuffle order of parameter set
                     force=False,  # force overwrite of existing results
-                    dry=True,  # dry runs
+                    dry=False,  # dry runs
                     dataset_path=table_fp,
                     metadata_path=metadata_fp,
                 )
+                
+                cmd = f"qsub -t {start}:{end}%{n_concurrent_jobs} {script_fp}"
+                subprocess.run(cmd)
 
             except Exception:
                 print(f"TEST FAILURE. CONFIG: " + config.analysis_name)

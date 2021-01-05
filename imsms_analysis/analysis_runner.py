@@ -172,7 +172,7 @@ class ParallelRunner:
                     metadata_path=metadata_fp,
                 )
                 
-                cmd = f"qsub -t {start}:{end}%{n_concurrent_jobs} {script_fp}"
+                cmd = ["qsub", "-t", f"{start}-{end}%{n_concurrent_jobs}", script_fp]
                 subprocess.run(cmd)
 
             except Exception:

@@ -2,6 +2,7 @@ import pandas as pd
 
 from imsms_analysis.common.analysis_config import AnalysisConfig
 from imsms_analysis.common.normalization import Normalization
+from imsms_analysis.common.table_info import BiomTable
 from imsms_analysis.dataset.sample_sets.fixed_training_set import retrieve_training_set
 from imsms_analysis.events.analysis_callbacks import AnalysisCallbacks
 from imsms_analysis.preprocessing import id_parsing, sample_filtering, \
@@ -35,7 +36,8 @@ def process(analysis_config: AnalysisConfig,
             metadata_filter=None,
             dim_reduction=None,
             normalization=Normalization.DEFAULT,
-            feature_transform=None):
+            feature_transform=None,
+            meta_encoder=None):
     filtered = _filter_samples(analysis_config, state, callbacks, verbose)
     train, test = _split_test_set(filtered,
                                   training_set_index,
@@ -51,6 +53,7 @@ def process(analysis_config: AnalysisConfig,
                              dim_reduction=dim_reduction,
                              normalization_strategy=normalization,
                              feature_transform=feature_transform,
+                             meta_encoder=meta_encoder
                              )
 
 
@@ -65,11 +68,12 @@ def _filter_samples(analysis_config: AnalysisConfig,
     # noinspection PyListCreation
     steps = []
 
-    # Filter out the bad samples (sample prefixes are based on pre-parsed
-    # values. do not reorder below id_parsing)
-    steps.append(sample_filtering.build_prefix_filter(BAD_SAMPLE_PREFIXES))
-    # Parse the IDs and rename to match metadata
-    steps.append(id_parsing.build())
+    if isinstance(analysis_config.table_info, BiomTable):
+        # Filter out the bad samples (sample prefixes are based on pre-parsed
+        # values. do not reorder below id_parsing)
+        steps.append(sample_filtering.build_prefix_filter(BAD_SAMPLE_PREFIXES))
+        # Parse the IDs and rename to match metadata
+        steps.append(id_parsing.build())
     # Run some aggregation function when multiple ids map to the same
     # sample ID, (due to technical replicates)
     steps.append(sample_aggregation.build("sum"))
@@ -112,7 +116,8 @@ def _apply_transforms(analysis_config: AnalysisConfig,
                       metadata_filter=None,
                       dim_reduction=None,
                       normalization_strategy=Normalization.DEFAULT,
-                      feature_transform=None
+                      feature_transform=None,
+                      meta_encoder=None
                       ):
     # noinspection PyListCreation
     steps = []
@@ -133,6 +138,12 @@ def _apply_transforms(analysis_config: AnalysisConfig,
                                      **normalization_strategy.kwargs))
     if restricted_feature_set is not None:
         steps.append(build_column_filter(restricted_feature_set))
+
+    if meta_encoder is not None:
+        steps.append(column_transformation.build_meta_encoder(
+            meta_encoder.col_name,
+            meta_encoder.encoder)
+        )
 
     # Show correlation matrix heatmap for debugging
     # steps.append(visualization.plot_correlation_matrix())

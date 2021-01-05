@@ -65,14 +65,15 @@ class SerialRunner:
 
         # TODO:  Would probably be smart to save results as we go in case of
         #  catastrophic failure.
-        print(test_accuracies)
-        results_df = pd.concat(test_accuracies, axis=1)
-        results_df.to_csv("./results/all.csv")
+        if len(test_accuracies) > 0:
+            print(test_accuracies)
+            results_df = pd.concat(test_accuracies, axis=1)
+            results_df.to_csv("./results/all.csv")
 
-        summary_df = pd.concat([results_df.mean(), results_df.std()], axis=1)
-        summary_df.columns = ["Mean Test Acc", "Std Dev Test Acc"]
-        summary_df.to_csv("./results/summary.csv")
-        print(summary_df)
+            summary_df = pd.concat([results_df.mean(), results_df.std()], axis=1)
+            summary_df.columns = ["Mean Test Acc", "Std Dev Test Acc"]
+            summary_df.to_csv("./results/summary.csv")
+            print(summary_df)
 
 
 # TODO

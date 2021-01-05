@@ -1,15 +1,16 @@
 # Examine the data
 from analysis_runner import SerialRunner
-from common import biom_util
 from common.analysis_factory import AnalysisFactory
 from common.feature_set import FeatureSet
+
+from imsms_analysis.common.table_info import BiomTable
 
 
 def configure():
     metadata_filepath = "./dataset/metadata/iMSMS_1140samples_metadata.tsv"
 
     return AnalysisFactory(
-        "genus",
+        BiomTable("genus"),
         metadata_filepath
     )
 
@@ -20,8 +21,7 @@ if __name__ == "__main__":
     os.chdir("..")
 
     config = list(configure().gen_configurations())[0]
-    print(config.biom_filepath)
-    genome_ids = biom_util.read_biom_metadata(config.biom_filepath)
+    genome_ids = config.table_info.read_biom_metadata()
     print(genome_ids)
     genome_ids.to_csv("./results/genome_ids.tsv", sep="\t")
 

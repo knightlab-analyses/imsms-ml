@@ -23,7 +23,8 @@ from imsms_analysis.state.pipeline_state import PipelineState
 #
 def build(method_name, target_count=10000):
     if method_name == 'none':
-        return NamedFunctor("No Normalization (WARN: IGNORES COMPOSITIONALITY",
+        return NamedFunctor("No Normalization "
+                            "(WARN: IGNORES COMPOSITIONALITY)",
                             lambda state, mode: state)
 
     if method_name == 'rarefy':

@@ -8,6 +8,7 @@ import pandas as pd
 from imsms_analysis import preprocessing_pipeline
 
 # Load sequence DataFrame
+from imsms_analysis.common.analysis_config import AnalysisConfig
 from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.common import plotter
 from imsms_analysis.events.analysis_callbacks import AnalysisCallbacks
@@ -42,7 +43,6 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
     callbacks.start_analysis(analysis_config)
     
     analysis_name = analysis_config.analysis_name
-    biom_filepath = analysis_config.biom_filepath
     metadata_filepath = analysis_config.metadata_filepath
     feature_set_index = analysis_config.feature_set_index
     if feature_set_index is not None:
@@ -62,9 +62,7 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
     # TODO: Probably need to keep the config for the algorithm next to the algo
     #  blahhh.
 
-    biom_table = load_table(biom_filepath)
-    table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
-    df = table.view(pd.DataFrame)
+    df = analysis_config.table_info.load_dataframe()
 
     # print("RAGE")
     # print(biom_filepath)
@@ -123,7 +121,8 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
         metadata_filter=metadata_filter,
         dim_reduction=dim_reduction,
         normalization=normalization,
-        feature_transform=feature_transform
+        feature_transform=feature_transform,
+        meta_encoder=analysis_config.meta_encoder
     )
 
     df = train_state.df

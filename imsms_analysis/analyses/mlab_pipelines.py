@@ -3,12 +3,13 @@ from q2_mlab import ClassificationTask
 
 from imsms_analysis.analysis_runner import SerialRunner, DryRunner
 from imsms_analysis.common.analysis_factory import AnalysisFactory, MultiFactory
+from imsms_analysis.common.table_info import BiomTable
 
 
 def configure():
     metadata_filepath = "./dataset/metadata/iMSMS_1140samples_metadata.tsv"
     return AnalysisFactory(
-        ["species"],
+        [BiomTable("species")],
         metadata_filepath
     ).with_algorithm(list(ClassificationTask.algorithms.keys()) + ["RandomForestSVD"])
 

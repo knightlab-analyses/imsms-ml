@@ -4,20 +4,22 @@ from typing import Union
 from imsms_analysis.common.analysis_config import AnalysisConfig
 from imsms_analysis.common.dimensionality_reduction import DimensionalityReduction
 from imsms_analysis.common.feature_set import FeatureSet
+from imsms_analysis.common.meta_encoder import MetaEncoder
 from imsms_analysis.common.metadata_filter import MetadataFilter
 from imsms_analysis.common.normalization import Normalization
+from imsms_analysis.common.table_info import TableInfo, BiomTable
 from imsms_analysis.dataset.feature_transforms.feature_transformer import \
     FeatureTransformer
 
 
 class AnalysisFactory:
     def __init__(self,
-                 biom_type: Union[list, str],
+                 table_info: Union[list, TableInfo],
                  metadata_filepath: str,
                  analysis_name: str = None):
-        self.biom_type = biom_type
-        if type(biom_type) is str:
-            self.biom_type = [biom_type]
+        self.table_info = table_info
+        if isinstance(table_info, TableInfo):
+            self.table_info = [table_info]
         self.metadata_filepath = metadata_filepath
         self.analysis_name = analysis_name
 
@@ -31,6 +33,7 @@ class AnalysisFactory:
         self.mlab_algorithm = None
         self.feature_transform = None
         self.allele_info = None
+        self.meta_encoder = None
 
     def with_feature_set(self, feature_set):
         if type(feature_set) == FeatureSet:
@@ -113,9 +116,11 @@ class AnalysisFactory:
         self.allele_info = allele_info
         return self
 
-    @staticmethod
-    def _build_biom_file_path(biom_type: str) -> str:
-        return "./dataset/biom/combined-" + biom_type + ".biom"
+    def with_meta_encoders(self, meta_encoder):
+        if type(meta_encoder) == MetaEncoder:
+            meta_encoder = [meta_encoder]
+        self.meta_encoder = meta_encoder
+        return self
 
     def _analysis_name_gen(self,
                            all_params,
@@ -134,14 +139,8 @@ class AnalysisFactory:
         if not path.exists(self.metadata_filepath):
             raise FileNotFoundError("No Metadata File:" + self.metadata_filepath)
 
-        # Check that biom files exist
-        for biom_type in self.biom_type:
-            biom_path = self._build_biom_file_path(biom_type)
-            if not path.exists(biom_path):
-                raise FileNotFoundError("No Biom Table: " + biom_path)
-
     def gen_configurations(self):
-        all_params = [self.biom_type,
+        all_params = [self.table_info,
                       self.feature_set,
                       self.training_set,
                       self.pair_strategy,
@@ -151,7 +150,8 @@ class AnalysisFactory:
                       self.normalization,
                       self.mlab_algorithm,
                       self.feature_transform,
-                      self.allele_info]
+                      self.allele_info,
+                      self.meta_encoder]
 
         for i in range(len(all_params)):
             if all_params[i] is None:
@@ -167,10 +167,10 @@ class AnalysisFactory:
                         yield result
 
         for chosen in _iterate(all_params, 0, []):
-            bt, fs, ts, ps, mf, num_seeds, dr, norm, algo, ft, ai = chosen
+            bt, fs, ts, ps, mf, num_seeds, dr, norm, algo, ft, ai, me = chosen
             yield AnalysisConfig(
                 self._analysis_name_gen(all_params, chosen),
-                self._build_biom_file_path(bt),
+                bt,
                 self.metadata_filepath,
                 fs,
                 ts,
@@ -181,7 +181,8 @@ class AnalysisFactory:
                 norm,
                 algo,
                 ft,
-                ai
+                ai,
+                me
             )
 
 

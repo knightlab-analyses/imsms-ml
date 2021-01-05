@@ -2,16 +2,16 @@
 
 from imsms_analysis.analysis_runner import SerialRunner
 from imsms_analysis.common.analysis_factory import AnalysisFactory
+from imsms_analysis.common.table_info import BiomTable
 
 
 def configure():
     metadata_filepath = "./dataset/metadata/iMSMS_1140samples_metadata.tsv"
     return AnalysisFactory(
-        "species",
+        BiomTable("species"),
         metadata_filepath
     )\
-        .with_num_training_sets(10)\
-        .with_pair_strategy(["paired_concat", "paired_subtract", "unpaired"])
+        .with_pair_strategy(["unpaired", "paired_concat", "paired_subtract"])
 
 
 if __name__ == "__main__":

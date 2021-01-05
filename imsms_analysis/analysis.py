@@ -146,17 +146,17 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
     final_biom = Artifact.import_data("FeatureTable[Frequency]", df)\
         .view(biom.Table)
     
-    return final_biom, train_state, test_state
+    return final_biom, target, train_state, test_state
 
 def run_analysis(analysis_config, callbacks: AnalysisCallbacks):
     
     (
     final_biom,
+    target,
     train_state,
     test_state
     ) = run_preprocessing(analysis_config, callbacks)
 
-    target = train_state.target
     analysis_name = analysis_config.analysis_name
     n_random_seeds = analysis_config.n_random_seeds
     if n_random_seeds is None:

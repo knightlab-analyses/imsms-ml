@@ -1,10 +1,13 @@
 import pandas as pd
 
 from imsms_analysis.common.analysis_factory import AnalysisFactory
-from imsms_analysis.analysis import run_analysis
+from imsms_analysis.analysis import run_analysis, run_preprocessing
 import traceback
-
+from q2_mlab import orchestrate_hyperparameter_search
 from imsms_analysis.events.analysis_callbacks import AnalysisCallbacks
+from os import path, getcwd, makedirs
+from qiime2 import Artifact, Metadata
+import subprocess
 
 
 def _check_unique_names(factory):
@@ -12,10 +15,12 @@ def _check_unique_names(factory):
     names = set()
     for config in factory.gen_configurations():
         if config.analysis_name in names:
-            raise Exception("Duplicate analysis name: " +
-                            config.analysis_name +
-                            ".  Analysis factory may require code update "
-                            "to handle new parameter type")
+            raise Exception(
+                "Duplicate analysis name: "
+                + config.analysis_name
+                + ".  Analysis factory may require code update "
+                "to handle new parameter type"
+            )
         names.add(config.analysis_name)
 
 
@@ -36,7 +41,6 @@ class DryRunner:
 
 
 class SerialRunner:
-
     def __init__(self):
         self.callbacks = AnalysisCallbacks()
 
@@ -73,6 +77,105 @@ class SerialRunner:
             print(summary_df)
 
 
-# class ParallelRunner:
-#     # TODO: Something something queue some jobs
-#     pass
+# TODO
+# Try passing the job array id in the config
+# https://waterprogramming.wordpress.com/2013/01/24/pbs-job-submission-with-python/
+# ^ for submitting jobs with python
+class ParallelRunner:
+    def __init__(self):
+        self.callbacks = AnalysisCallbacks()
+
+    def run(self, factory):
+        factory.validate()
+        _check_unique_names(factory)
+
+        configs = []
+        for config in factory.gen_configurations():
+            configs.append(config)
+
+        # Run test
+        configs = [x for x in factory.gen_configurations()]
+
+        self.callbacks.batch_info(configs)
+        for config in configs:
+            try:
+                print(config.analysis_name)
+                
+                # Run this custom preprocessing
+                (
+                final_biom, 
+                target, 
+                _, _
+                ) = run_preprocessing(config, self.callbacks)
+
+                base_dir = "dataset"
+                dataset = "imsms-mlab"
+                preparation = config.analysis_name
+                target_name = "disease_binary"
+                algorithm = config.mlab_algorithm
+                if algorithm is None:
+                    algorithm = "RandomForestClassifier"
+
+                # Create the  expected file structure
+                results_dir = path.join(
+                    base_dir, dataset, preparation, target_name
+                )
+                if not path.exists(results_dir):
+                    makedirs(results_dir)
+                
+                # Save table and metadata
+                table_fp = path.join(
+                    base_dir, dataset, preparation, target_name,
+                    "filtered_table.qza"
+                )
+                table_artifact = Artifact.import_data(
+                    "FeatureTable[Frequency]", 
+                    final_biom
+                )
+                table_artifact.save(table_fp)
+
+                metadata_fp = path.join(
+                    base_dir, dataset, preparation, target_name,
+                    "filtered_metadata.qza"
+                )
+                metadata_artifact = Artifact.import_data(
+                    "SampleData[Target]", target
+                )
+                metadata_artifact.save(metadata_fp)
+                
+
+                # run job indices 1...10 inclusive, letting 5 jobs run at once
+                # each job has 100 parameter sets, for a total of 1000 parameter sets
+                start = 1
+                end = 10
+                n_concurrent_jobs = 5
+                chunk_size = 100
+                (
+                    script_fp,
+                    params_fp,
+                    run_info_fp,
+                ) = orchestrate_hyperparameter_search(
+                    dataset=dataset,
+                    preparation=preparation,
+                    target=target_name,
+                    algorithm=algorithm,
+                    repeats=3,  # num CV repeats
+                    base_dir=base_dir,  # Directory with mlab structure containing datasets
+                    ppn=4,  # processors per node
+                    memory=32,  # memory in GB
+                    wall=50,  # walltime  in hours
+                    chunk_size=chunk_size,  # num parameter sets to run per job
+                    randomize=True,  # randomly shuffle order of parameter set
+                    force=False,  # force overwrite of existing results
+                    dry=False,  # dry runs
+                    dataset_path=table_fp,
+                    metadata_path=metadata_fp,
+                )
+                
+                cmd = ["qsub", "-t", f"{start}-{end}%{n_concurrent_jobs}", script_fp]
+                subprocess.run(cmd)
+
+            except Exception:
+                print(f"TEST FAILURE. CONFIG: " + config.analysis_name)
+                traceback.print_exc()
+

@@ -11,3 +11,7 @@ class Normalization:
 Normalization.DEFAULT = Normalization("Divide10000",
                                       "divide_total",
                                       target_count=10000)
+
+Normalization.CLR = Normalization("CLR", "CLR")
+
+Normalization.NONE = Normalization("None", "none")

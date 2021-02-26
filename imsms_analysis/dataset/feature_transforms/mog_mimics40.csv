@@ -1,0 +1,71 @@
+ncbi_id,genome_id,epitope,mimicked,blosum,genus,species
+1122146,G000423245,IHLYKNGKD,MOG,47,Lactobacillus,Lactobacillus ceti
+1784,G001584765,VHLYRNGPD,MOG,45,Mycobacterium,Mycobacterium simiae
+1660156,G001724515,VHLYMNGKD,MOG,45,,bacterium SCN 62-11
+1121346,G000378425,IHYYRNGKD,MOG,45,Cohnella,Cohnella laeviribosi
+1122915,G000422905,IHYYRNGKD,MOG,45,Paenibacillus,Paenibacillus alginolyticus
+1449346,G000744785,VHLYVNGKD,MOG,43,Kitasatospora,Kitasatospora azatica
+1449347,G000744225,VHLYVNGKD,MOG,43,Kitasatospora,Kitasatospora mediocidica
+66896,G001418575,VHLYVNGKD,MOG,43,Streptomyces,Streptomyces griseoplanus
+1280674,G000424185,VHLYRNGEE,MOG,43,Prevotella,Prevotella sp. AGR2160
+1262691,G000437075,VHLYRNGEN,MOG,42,Akkermansia,Akkermansia sp. CAG:344
+1149865,G000258495,VHLYKNAKD,MOG,42,Pedobacter,Pedobacter agri
+388399,G000169415,LYLYRNGKD,MOG,42,Sagittula,Sagittula stellata
+1116389,G000970465,LYLYRNGKD,MOG,42,Devosia,Devosia insulae
+1417296,G000687435,LYLYRNGKD,MOG,42,Defluviimonas,Defluviimonas sp. 20V17
+1523430,G001295845,LYLYRNGKD,MOG,42,Rhodopseudomonas,Rhodopseudomonas sp. AAP120
+95607,G000333455,LYLYRNGKD,MOG,42,Rhodopseudomonas,Rhodopseudomonas sp. B29
+927704,G000284095,LHLYANGKD,MOG,42,Selenomonas,Selenomonas ruminantium
+971,G900116485,LHLYANGKD,MOG,42,Selenomonas,Selenomonas ruminantium
+971,G900111915,LHLYANGKD,MOG,42,Selenomonas,Selenomonas ruminantium
+971,G900107615,LHLYANGKD,MOG,42,Selenomonas,Selenomonas ruminantium
+971,G900104055,LHLYANGKD,MOG,42,Selenomonas,Selenomonas ruminantium
+971,G900100835,LHLYANGKD,MOG,42,Selenomonas,Selenomonas ruminantium
+1265,G900119535,LHIYRNGED,MOG,42,Ruminococcus,Ruminococcus flavefaciens
+1122919,G000380965,IRALVGDEV,MOG,42,Paenibacillus,Paenibacillus ginsengihumi
+1122923,G000422485,IHYYRNGRD,MOG,42,Paenibacillus,Paenibacillus pasadenensis
+879308,G000221565,IHLYRNQKD,MOG,42,Peptoniphilus,Peptoniphilus sp. oral taxon 375
+1736674,G001310225,IHLYRDGRD,MOG,42,Algibacter,Algibacter alginolytica
+1003181,G001640045,IHLYRDGRD,MOG,42,Thiomargarita,Candidatus Thiomargarita nelsonii
+1801839,G001804395,IHLYRDGRD,MOG,42,,Omnitrophica WOR_2 bacterium GWA2_45_18
+1501392,G000803105,VHLYPNGRD,MOG,41,Coprobacter,Coprobacter secundus
+1408452,G000526915,VHLFRNGPD,MOG,41,Mycobacterium,Mycobacterium genavense
+47839,G000689255,VHLFRNGPD,MOG,41,Mycobacterium,Mycobacterium triplex
+768671,G000223985,VHIYRDGRD,MOG,41,Thiocapsa,Thiocapsa marina
+1089550,G000419585,VHIYRDGRD,MOG,41,Salisaeta,Salisaeta longa
+1134406,G001306115,VHFYRNAKD,MOG,41,Ornatilinea,Ornatilinea apprima
+1121895,G000769825,LNLYRNGKD,MOG,41,Flavobacterium,Flavobacterium rivuli
+1121895,G000378485,LNLYRNGKD,MOG,41,Flavobacterium,Flavobacterium rivuli
+1727164,G001412655,LNLYRNGKD,MOG,41,Pedobacter,Pedobacter sp. PACM 27299
+573321,G900109685,LNLYRNGKD,MOG,41,Chitinophaga,Chitinophaga rupis
+388467,G000710505,LNLYRNGKD,MOG,41,Planktothrix,Planktothrix agardhii
+1896168,G001899155,LNLYRNGKD,MOG,41,Flavobacterium,Flavobacterium sp. 38-13
+1121897,G000422705,LNLYRNGKD,MOG,41,Flavobacterium,Flavobacterium soli
+1338009,G001006065,LNLYRNGKD,MOG,41,Sphingobacterium,Sphingobacterium sp. IITKGP-BTPF85
+1220589,G000773015,LHLYRNGKT,MOG,41,Lysinibacillus,Lysinibacillus odysseyi
+647113,G000179575,LHLYKNGKE,MOG,41,Methanothermococcus,Methanothermococcus okinawensis
+1194090,G900129315,IHLYRSGKE,MOG,41,Aliifodinibius,Aliifodinibius roseus
+105219,G000954135,VNLYRNGQD,MOG,40,Ralstonia,Ralstonia mannitolilytica
+105219,G000953875,VNLYRNGQD,MOG,40,Ralstonia,Ralstonia mannitolilytica
+67352,G000718025,VHVYVNGKD,MOG,40,Streptomyces,Streptomyces purpeofuscus
+1736486,G001429805,VHVYVNGKD,MOG,40,Kitasatospora,Kitasatospora sp. Root187
+1463833,G000717715,VHVYVNGKD,MOG,40,Streptomyces,Streptomyces sp. NRRL B-24484
+1427391,G000955975,VHVYVNGKD,MOG,40,Saccharothrix,Saccharothrix sp. ST-888
+1444768,G000710465,VHVYVNGKD,MOG,40,Kitasatospora,Kitasatospora sp. MBT63
+571915,G001020985,VHVYRNHKD,MOG,40,Corynebacterium,Corynebacterium mustelae
+688246,G000218235,VHVYRNGEE,MOG,40,Prevotella,Prevotella multisaccharivorax
+1122985,G000378085,VHTYRNGKS,MOG,40,Prevotella,Prevotella loescheii
+112248,G900129355,VHLYSNGKN,MOG,40,Seinonella,Seinonella peptonophila
+35841,G000751775,VHLYKNGID,MOG,40,Bacillus,Bacillus thermoamylovorans
+1392836,G000875945,VHLYENGKS,MOG,40,,Lachnospiraceae bacterium TWA4
+1410657,G000702065,VHLYADGKD,MOG,40,Kandleria,Kandleria vitulina
+1410659,G000621925,VHLYADGKD,MOG,40,Kandleria,Kandleria vitulina
+118161,G000332195,INLYRNGRD,MOG,40,Pleurocapsa,Pleurocapsa sp. PCC 7319
+1095552,G000427625,INLYKNGKD,MOG,40,Methylobacter,Methylobacter luteus
+1234409,G000313915,IHLYANGKE,MOG,40,Catellicoccus,Catellicoccus marimammalium
+1003181,G001640045,IHIYRDGRD,MOG,40,Thiomargarita,Candidatus Thiomargarita nelsonii
+91464,G000155595,IHIYRDGRD,MOG,40,Synechococcus,Synechococcus sp. PCC 7335
+1141660,G000314895,IHCYRNGKN,MOG,40,Providencia,Providencia sneebia
+673860,G000327505,IHAYRNGKN,MOG,40,Aciduliprofundum,Aciduliprofundum sp. MAR08-339
+1704026,G001303745,IHAYENGKD,MOG,40,,Nitrospira bacterium SM23_35
+558152,G000737775,FYLYRNGKD,MOG,40,Chryseobacterium,Chryseobacterium piperi

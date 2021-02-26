@@ -16,6 +16,24 @@ from imsms_analysis.state.pipeline_state import PipelineState
 import pdb
 
 
+def _print_read_count_info(df):
+    import csv
+    """ Open up a mimic file and print read counts from the raw dataframe """
+    with open("dataset/feature_transforms/plp1mimics42.csv") as f:
+        rr = csv.reader(f)
+        headers = next(rr, None)
+        gid = headers.index("genome_id")
+        print("\t".join([str(x) for x in headers + ["Read Count"]]))
+
+        for row in rr:
+            key = row[gid]
+            count = 0
+
+        if key in df.columns:
+            count = df[key].sum()
+        print("\t".join([str(x) for x in row + [count]]))
+
+
 def eval_model(model, state):
     test_df = state.df
     test_meta_df = state.meta_df
@@ -63,6 +81,7 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
     #  blahhh.
 
     df = analysis_config.table_info.load_dataframe()
+    _print_read_count_info(df)
 
     # print("RAGE")
     # print(biom_filepath)
@@ -148,13 +167,13 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
     
     return final_biom, target, train_state, test_state
 
+
 def run_analysis(analysis_config, callbacks: AnalysisCallbacks):
-    
     (
-    final_biom,
-    target,
-    train_state,
-    test_state
+        final_biom,
+        target,
+        train_state,
+        test_state
     ) = run_preprocessing(analysis_config, callbacks)
 
     analysis_name = analysis_config.analysis_name

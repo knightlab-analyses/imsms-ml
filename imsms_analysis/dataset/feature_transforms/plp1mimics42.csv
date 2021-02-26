@@ -1,0 +1,147 @@
+ncbi_id,genome_id,epitope,mimicked,blosum,genus,species
+1778262,G900039485,IIPWNSFPG,PLP1,49,Candidatus Doolittlea,Candidatus Doolittlea endobia
+457421,G000155435,VVPWTAFPG,PLP1,46,,Clostridiales bacterium 1_7_47FAA
+1263066,G000438215,VVPWTAFPG,PLP1,46,Clostridium,Clostridium clostridioforme CAG:511
+1263064,G000431175,VVPWTAFPG,PLP1,46,Clostridium,Clostridium bolteae CAG:59
+1263065,G000436455,VVPWTAFPG,PLP1,46,Clostridium,Clostridium clostridioforme CAG:132
+997894,G000371705,VVPWTAFPG,PLP1,46,Lachnoclostridium,[Clostridium] bolteae
+645991,G000190635,MLPWTAFPG,PLP1,46,Syntrophobotulus,Syntrophobotulus glycolicus
+1120960,G000421565,ILPWNAFDG,PLP1,46,Agromyces,Agromyces subbeticus
+1803438,G001919715,VVPWNAVPG,PLP1,45,,Acidobacteria bacterium 13_1_20CM_58_21
+1803432,G001920375,VVPWNAVPG,PLP1,45,,Acidobacteria bacterium 13_1_20CM_3_58_11
+292800,G001688625,VIPWNAFPR,PLP1,45,Flavonifractor,Flavonifractor plautii
+1441930,G000520015,LIPWNPFPG,PLP1,45,Chania,Chania multitudinisentens
+393305,G000009345,LIPWNPFPG,PLP1,45,Yersinia,Yersinia enterocolitica
+1354337,G001654855,LIPWNPFPG,PLP1,45,Cosenzaea,Cosenzaea myxofaciens
+61652,G001572725,LIPWNPFPG,PLP1,45,Serratia,Serratia rubidaea
+634500,G000196615,LIPWNPFPG,PLP1,45,Erwinia,Erwinia billingiae
+1267600,G000599885,LIPWNPFPG,PLP1,45,Pantoea,Pantoea sp. IMH
+572265,G000021705,LIPWNPFPG,PLP1,45,Candidatus Hamiltonella,Candidatus Hamiltonella defensa
+1133852,G000299455,LIPWNPFPG,PLP1,45,Escherichia,Escherichia coli
+1157951,G000259175,LIPWNPFPG,PLP1,45,Providencia,Providencia stuartii
+755872,G000324905,LIPWNPFPG,PLP1,45,Yersinia,Yersinia pestis
+1358411,G000465555,LIPWNPFPG,PLP1,45,Pantoea,Pantoea dispersa
+930944,G000253175,LIPWNPFPG,PLP1,45,Yersinia,Yersinia enterocolitica
+1123402,G900111395,LIPWNPFPG,PLP1,45,Thorsellia,Thorsellia anophelis
+703,G900087055,LIPWNPFPG,PLP1,45,Plesiomonas,Plesiomonas shigelloides
+561230,G000023605,LIPWNPFPG,PLP1,45,Pectobacterium,Pectobacterium carotovorum
+1115515,G000759795,LIPWNPFPG,PLP1,45,Escherichia,Escherichia vulneris
+796334,G000770305,LIPWNPFPG,PLP1,45,Erwinia,Erwinia oleae
+351671,G000968195,LIPWNPFPG,PLP1,45,Xenorhabdus,Xenorhabdus doucetiae
+1028307,G000215745,LIPWNPFPG,PLP1,45,Klebsiella,[Enterobacter] aerogenes
+82985,G001026985,LIPWNPFPG,PLP1,45,Pragia,Pragia fontium
+1267021,G000807275,LIPWNPFPG,PLP1,45,Frischella,Frischella perrara
+1224136,G000302695,LIPWNPFPG,PLP1,45,,Enterobacteriaceae bacterium LSJC7
+665029,G000091565,LIPWNPFPG,PLP1,45,Erwinia,Erwinia amylovora
+1906741,G001808185,LIPWNPFPG,PLP1,45,Jeongeupia,Jeongeupia sp. USM3
+1336237,G000518745,LIPWNPFPG,PLP1,45,Phaseolibacter,Phaseolibacter flectens
+667129,G000163595,LIPWNPFPG,PLP1,45,Serratia,Serratia odorifera
+883121,G000247895,LIPWNPFPG,PLP1,45,Raoultella,Raoultella ornithinolytica
+1151116,G000255535,LIPWNPFPG,PLP1,45,Rahnella,Rahnella aquatilis
+1239307,G000517425,LIPWNPFPG,PLP1,45,Sodalis,Sodalis praecaptivus
+1484157,G000784965,LIPWNPFPG,PLP1,45,Pantoea,Pantoea sp. PSNIH2
+1354267,G001294465,LIPWNPFPG,PLP1,45,Moellerella,Moellerella wisconsensis
+1109412,G001049335,LIPWNPFPG,PLP1,45,Brenneria,Brenneria goodwinii
+1125630,G000240185,LIPWNPFPG,PLP1,45,Klebsiella,Klebsiella pneumoniae
+1121018,G000429565,LIPWNPFPG,PLP1,45,Arsenophonus,Arsenophonus nasoniae
+663321,G000143625,LIPWNPFPG,PLP1,45,Candidatus Regiella,Candidatus Regiella insecticola
+1445514,G000725175,LIPWNPFPG,PLP1,45,Gilliamella,Gilliamella apicola
+1247024,G000757905,LIPWNPFPG,PLP1,45,Arsenophonus,Arsenophonus endosymbiont of Nilaparvata lugens
+529507,G000069965,LIPWNPFPG,PLP1,45,Proteus,Proteus mirabilis
+1225786,G000400795,LIPWNPFPG,PLP1,45,Dickeya,Dickeya solani
+82983,G001586165,LIPWNPFPG,PLP1,45,Obesumbacterium,Obesumbacterium proteus
+1124991,G000286435,LIPWNPFPG,PLP1,45,Morganella,Morganella morganii
+29483,G001122605,LIPWNPFPG,PLP1,45,Yersinia,Yersinia aldovae
+891974,G000180175,LIPWNPFPG,PLP1,45,,Plautia stali symbiont
+1736225,G001422605,LIPWNPFPG,PLP1,45,Erwinia,Erwinia sp. Leaf53
+1141660,G000314895,LIPWNPFPG,PLP1,45,Providencia,Providencia sneebia
+1274722,G000336255,LIPWNPFPG,PLP1,45,Erwinia,Erwinia toletana
+634503,G000022885,LIPWNPFPG,PLP1,45,Edwardsiella,Edwardsiella ictaluri
+69222,G000590885,LIPWNPFPG,PLP1,45,Erwinia,Erwinia mallotivora
+1120999,G000711875,LIPWNPFPG,PLP1,45,Andreprevotia,Andreprevotia chitinilytica
+1415779,G000711245,LIPWNPFPG,PLP1,45,Polycyclovorans,Polycyclovorans algicola
+399742,G000016325,LIPWNPFPG,PLP1,45,Enterobacter,Enterobacter sp. 638
+1354304,G000968175,LIPWNPFPG,PLP1,45,Xenorhabdus,Xenorhabdus poinarii
+1122977,G900112475,LIPWNPFPG,PLP1,45,Pragia,Pragia fontium
+1513468,G000951135,LIPWNPFPG,PLP1,45,Rouxiella,Rouxiella chamberiensis
+1044999,G000404125,LIPWNPFPG,PLP1,45,Erwinia,Erwinia tracheiphila
+1628856,G001602605,LIPWNPFPG,PLP1,45,,bacteria symbiont BFo2 of Frankliniella occidentalis
+1628856,G001602535,LIPWNPFPG,PLP1,45,,bacteria symbiont BFo2 of Frankliniella occidentalis
+755891,G000323785,LIPWNPFPG,PLP1,45,Yersinia,Yersinia pestis
+745411,G000299915,LIPWNPFPG,PLP1,45,Gallaecimonas,Gallaecimonas xiamenensis
+988801,G900111105,LIPWNPFPG,PLP1,45,Rosenbergiella,Rosenbergiella nectarea
+1878942,G900128755,LIPWNPFPG,PLP1,45,Candidatus Fukatsuia,Candidatus Fukatsuia symbiotica
+273526,G000513215,LIPWNPFPG,PLP1,45,Serratia,Serratia marcescens
+1196095,G001693745,LIPWNPFPG,PLP1,45,Gilliamella,Gilliamella apicola
+1196095,G001693435,LIPWNPFPG,PLP1,45,Gilliamella,Gilliamella apicola
+1196095,G001690585,LIPWNPFPG,PLP1,45,Gilliamella,Gilliamella apicola
+1196095,G001690535,LIPWNPFPG,PLP1,45,Gilliamella,Gilliamella apicola
+1196095,G001690525,LIPWNPFPG,PLP1,45,Gilliamella,Gilliamella apicola
+1196095,G001690515,LIPWNPFPG,PLP1,45,Gilliamella,Gilliamella apicola
+1196095,G001690495,LIPWNPFPG,PLP1,45,Gilliamella,Gilliamella apicola
+1196095,G001690445,LIPWNPFPG,PLP1,45,Gilliamella,Gilliamella apicola
+1196095,G001690435,LIPWNPFPG,PLP1,45,Gilliamella,Gilliamella apicola
+1196095,G001690425,LIPWNPFPG,PLP1,45,Gilliamella,Gilliamella apicola
+1196095,G001690385,LIPWNPFPG,PLP1,45,Gilliamella,Gilliamella apicola
+1196095,G001690355,LIPWNPFPG,PLP1,45,Gilliamella,Gilliamella apicola
+1196095,G001690255,LIPWNPFPG,PLP1,45,Gilliamella,Gilliamella apicola
+1196095,G001690195,LIPWNPFPG,PLP1,45,Gilliamella,Gilliamella apicola
+1196095,G000599985,LIPWNPFPG,PLP1,45,Gilliamella,Gilliamella apicola
+158822,G000757825,LIPWNPFPG,PLP1,45,Cedecea,Cedecea neteri
+368603,G001676225,LIPWNPFPG,PLP1,45,Morganella,Morganella psychrotolerans
+368603,G001676155,LIPWNPFPG,PLP1,45,Morganella,Morganella psychrotolerans
+1387197,G000471645,LIPWNPFPG,PLP1,45,Candidatus Schmidhempelia,Candidatus Schmidhempelia bombi
+343509,G000010085,LIPWNPFPG,PLP1,45,Sodalis,Sodalis glossinidius
+570521,G900141785,IETYFSENY,PLP1,45,Aquimarina,Aquimarina spongiae
+1219361,G001552615,VLPWNAYPW,PLP1,44,Millisia,Millisia brevis
+1502851,G000735605,LLPWHSFPG,PLP1,44,Bosea,Bosea sp. LC85
+1526658,G001298265,LLPWHSFPG,PLP1,44,Bosea,Bosea vaviloviae
+1736524,G001429395,LLPWHSFPG,PLP1,44,Bosea,Bosea sp. Root381
+1778264,G900048045,LIPWNHFPG,PLP1,44,Candidatus Mikella,Candidatus Mikella endobia
+1122146,G000423245,LETYFAKNY,PLP1,44,Lactobacillus,Lactobacillus ceti
+1620421,G001011155,IMSWNAFPG,PLP1,44,Hoeflea,Hoeflea sp. IMCC20628
+1764961,G002007305,VVPWTSFPG,PLP1,43,Epulopiscium,Epulopiscium sp. Nele67-Bin002
+1764960,G002007375,VVPWTSFPG,PLP1,43,Epulopiscium,Epulopiscium sp. Nele67-Bin001
+644966,G000184705,VVPWTSFPG,PLP1,43,Thermaerobacter,Thermaerobacter marianensis
+95606,G000333335,VVPWHGFPG,PLP1,43,,Sphingomonas-like bacterium B12
+1502851,G000735605,VLPWRALPG,PLP1,43,Bosea,Bosea sp. LC85
+1736346,G001426225,VLPWRALPG,PLP1,43,Bosea,Bosea sp. Leaf344
+1736436,G001425835,VLPWRALPG,PLP1,43,Afipia,Afipia sp. Root123D2
+270351,G001548015,VLPWRALPG,PLP1,43,Methylobacterium,Methylobacterium aquaticum
+270351,G001043915,VLPWRALPG,PLP1,43,Methylobacterium,Methylobacterium aquaticum
+1736251,G001422375,VLPWRALPG,PLP1,43,Methylobacterium,Methylobacterium sp. Leaf99
+1736245,G001422215,VLPWRALPG,PLP1,43,Methylobacterium,Methylobacterium sp. Leaf89
+1101192,G000372825,VLPWRALPG,PLP1,43,Methylobacterium,Methylobacterium sp. 77
+1736364,G001424525,VLPWRALPG,PLP1,43,Methylobacterium,Methylobacterium sp. Leaf399
+1736544,G001429505,VLPWRALPG,PLP1,43,Bosea,Bosea sp. Root483D1
+663610,G000746085,VLPWRALPG,PLP1,43,Methylocapsa,Methylocapsa aurea
+1385368,G000936425,VLPWRALPG,PLP1,43,Skermanella,Skermanella aerolata
+1374,G001465835,ILPWDALPG,PLP1,43,Planococcus,Planococcus kocurii
+1121303,G000621505,IETYLSKNY,PLP1,43,Ruminiclostridium,[Clostridium] cellobioparum
+1195236,G000350485,IETYLSKNY,PLP1,43,Ruminiclostridium,[Clostridium] termitidis
+1736301,G001421995,VVPWRGFPG,PLP1,42,Sphingomonas,Sphingomonas sp. Leaf231
+1089551,G000427665,VLTWNAWPG,PLP1,42,Geminicoccus,Geminicoccus roseus
+66869,G000717025,VLPWTAVPG,PLP1,42,Streptomyces,Streptomyces atroolivaceus
+1051973,G001620305,VLPWSAFSG,PLP1,42,Rhodococcus,Rhodococcus fascians
+570952,G000420625,VLPWRAVPG,PLP1,42,Fodinicurvata,Fodinicurvata sediminis
+89524,G900107585,VLPWRAVPG,PLP1,42,Rubrimonas,Rubrimonas cliftonensis
+1771959,G001542565,VIPWNAYPW,PLP1,42,Arthrobacter,Arthrobacter sp. ATCC 21022
+1120652,G001695855,MMPWYAFPG,PLP1,42,Ensifer,Ensifer sp. LC163
+665126,G001305515,MIPWYAFPG,PLP1,42,Prosthecomicrobium,Prosthecomicrobium hirschii
+360313,G000344725,MIPWYAFPG,PLP1,42,Ochrobactrum,Ochrobactrum sp. CDB2
+1220581,G000696095,MIPWYAFPG,PLP1,42,Agrobacterium,Agrobacterium rhizogenes
+1201036,G000409565,MIPWYAFPG,PLP1,42,Pseudochrobactrum,Pseudochrobactrum sp. AO18b
+754523,G000517605,MIPWYAFPG,PLP1,42,Rhizobium,Rhizobium leguminosarum
+419475,G001652485,MIPWYAFPG,PLP1,42,Ochrobactrum,Ochrobactrum pseudogrignonense
+1123072,G000425365,MIPWYAFPG,PLP1,42,Rubritepida,Rubritepida flocculans
+439375,G000017405,MIPWYAFPG,PLP1,42,Ochrobactrum,Ochrobactrum anthropi
+492774,G000744505,MIPWYAFPG,PLP1,42,Rhizobium,Rhizobium alamii
+1494590,G001558695,MIPWYAFPG,PLP1,42,Paramesorhizobium,Paramesorhizobium deserti
+1041147,G000426285,MIPWYAFPG,PLP1,42,Rhizobium,Rhizobium leucaenae
+1522316,G000751295,MIPWYAFPG,PLP1,42,,bacterium YEK0313
+1220589,G000773015,IVPWTSFPG,PLP1,42,Lysinibacillus,Lysinibacillus odysseyi
+545243,G000246895,IVPWTSFPG,PLP1,42,Clostridium,Clostridium arbusti
+876269,G000385335,ILPWRALPG,PLP1,42,Methyloferula,Methyloferula stellata
+1736345,G001423765,ILPWRALPG,PLP1,42,Sphingomonas,Sphingomonas sp. Leaf343
+363953,G001418005,ILPWRALPG,PLP1,42,Chelatococcus,Chelatococcus sambhunathii
+927083,G000737325,FIPWNAIPG,PLP1,42,Sandaracinus,Sandaracinus amylolyticus

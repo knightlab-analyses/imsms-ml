@@ -106,10 +106,10 @@ import seaborn as sns
 #              value_name="Accuracy")
 
 #
-df = pd.read_csv("./plottedResults/human2-pathabundance.csv", sep=',')
+df = pd.read_csv("./plottedResults/vfdb_normalizations.csv", sep=',')
 df = pd.melt(df,
              value_vars=df.columns.tolist()[1:],
-             var_name="Permutation",
+             var_name="Features",
              value_name="Accuracy")
 
 
@@ -136,12 +136,12 @@ df = pd.melt(df,
 
 
 sns.set(style="ticks")
-g = sns.catplot(x="Permutation", y="Accuracy", data=df)
+g = sns.catplot(x="Features", y="Accuracy", data=df)
 # g = sns.catplot(x="Randomized Test Set", y="Accuracy", hue="hue", data=df)
 ax = g.ax
 ax.set_xticklabels(ax.get_xticklabels(), rotation=40, ha="right")
 ax.axhline(.5, ls='--')
 # ax2.axhline(30, ls='--')
 plt.tight_layout()
-plt.title("Pathway and Species Specific Pathways vs Species")
+plt.title("VFDB Random Forest Accuracy")
 plt.show()

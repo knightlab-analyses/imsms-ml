@@ -1,0 +1,164 @@
+ncbi_id,genome_id,epitope,mimicked,blosum,genus,species
+1803815,G001595945,VHFFKNIVN,MBP,43,,Thermoplasmatales archaeon SM1-50
+325775,G000815025,VHWFKNIIT,MBP,42,Coxiella,Coxiella endosymbiont of Amblyomma americanum
+959,G001592755,VHFFQNVIT,MBP,42,Bdellovibrio,Bdellovibrio bacteriovorus
+959,G001592745,VHFFQNVIT,MBP,42,Bdellovibrio,Bdellovibrio bacteriovorus
+959,G001592735,VHFFQNVIT,MBP,42,Bdellovibrio,Bdellovibrio bacteriovorus
+959,G000691605,VHFFQNVIT,MBP,42,Bdellovibrio,Bdellovibrio bacteriovorus
+1069642,G000317895,VHFFQNVIT,MBP,42,Bdellovibrio,Bdellovibrio bacteriovorus
+264462,G000196175,VHFFQNVIT,MBP,42,Bdellovibrio,Bdellovibrio bacteriovorus
+765869,G000525675,VHFFQNVIT,MBP,42,Bdellovibrio,Bdellovibrio bacteriovorus
+1367847,G000444995,VHFFQNVIT,MBP,42,Paracoccus,Paracoccus aminophilus
+1794908,G001577565,VHFFKNIVL,MBP,42,Methanolobus,Methanolobus sp. T82-4
+1912856,G000952975,VHFFKNIST,MBP,42,Peptoniphilus,Peptoniphilus sp. ING2-D1G
+313628,G000170755,VHFFENVIT,MBP,42,Lentisphaera,Lentisphaera araneosa
+1208321,G000508165,VHFFKNVVI,MBP,41,Marinomonas,Marinomonas profundimaris
+259564,G000013725,VHFFKNIIL,MBP,41,Methanococcoides,Methanococcoides burtonii
+1895843,G001899705,VHFYKNIVA,MBP,40,Sphingobacterium,Sphingobacterium sp. 40-24
+1033738,G000307285,LHFFKNLLT,MBP,40,Kurthia,Kurthia sp. Dielmo
+435590,G000012825,IHFFKNSIT,MBP,40,Bacteroides,Bacteroides vulgatus
+112903,G900110485,VHFLRNIVT,MBP,39,Propionispora,Propionispora vibrioides
+1896215,G900142495,VHFFRNVFT,MBP,39,Fibrobacter,Fibrobacter sp. UWOV1
+1896208,G900129735,VHFFRNVFT,MBP,39,Fibrobacter,Fibrobacter sp. UWCM
+1114856,G000383975,VHFFRNAIT,MBP,39,Natronorubrum,Natronorubrum tibetense
+1801957,G001825665,VHFFKNLIL,MBP,39,,Planctomycetes bacterium GWF2_41_51
+1123365,G000421265,VHFFKNIMM,MBP,39,Thalassospira,Thalassospira lucentensis
+1734395,G001515945,VHFFKNFIS,MBP,39,Desulfitibacter,Desulfitibacter sp. BRH_c19
+1201288,G000447795,LHFFENVIT,MBP,39,Bacteriovorax,Bacteriovorax sp. Seq25_V
+1201290,G000443995,LHFFENVIT,MBP,39,Bacteriovorax,Bacteriovorax sp. BAL6_X
+717960,G000210615,IHFYKNIVN,MBP,39,Faecalitalea,Faecalitalea cylindroides
+1263016,G000434715,IHFYKNIVN,MBP,39,,Firmicutes bacterium CAG:308
+649755,G000469305,IHFYKNIVN,MBP,39,Faecalitalea,Faecalitalea cylindroides
+929556,G000242635,IHFFENITT,MBP,39,Solitalea,Solitalea canadensis
+1194526,G000332735,VHYLKNVVT,MBP,38,Staphylococcus,Staphylococcus warneri
+1895743,G001897225,VHLFKNIVS,MBP,38,,Chlamydiales bacterium 38-26
+59196,G001881485,VHFYKNNVT,MBP,38,Rickettsiella,Rickettsiella grylli
+59196,G000168295,VHFYKNNVT,MBP,38,Rickettsiella,Rickettsiella grylli
+54915,G001187725,VHFFSDIVT,MBP,38,Brevibacillus,Brevibacillus reuszeri
+1122915,G000422905,VHFFKTITT,MBP,38,Paenibacillus,Paenibacillus alginolyticus
+666685,G000230695,VHFFKNVMM,MBP,38,Rhodanobacter,Rhodanobacter denitrificans
+1318628,G000397065,VHFFKNTIS,MBP,38,Marinobacter,Marinobacter lipolyticus
+499207,G000946815,VHFFKNMIK,MBP,38,Syntrophaceticus,Syntrophaceticus schinkii
+1410609,G000619925,VHFFKDVVS,MBP,38,Treponema,Treponema sp. C6A8
+708132,G001748245,VHFFENAIT,MBP,38,Oligoflexus,Oligoflexus tunisiensis
+1895742,G001897185,LNFFKNIVT,MBP,38,Chlamydia,Chlamydia sp. 32-24
+572480,G000092245,IHFFTNILT,MBP,38,Arcobacter,Arcobacter nitrofigilis
+1121875,G000382125,IHFFKNVLN,MBP,38,Eudoraea,Eudoraea adriatica
+313603,G000153165,IHFFKNVLN,MBP,38,Maribacter,Maribacter sp. HTCC2170
+593133,G900116115,IHFFKNVLN,MBP,38,Lutibacter,Lutibacter maritimus
+1541197,G000775575,IHFFKAIIT,MBP,38,Planococcus,Planococcus sp. CAU13
+1330035,G000416315,IHFFEDIVT,MBP,38,,Osedax symbiont Rs2
+1298593,G000355675,IHFFEDIVT,MBP,38,Thalassolituus,Thalassolituus oleivorans
+111780,G000317575,IFFFKNIVT,MBP,38,Stanieria,Stanieria cyanosphaera
+1797877,G001799065,VYFFSNIVT,MBP,37,,Deltaproteobacteria bacterium RIFCSPLOWO2_02_FULL_44_10
+1797862,G001798185,VYFFSNIVT,MBP,37,,Deltaproteobacteria bacterium RIFCSPHIGHO2_02_FULL_44_16
+572480,G000092245,VYFFKNVAT,MBP,37,Arcobacter,Arcobacter nitrofigilis
+1220589,G000773015,VNFFKNFVT,MBP,37,Lysinibacillus,Lysinibacillus odysseyi
+1121884,G900129295,VHYFKNQIT,MBP,37,Flavisolibacter,Flavisolibacter ginsengisoli
+315358,G001029265,VHTFKNILT,MBP,37,Spiroplasma,Spiroplasma eriocheiris
+1434115,G000970185,VHFWKNIVR,MBP,37,Methanosarcina,Methanosarcina mazei
+1402208,G000813025,VHFFKNFVH,MBP,37,Lactobacillus,Lactobacillus ruminis
+28892,G000275865,VHFFKNFIR,MBP,37,Methanofollis,Methanofollis liminatans
+221126,G000764755,LHFFKNYLT,MBP,37,Algibacter,Algibacter lectus
+1817878,G001790695,LHFFKNILV,MBP,37,,Candidatus Schekmanbacteria bacterium RBG_13_48_7
+1645915,G001280435,LHFFKNEIT,MBP,37,Mangrovimonas,Mangrovimonas sp. ST2L12
+1729650,G900009135,IHYFKNLIS,MBP,37,Planktothrix,Planktothrix sp. PCC 11201
+1797351,G001769245,IHFYENLIT,MBP,37,,Bacteroidetes bacterium GWF2_42_66
+1797320,G001768205,IHFYENLIT,MBP,37,,Bacteroidetes bacterium GWA2_42_15
+1797338,G001768535,IHFYENLIT,MBP,37,,Bacteroidetes bacterium GWE2_42_39
+1384049,G000772945,IHFIENIVT,MBP,37,Lysinibacillus,Lysinibacillus manganicus
+1193181,G000367525,IHFFRSLVT,MBP,37,Tetrasphaera,Tetrasphaera elongata
+1158607,G000407485,IHFFKNLLA,MBP,37,Enterococcus,Enterococcus pallens
+1009858,G000521565,IHFFKNITP,MBP,37,Buchnera,Buchnera aphidicola
+366394,G000017145,IHFFKNIAM,MBP,37,Sinorhizobium,Sinorhizobium medicae
+68895,G000832305,IHFFKNIAM,MBP,37,Cupriavidus,Cupriavidus basilensis
+1207076,G000282775,IHFFKNIAM,MBP,37,Pseudomonas,Pseudomonas luteola
+1041139,G000379605,IHFFKNIAM,MBP,37,Rhizobium,Rhizobium giardinii
+1737983,G001676615,IHFFKNIAM,MBP,37,Labrys,Labrys sp. WJW
+1123269,G000512205,IHFFKNIAI,MBP,37,Sphingomonas,Sphingomonas sanxanigenens
+1112212,G000241465,IHFFKNIAI,MBP,37,Sphingomonas,Sphingomonas echinoides
+627192,G000283515,IHFFKNIAI,MBP,37,Sphingobium,Sphingobium sp. SYK-6
+279238,G000013325,IHFFKNIAI,MBP,37,Novosphingobium,Novosphingobium aromaticivorans
+158500,G001742225,IHFFKNIAI,MBP,37,Novosphingobium,Novosphingobium resinovorum
+1120918,G900112085,IHFFENYIT,MBP,37,Acetitomaculum,Acetitomaculum ruminis
+1079859,G900115665,IHFFENIVP,MBP,37,Pseudarcicella,Pseudarcicella hirudinis
+553177,G000173675,IHFFENIPT,MBP,37,Capnocytophaga,Capnocytophaga sputigena
+1035193,G000318295,IHFFENIPT,MBP,37,Capnocytophaga,Capnocytophaga sp. oral taxon 326
+1208321,G000508165,IHFFEDVVT,MBP,37,Marinomonas,Marinomonas profundimaris
+1122206,G900129155,IHFFEDVVT,MBP,37,Marinomonas,Marinomonas polaris
+314277,G000153025,IHFFEDVVT,MBP,37,Marinomonas,Marinomonas sp. MED121
+945713,G000258405,YHFFKNIWT,MBP,36,Ignavibacterium,Ignavibacterium album
+1349782,G001514495,VYFFPNIVT,MBP,36,Paenibacillus,Paenibacillus pabuli
+582692,G900102085,VYFFPNIVT,MBP,36,Paenibacillus,Paenibacillus sp. BL9
+1566277,G900107875,VYFFPNIVT,MBP,36,Paenibacillus,Paenibacillus sp. 276b
+697281,G000213255,VYFFPNIVT,MBP,36,Mahella,Mahella australiensis
+1499968,G000732325,VYFFPNIVT,MBP,36,Paenibacillus,Paenibacillus sp. TCA20
+1761874,G900116105,VYFFPNIVT,MBP,36,Paenibacillus,Paenibacillus sp. 453mf
+1460653,G001310595,VYFFPNIVT,MBP,36,Bacillus,Bacillus sp. JCM 19035
+866786,G900142675,VYFFPNIVT,MBP,36,Bacillus,Bacillus rhizosphaerae
+66692,G000009825,VYFFPNIVT,MBP,36,Bacillus,Bacillus clausii
+1761879,G900143165,VYFFPNIVT,MBP,36,Paenibacillus,Paenibacillus sp. ov031
+1305737,G001314815,VQFFENIVT,MBP,36,Algoriphagus,Algoriphagus marincola
+1197874,G001020565,VNFFKSIVT,MBP,36,Maribacter,Maribacter thermophilus
+1619090,G000991265,VNFFKNAVT,MBP,36,,candidate division WS6 bacterium GW2011_GWC1_36_11
+1120950,G000373925,VHYFRNLTT,MBP,36,Actinopolymorpha,Actinopolymorpha alba
+1660100,G001725305,VHYFQNLLT,MBP,36,Granulicella,Granulicella sp. SCN 62-9
+1478175,G000813665,VHLFKNIVE,MBP,36,Neochlamydia,Neochlamydia sp. EPS4
+1123243,G900129225,VHFYRNVFT,MBP,36,Schwartzia,Schwartzia succinivorans
+1526,G900112885,VHFYRNVFT,MBP,36,Lachnoclostridium,[Clostridium] aminophilum
+1526,G900101295,VHFYRNVFT,MBP,36,Lachnoclostridium,[Clostridium] aminophilum
+758847,G000313175,VHFYRNVFT,MBP,36,Leptospira,Leptospira santarosai
+1121296,G000711825,VHFYRNVFT,MBP,36,Lachnoclostridium,[Clostridium] aminophilum
+1385664,G000801315,VHFYKNIMP,MBP,36,Hymenobacter,Hymenobacter sp. DG25B
+290315,G000020465,VHFISNIIT,MBP,36,Chlorobium,Chlorobium limicola
+309801,G000021685,VHFFVNIVA,MBP,36,Thermomicrobium,Thermomicrobium roseum
+572480,G000092245,VHFFSNIIK,MBP,36,Arcobacter,Arcobacter nitrofigilis
+888060,G000213975,VHFFRTIMT,MBP,36,Centipeda,Centipeda periodontii
+1232428,G000455225,VHFFRNIFS,MBP,36,Megasphaera,Megasphaera massiliensis
+1260365,G000415005,VHFFNNVKT,MBP,36,Enterococcus,Enterococcus faecalis
+937775,G000243255,VHFFKNTIK,MBP,36,Methanoplanus,Methanoplanus limicola
+1736416,G001429625,VHFFKNISM,MBP,36,Nocardioides,Nocardioides sp. Soil805
+1218081,G000739795,VHFFKNISI,MBP,36,Paraburkholderia,Paraburkholderia kururiensis
+405671,G900100705,VHFFKNIKP,MBP,36,Pedobacter,Pedobacter terrae
+1706435,G001587635,VHFFKNFIW,MBP,36,,Arc I group archaeon ADurb1213_Bin02801
+1706434,G001587605,VHFFKNFIW,MBP,36,,Arc I group archaeon ADurb1113_Bin01801
+1706433,G001587595,VHFFKNFIW,MBP,36,,Arc I group archaeon ADurb1013_Bin02101
+1732214,G001412425,VHFFKNFIW,MBP,36,Candidatus Cloacimonas,Candidatus Cloacimonas sp. SDB
+1706437,G001587695,VHFFKNFIW,MBP,36,,Arc I group archaeon B15fssc0709_Meth_Bin003
+1434100,G000970045,VHFFKNFIW,MBP,36,Methanosarcina,Methanosarcina sp. MTP4
+1705564,G001587675,VHFFKNFIW,MBP,36,,Arc I group archaeon U1lsi0528_Bin089
+1706436,G001587655,VHFFKNFIW,MBP,36,,Arc I group archaeon B03fssc0709_Meth_Bin005
+1864608,G001683555,VHFFKNFIW,MBP,36,Methanohalophilus,Methanohalophilus sp. DAL1
+1706438,G001587575,VHFFKNFIW,MBP,36,,Arc I group archaeon BMIXfssc0709_Meth_Bin006
+1705409,G001587715,VHFFKNFIW,MBP,36,,Arc I group archaeon U1lsi0528_Bin055
+547558,G000025865,VHFFKNFIH,MBP,36,Methanohalophilus,Methanohalophilus mahii
+867904,G000328665,VHFFKNAIR,MBP,36,Methanomethylovorans,Methanomethylovorans hollandica
+1848903,G000827695,VHFFKELAT,MBP,36,Capnocytophaga,Capnocytophaga canis
+1123278,G000374085,VHFFKDIVG,MBP,36,Spirosoma,Spirosoma spitsbergense
+1801962,G001824675,MHFYSNIIT,MBP,36,,Planctomycetes bacterium RBG_13_50_24
+437022,G001431315,LHFYTNIVT,MBP,36,Candidatus Berkiella,Candidatus Berkiella cookevillensis
+171693,G000612865,LHFYKNLVS,MBP,36,Oceanobacillus,Oceanobacillus picturae
+1444712,G000756735,LDFFKNIVT,MBP,36,Candidatus Rubidus,Candidatus Rubidus massiliensis
+518637,G000156655,IHYYKNIVN,MBP,36,Holdemanella,Holdemanella biformis
+1862672,G001945605,IHYYKNIVN,MBP,36,Dubosiella,Dubosiella newyorkensis
+927664,G900112255,IHYFKNIIF,MBP,36,Flexibacter,Flexibacter flexilis
+203907,G000043285,IHLFNNIVT,MBP,36,Candidatus Blochmannia,Candidatus Blochmannia floridanus
+1680155,G001908185,IHFYKNLVM,MBP,36,Bradyrhizobium,Bradyrhizobium sp. AS23.2
+1802203,G001820115,IHFYKNEIT,MBP,36,,Candidatus Staskawiczbacteria bacterium RIFCSPHIGHO2_01_FULL_41_41
+1441095,G001278705,IHFYENVLT,MBP,36,Bacillus,Bacillus gobiensis
+425514,G900107535,IHFFTDIVT,MBP,36,Pedobacter,Pedobacter hartonius
+959,G001592755,IHFFRNVVY,MBP,36,Bdellovibrio,Bdellovibrio bacteriovorus
+959,G001592745,IHFFRNVVY,MBP,36,Bdellovibrio,Bdellovibrio bacteriovorus
+959,G001592735,IHFFRNVVY,MBP,36,Bdellovibrio,Bdellovibrio bacteriovorus
+959,G000691605,IHFFRNVVY,MBP,36,Bdellovibrio,Bdellovibrio bacteriovorus
+765869,G000525675,IHFFRNVVY,MBP,36,Bdellovibrio,Bdellovibrio bacteriovorus
+1632867,G000963695,IHFFRNVRT,MBP,36,,Methylococcaceae bacterium Sn10-6
+641691,G900101815,IHFFKNVKS,MBP,36,Pricia,Pricia antarctica
+1420591,G001476695,IHFFKNVAM,MBP,36,Novosphingobium,Novosphingobium barchaimii
+1096930,G000445125,IHFFKNVAM,MBP,36,Novosphingobium,Novosphingobium lindaniclasticum
+48936,G000807925,IHFFKNVAL,MBP,36,Novosphingobium,Novosphingobium subterraneum
+1346290,G000372885,IHFFKNVAI,MBP,36,Methyloversatilis,Methyloversatilis thermotolerans
+1119528,G000527135,IHFFKNVAI,MBP,36,Methyloversatilis,Methyloversatilis discipulorum
+1224947,G900116665,IHFFKNINS,MBP,36,Pustulibacterium,Pustulibacterium marinum
+1801694,G001803645,IHFFDDIVT,MBP,36,,Nitrospirae bacterium GWC2_42_7
+604354,G000022545,AHFYKNIYT,MBP,36,Thermococcus,Thermococcus sibiricus

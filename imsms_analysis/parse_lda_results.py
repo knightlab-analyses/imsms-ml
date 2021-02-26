@@ -43,13 +43,22 @@ def read_pathways():
     return df
 
 
+def read_vfdb():
+    df = pd.read_csv("plottedResults/vfdb_lda_all.csv", index_col=0)
+    df = df.transpose()
+    df.columns = ["Accuracy"]
+    return df
+
+
 # df = read_species()
-df = read_pathways()
+# df = read_pathways()
+df = read_vfdb()
 df = df.sort_values("Accuracy", axis=0, ascending=False)
-print(df)
-df = df * 183
-bins = range(184)
-df.hist(column="Accuracy", bins=bins)
+# print(df)
+# df = df * 183
+# bins = range(184)
+# df.hist(column="Accuracy", bins=bins)
+df.hist(column="Accuracy")
 plt.title("Univariate LDA Result Histogram")
 plt.xlabel("Accuracy")
 plt.ylabel("Count")

@@ -18,8 +18,9 @@ import pdb
 
 def _print_read_count_info(df):
     import csv
+    print("--------------------------------------")
     """ Open up a mimic file and print read counts from the raw dataframe """
-    with open("dataset/feature_transforms/plp1mimics42.csv") as f:
+    with open("dataset/feature_transforms/mog_mimics40.csv") as f:
         rr = csv.reader(f)
         headers = next(rr, None)
         gid = headers.index("genome_id")
@@ -29,9 +30,12 @@ def _print_read_count_info(df):
             key = row[gid]
             count = 0
 
-        if key in df.columns:
-            count = df[key].sum()
-        print("\t".join([str(x) for x in row + [count]]))
+            if key in df.columns:
+                count = df[key].sum()
+                print("\t".join([str(x) for x in row + [count]]))
+    print("--------------------------------------")
+    exit(0)
+
 
 
 def eval_model(model, state):
@@ -141,7 +145,8 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
         dim_reduction=dim_reduction,
         normalization=normalization,
         feature_transform=feature_transform,
-        meta_encoder=analysis_config.meta_encoder
+        meta_encoder=analysis_config.meta_encoder,
+        downsample_count=analysis_config.downsample_count
     )
 
     df = train_state.df
@@ -175,6 +180,8 @@ def run_analysis(analysis_config, callbacks: AnalysisCallbacks):
         train_state,
         test_state
     ) = run_preprocessing(analysis_config, callbacks)
+
+    _print_read_count_info(train_state.df)
 
     analysis_name = analysis_config.analysis_name
     n_random_seeds = analysis_config.n_random_seeds

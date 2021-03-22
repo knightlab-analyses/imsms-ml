@@ -34,6 +34,7 @@ class AnalysisFactory:
         self.feature_transform = None
         self.allele_info = None
         self.meta_encoder = None
+        self.downsample_count = None
 
     def with_feature_set(self, feature_set):
         if type(feature_set) == FeatureSet:
@@ -122,6 +123,12 @@ class AnalysisFactory:
         self.meta_encoder = meta_encoder
         return self
 
+    def with_downsampling(self, downsample_count):
+        if type(downsample_count) == int:
+            downsample_count = [downsample_count]
+        self.downsample_count = downsample_count
+        return self
+
     def _analysis_name_gen(self,
                            all_params,
                            chosen_tuple):
@@ -151,7 +158,8 @@ class AnalysisFactory:
                       self.mlab_algorithm,
                       self.feature_transform,
                       self.allele_info,
-                      self.meta_encoder]
+                      self.meta_encoder,
+                      self.downsample_count]
 
         for i in range(len(all_params)):
             if all_params[i] is None:
@@ -167,7 +175,7 @@ class AnalysisFactory:
                         yield result
 
         for chosen in _iterate(all_params, 0, []):
-            bt, fs, ts, ps, mf, num_seeds, dr, norm, algo, ft, ai, me = chosen
+            bt, fs, ts, ps, mf, num_seeds, dr, norm, algo, ft, ai, me, dc = chosen
             yield AnalysisConfig(
                 self._analysis_name_gen(all_params, chosen),
                 bt,
@@ -182,7 +190,8 @@ class AnalysisFactory:
                 algo,
                 ft,
                 ai,
-                me
+                me,
+                dc
             )
 
 

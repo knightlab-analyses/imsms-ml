@@ -25,7 +25,8 @@ class AnalysisConfig:
                  mlab_algorithm: Optional[str],
                  feature_transform: Optional[FeatureTransformer],
                  allele_info: Optional[str],
-                 meta_encoder: Optional[MetaEncoder]):
+                 meta_encoder: Optional[MetaEncoder],
+                 downsample_count: Optional[int]):
         self.analysis_name = analysis_name
         self.table_info = table_info
         self.metadata_filepath = metadata_filepath
@@ -40,3 +41,4 @@ class AnalysisConfig:
         self.feature_transform = feature_transform
         self.allele_info = allele_info
         self.meta_encoder = meta_encoder
+        self.downsample_count = downsample_count

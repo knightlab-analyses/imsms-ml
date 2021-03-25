@@ -85,7 +85,7 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
     #  blahhh.
 
     df = analysis_config.table_info.load_dataframe()
-    _print_read_count_info(df)
+    # _print_read_count_info(df)
 
     # print("RAGE")
     # print(biom_filepath)
@@ -181,7 +181,7 @@ def run_analysis(analysis_config, callbacks: AnalysisCallbacks):
         test_state
     ) = run_preprocessing(analysis_config, callbacks)
 
-    _print_read_count_info(train_state.df)
+    # _print_read_count_info(train_state.df)
 
     analysis_name = analysis_config.analysis_name
     n_random_seeds = analysis_config.n_random_seeds

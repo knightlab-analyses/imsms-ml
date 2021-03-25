@@ -122,11 +122,14 @@ def _restrict_columns_compositional(state: PipelineState,
                                     chosen_columns: list) \
         -> PipelineState:
 
-    print(chosen_columns)
-    print("Grr")
-    print(state.df.columns)
-
     df = state.df
+    present_columns = []
+    for col in chosen_columns:
+        if col in state.df.columns:
+            present_columns.append(col)
+    if len(present_columns) == 0:
+        raise Exception("Cannot restrict columns, no chosen columns are present")
+    chosen_columns = present_columns
     remainder = df.drop(chosen_columns, axis=1)
 
     print(remainder)

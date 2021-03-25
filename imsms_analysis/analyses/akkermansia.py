@@ -2,6 +2,7 @@
 from imsms_analysis.analysis_runner import SerialRunner
 from imsms_analysis.common.analysis_factory import AnalysisFactory
 from imsms_analysis.common.feature_set import FeatureSet
+from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.common.table_info import BiomTable
 
 
@@ -16,8 +17,10 @@ def configure():
         BiomTable("species"),
         metadata_filepath,
         "Akkermansia"
-    ).with_feature_set(akkermansia_feature_set)
-
+    )\
+    .with_feature_set(akkermansia_feature_set.create_univariate_sets() + [akkermansia_feature_set]) \
+    .with_pair_strategy("paired_subtract_sex_balanced") \
+    .with_normalization(Normalization.DEFAULT)
 
 if __name__ == "__main__":
     # Pretend all scripts are run from root of repo for file paths.

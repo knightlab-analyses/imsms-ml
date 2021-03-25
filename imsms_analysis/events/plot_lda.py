@@ -25,6 +25,7 @@ class LDAPlot:
         self.acc_val_titles = []
         self.acc_val_values = []
         self.enable_plots = enable_plots
+        self.scratch = None
 
     def hook_events(self, runner: SerialRunner):
         def _batch_info(configs: list):
@@ -52,27 +53,31 @@ class LDAPlot:
             if last_step.name != "Run LDA":
                 return
 
+            print("CONFIG: ", config.analysis_name, "MODE: ", mode)
+
             acc2 = (last_step._lda.score(self.df_before, state.target))
             print("LDA Acc:", acc2)
 
             # Cool 2d plot but only works for 2d data, muck with subplot
             # to make it show up
-            # plt.subplot(self.rows+1, self.cols, self.plot_index)
-            # print(self.df_before)
-            # plot_data(last_step._lda,
-            #     self.df_before.to_numpy(),
-            #     state.target.to_numpy(),
-            #     last_step._lda.predict(self.df_before.to_numpy()),
-            #     mode
-            # )
+            title = config.analysis_name + "-" + mode
+            if mode == "train":
+                self.scratch = None
+            self.scratch = plot_data(last_step._lda,
+                self.df_before,
+                state.target,
+                last_step._lda.predict(self.df_before.to_numpy()),
+                title,
+                self.scratch
+            )
 
             self.plot_index = self.plot_index + 1
-            title = config.analysis_name + "-" + mode
-
             if self.enable_plots:
                 plt.subplot(self.rows, self.cols, self.plot_index - 1)
                 plot_categorical(state, mode, "", colors=["#FF4C4C", "#4C4CFF"])
                 plt.text(0, .5, "Accuracy " + str(int(acc2 * 100)) + "%")
+                plt.title(mode)
+                plt.suptitle(config.analysis_name)
 
             self.ldas.append(last_step._lda.coef_)
 
@@ -95,7 +100,9 @@ class LDAPlot:
             columns=self.acc_val_titles
         )
         df.to_csv("./results/lda_all.csv")
-        print(df)
+
+        with pd.option_context('display.max_rows', None, 'display.max_columns', None):
+            print(df)
 
     def _make_presentation_plot(self, df, target):
         # Stupid workaround for LDA only producing one component
@@ -127,62 +134,78 @@ cmap = colors.LinearSegmentedColormap(
 plt.cm.register_cmap(cmap=cmap)
 
 
-def plot_data(lda, X, y, y_pred, title):
-    for xxx in range(4):
-        plt.subplot(2,2,xxx+1)
-        if xxx == 3:
-            rfc = RandomForestClassifier(n_estimators=100)
-        else:
-            rfc = RandomForestClassifier(n_estimators=1)
+def plot_data(lda, X, y, y_pred, title, model):
+    print("COLUMNS:")
+    print(X.columns)
+    axis_name_x = X.columns[0]
+    axis_name_y = X.columns[1]
+    X = X.to_numpy()
+    y = y.to_numpy()
+    if model is None:
+        rfc = RandomForestClassifier(n_estimators=100)
         rfc.fit(X, y)
-        y_pred = rfc.predict(X)
+    else:
+        test_acc = model.score(X, y)
+        rfc = model
+    y_pred = rfc.predict(X)
 
-        tp = (y == y_pred)  # True Positive
-        tp0, tp1 = tp[y == 0], tp[y == 1]
-        X0, X1 = X[y == 0], X[y == 1]
-        X0_tp, X0_fp = X0[tp0], X0[~tp0]
-        X1_tp, X1_fp = X1[tp1], X1[~tp1]
+    tp = (y == y_pred)  # True Positive
+    tp0, tp1 = tp[y == 0], tp[y == 1]
+    X0, X1 = X[y == 0], X[y == 1]
+    X0_tp, X0_fp = X0[tp0], X0[~tp0]
+    X1_tp, X1_fp = X1[tp1], X1[~tp1]
 
-        ax = plt.gca()
-        ax.set(xlim=(-10, 10), ylim=(-10, 10))
+    ax = plt.gca()
 
-        # class 0: dots
-        plt.scatter(X0_tp[:, 0], X0_tp[:, 1], marker='.', color='red')
-        plt.scatter(X0_fp[:, 0], X0_fp[:, 1], marker='x',
-                    s=20, color='#990000')  # dark red
+    plt.subplot(2,1,1)
+    # class 0: dots
+    plt.scatter(X0_tp[:, 0], X0_tp[:, 1], marker='.', color='red')
+    plt.scatter(X0_fp[:, 0], X0_fp[:, 1], marker='x',
+                s=20, color='#990000')  # dark red
 
-        # class 1: dots
-        plt.scatter(X1_tp[:, 0], X1_tp[:, 1], marker='.', color='blue')
-        plt.scatter(X1_fp[:, 0], X1_fp[:, 1], marker='x',
-                    s=20, color='#000099')  # dark blue
+    # class 1: dots
+    plt.scatter(X1_tp[:, 0], X1_tp[:, 1], marker='.', color='blue')
+    plt.scatter(X1_fp[:, 0], X1_fp[:, 1], marker='x',
+                s=20, color='#000099')  # dark blue
 
-        if xxx >= 2:
-            plt.xlabel("ΔCLR(Akkermansia)")
-        if xxx % 2 == 0:
-            plt.ylabel("ΔCLR(Faecalibacterium)")
-        if xxx == 3:
-            plt.title("Random Forest (100 Trees)")
-        else:
-            plt.title("Decision Tree: " + str(xxx))
+    plt.xlabel("Δ" + axis_name_x)
+    plt.ylabel("Δ" + axis_name_y)
+    plt.title("Random Forest (100 Trees)")
 
-        # class 0 and 1 : areas
-        nx, ny = 200, 200
-        x_min, x_max = plt.xlim()
-        y_min, y_max = plt.ylim()
-        xx, yy = np.meshgrid(np.linspace(x_min, x_max, nx),
-                             np.linspace(y_min, y_max, ny))
+    # class 0 and 1 : areas
+    nx, ny = 200, 200
+    x_min, x_max = plt.xlim()
+    y_min, y_max = plt.ylim()
+    xx, yy = np.meshgrid(np.linspace(x_min, x_max, nx),
+                         np.linspace(y_min, y_max, ny))
 
-        Z = rfc.predict_proba(np.c_[xx.ravel(), yy.ravel()])
-        # Z = lda.predict_proba(np.c_[xx.ravel(), yy.ravel()])
-        Z = Z[:, 1].reshape(xx.shape)
-        plt.pcolormesh(xx, yy, Z, cmap='red_blue_classes',
-                       norm=colors.Normalize(0., 1.), zorder=0)
-        plt.contour(xx, yy, Z, [0.5], linewidths=2., colors='white')
+    Z = rfc.predict_proba(np.c_[xx.ravel(), yy.ravel()])
+    # Z = lda.predict_proba(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z[:, 1].reshape(xx.shape)
+    plt.pcolormesh(xx, yy, Z, cmap='red_blue_classes',
+                   norm=colors.Normalize(0., 1.), zorder=0)
+    plt.contour(xx, yy, Z, [0.5], linewidths=2., colors='white')
 
-        # means
-        # plt.plot(lda.means_[0][0], lda.means_[0][1],
-        #          '*', color='yellow', markersize=15, markeredgecolor='grey')
-        # plt.plot(lda.means_[1][0], lda.means_[1][1],
-        #          '*', color='yellow', markersize=15, markeredgecolor='grey')
+    # means
+    # plt.plot(lda.means_[0][0], lda.means_[0][1],
+    #          '*', color='yellow', markersize=15, markeredgecolor='grey')
+    # plt.plot(lda.means_[1][0], lda.means_[1][1],
+    #          '*', color='yellow', markersize=15, markeredgecolor='grey')
 
+    plt.subplot(2,1,2)
+    # class 0: dots
+    plt.scatter(X0_tp[:, 0], X0_tp[:, 1] - (y_max-y_min) * 1/4, marker='.', color='red')
+    plt.scatter(X0_fp[:, 0], X0_fp[:, 1] + (y_max-y_min) * 0, marker='x',
+                s=20, color='#990000')  # dark red
+
+    # class 1: dots
+    plt.scatter(X1_tp[:, 0], X1_tp[:, 1] + (y_max-y_min) * 1/4, marker='.', color='blue')
+    plt.scatter(X1_fp[:, 0], X1_fp[:, 1] + (y_max-y_min) * 2/4, marker='x',
+                s=20, color='#000099')  # dark blue
+
+    if model is not None:
+        plt.text(0, .5, "Accuracy " + str(int(test_acc * 100)) + "%")
+
+    plt.suptitle(title)
     plt.show()
+    return rfc

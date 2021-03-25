@@ -21,7 +21,7 @@ def configure():
     probstel_features = AnalysisFactory(
         BiomTable("genus"),
         metadata_filepath,
-    ).with_feature_set([probstel] + probstel.create_univariate_sets("Univariate-"))
+    ).with_feature_set(probstel.create_univariate_sets("Univariate-") + [probstel])
 
     return MultiFactory([all_genera, probstel_features])
 

@@ -14,29 +14,33 @@ from imsms_analysis.common import plotter
 from imsms_analysis.events.analysis_callbacks import AnalysisCallbacks
 from imsms_analysis.state.pipeline_state import PipelineState
 import pdb
+import sqlite3
+import math
 
 
 def _print_read_count_info(df):
-    import csv
-    print("--------------------------------------")
-    """ Open up a mimic file and print read counts from the raw dataframe """
-    with open("dataset/feature_transforms/mog_mimics40.csv") as f:
-        rr = csv.reader(f)
-        headers = next(rr, None)
-        gid = headers.index("genome_id")
-        print("\t".join([str(x) for x in headers + ["Read Count"]]))
+    conn = sqlite3.connect("mimics.db")
+    c = conn.cursor()
 
-        for row in rr:
-            key = row[gid]
-            count = 0
+    # c.execute("CREATE TABLE IF NOT EXISTS counts(genome_id text PRIMARY KEY, fraction_samples_present real, total_reads_per_10k real, mean_nonzero_reads_per_10k real, log10_mean_nonzero_reads_per_10k real)")
+    c.execute("SELECT genome_id FROM genome")
 
-            if key in df.columns:
-                count = df[key].sum()
-                print("\t".join([str(x) for x in row + [count]]))
     print("--------------------------------------")
+    for row in c.fetchall():
+        key = row[0]
+        if key in df.columns:
+            col = df[key]
+            count = col.sum()
+            fraction_nonzero = col.astype(bool).sum()
+            mean_nonzero = col[col.astype(bool)].mean()
+            print(key, fraction_nonzero / col.size, mean_nonzero, count)
+            # c.execute('INSERT INTO counts(genome_id, fraction_samples_present, total_reads_per_10k, mean_nonzero_reads_per_10k, log10_mean_nonzero_reads_per_10k) VALUES(?, ?, ?, ?, ?)',
+            #           (key, fraction_nonzero / col.size, count, mean_nonzero, math.log10(mean_nonzero)))
+    print("--------------------------------------")
+    # print(df.shape)
+    # conn.commit()
+    conn.close()
     exit(0)
-
-
 
 def eval_model(model, state):
     test_df = state.df
@@ -76,6 +80,7 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
     if pair_strategy is None:
         pair_strategy = "paired_concat"
     metadata_filter = analysis_config.metadata_filter
+    feature_filter = analysis_config.feature_filter
     dim_reduction = analysis_config.dimensionality_reduction
     normalization = analysis_config.normalization
     if normalization is None:
@@ -85,6 +90,7 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
     #  blahhh.
 
     df = analysis_config.table_info.load_dataframe()
+    # For raw reads, uncomment here
     # _print_read_count_info(df)
 
     # print("RAGE")
@@ -132,6 +138,8 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
     meta_df = metadata.to_dataframe()
 
     state = PipelineState(df, meta_df, None)
+
+    print(analysis_name)
     # Run Preprocessing
     train_state, test_state = preprocessing_pipeline.process(
         analysis_config,
@@ -142,6 +150,7 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
         verbose=False,
         pair_strategy=pair_strategy,
         metadata_filter=metadata_filter,
+        feature_filter=feature_filter,
         dim_reduction=dim_reduction,
         normalization=normalization,
         feature_transform=feature_transform,
@@ -152,6 +161,28 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
     df = train_state.df
     meta_df = train_state.meta_df
     target = train_state.target
+
+    # For normalized reads after preprocessing, uncomment here
+    # c_perf = ['G000013285']
+    # akkermansias = [
+    #     'G000020225','G000436395','G000437075',
+    #     'G000723745', 'G000980515', 'G001578645',
+    #     'G001580195', 'G001647615', 'G001683795',
+    #     'G001917295', 'G001940945', 'G900097105'
+    # ]
+    # df2 = df[c_perf + akkermansias]
+    # df_akk = df[akkermansias]
+    # df2['sum'] = df_akk.sum(axis=1)
+    # for akk in akkermansias + ['sum']:
+    #     max_akk = df2[akk].max().max()
+    #     min_akk = max_akk - 1500
+    #     df3 = df2[df2[akk] > min_akk]
+    #     print(akk, min_akk/10000, "to", max_akk/10000)
+    #     print(df3)
+    # import code
+    # code.interact(local=locals())
+
+    # _print_read_count_info(df)
 
     # Shuffle the data so the machine learning can't learn anything based on
     # order
@@ -180,7 +211,11 @@ def run_analysis(analysis_config, callbacks: AnalysisCallbacks):
         train_state,
         test_state
     ) = run_preprocessing(analysis_config, callbacks)
-
+    # print(analysis_config.analysis_name)
+    # print("Train Shape: ", train_state.df.shape)
+    # print("Test Shape: ", test_state.df.shape)
+    # print("Target Shape: ", target.shape)
+    # return
     # _print_read_count_info(train_state.df)
 
     analysis_name = analysis_config.analysis_name

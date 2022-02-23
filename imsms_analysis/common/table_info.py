@@ -65,7 +65,6 @@ class MergeTable(TableInfo):
                          rsuffix=self.col_suffix_list[i])
         df = df.fillna(0)
         df['sum'] = df.sum(axis=0)
-        print(df)
         return df
 
     def __str__(self):

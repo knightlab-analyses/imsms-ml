@@ -12,7 +12,7 @@ def configure():
         [BiomTable("none")],
         metadata_filepath
     ).with_pair_strategy("unpaired")\
-     .with_normalization(Normalization.NONE)
+     .with_normalization(Normalization.DEFAULT)
 
     return MultiFactory([woltka_transforms])
 

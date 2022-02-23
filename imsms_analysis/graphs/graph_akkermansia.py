@@ -5,56 +5,93 @@ from imsms_analysis.common.feature_set import FeatureSet
 from imsms_analysis.common.metadata_filter import MetadataFilter
 from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.common.table_info import BiomTable
+from imsms_analysis.events.analysis_callbacks import AnalysisCallbacks
 from imsms_analysis.events.plot_lda import LDAPlot
 
-
-def configure():
-    hla_drb1_1501_households = \
-        ['714-0049', '714-0072', '714-0075', '714-0078', '714-0079',
-         '714-0086', '714-0094', '714-0101', '714-0102', '714-0107',
-         '714-0110', '714-0111', '714-0118', '714-0119', '714-0122',
-         '714-0123', '714-0128', '714-0133', '714-0135', '714-0148',
-         '714-0149', '714-0157', '714-0161', '714-0162', '714-0165',
-         '714-0167', '714-0172', '714-0176', '714-0184', '714-0189',
-         '714-0190', '714-0201', '714-0210', '714-0212', '714-0224',
-         '714-0254', '714-0255', '716-0009', '716-0015', '716-0020',
-         '716-0031', '716-0032', '716-0035', '716-0039', '716-0052',
-         '716-0076', '716-0082', '716-0095', '716-0101', '716-0110',
-         '716-0137', '716-0141', '716-0143', '716-0160']
-    meta_households = [hh[:3] + hh[4:] for hh in hla_drb1_1501_households]
-
-    akkermansia_feature_set = FeatureSet.build_feature_set(
-        "Akkermansia (all)",
-        "./dataset/feature_sets/just_akkermansia.tsv"
-    )
-    metadata_filepath = "./dataset/metadata/iMSMS_1140samples_metadata.tsv"
-
-    return AnalysisFactory(
-        BiomTable("species"),
-        metadata_filepath
-    )\
-    .with_lda([1]) \
-    .with_feature_set(akkermansia_feature_set.create_univariate_sets()) \
-    .with_pair_strategy("paired_subtract_sex_balanced") \
-    .with_normalization(Normalization.CLR) \
-    .with_metadata_filter([
-        None,
-        MetadataFilter(
-            "DRB1_1501",
-            "household",
-            meta_households
-        )
-    ])
+from imsms_analysis.analyses.akkermansia_lda import configure
+from imsms_analysis.analyses.akkermansia_target_gene import configure as config_target_gene
+from imsms_analysis.analysis import run_preprocessing
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 if __name__ == "__main__":
     # Pretend all scripts are run from root of repo for file paths.
     import os
     os.chdir("..")
-    runner = SerialRunner()
-    lda_plot = LDAPlot(rows=4, enable_plots=False)
-    lda_plot.hook_events(runner)
-    runner.run(configure())
-    lda_plot.print_acc()
+
+    factory = configure() # use setup from a particular analysis.
+    configs = factory.gen_configurations()
+
+    div10000_config = next(
+        config for config in configs
+        if config.analysis_name ==  "Akkermansia sp. CAG:3441262691-unpaired-None-Divide10000" )
+    gene_config = next(config_target_gene().gen_configurations())
+
+    _,_,train_state,test_state = run_preprocessing(div10000_config, AnalysisCallbacks())
+    _,_,train_state2,test_state2 = run_preprocessing(gene_config, AnalysisCallbacks())
+
+    df = train_state.df.drop("remainder", axis=1).join(train_state2.df.drop("remainder", axis=1))
+    df['target'] = train_state.target
+    df['target'] = df['target'].map({0: "Control", 1: "MS"})
+    df['treatment'] = train_state.meta_df['treatment_type']
+
+    # df = train_state.df
+    # df['target'] = train_state.target
+    # df['target'] = df['target'].map({0: "Control", 1: "MS"})
+
+    g = sns.swarmplot(x=df.columns[0], y='target', orient='h', data=df)
+    plt.title(div10000_config.analysis_name)
+    plt.show()
+    g = sns.swarmplot(x=df.columns[0], y='treatment', orient='h', data=df)
+    plt.title(div10000_config.analysis_name)
+    plt.show()
+    g = sns.swarmplot(x=df.columns[1], y='target', orient='h', data=df)
+    plt.title("TEST-SET Akk Cag 344 CDD94772.1 (Reads/10000)")
+    plt.show()
+    g = sns.scatterplot(x=df.columns[0], y=df.columns[1], hue=df.columns[2], data=df)
+    plt.title("TEST-SET Akk Cag sp 344 vs CDD94772.1 Reads/10000")
+    plt.show()
+
+    with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+        print(df)
+
+    for target in ['MS', 'Control']:
+        print(target, "CDD94772.1 > 0:")
+        set1 = df[(df['target'] == target) & (df['target_reads'] > 0)]
+        print("count", len(set1))
+        print("mean", set1['target_reads'].mean())
+        print("median", set1['target_reads'].median())
+        print(target, "CDD94772.1 == 0:")
+        set2 = df[(df['target'] == target) & (df['target_reads'] == 0)]
+        print("count", len(set2))
+        print("mean", set2['target_reads'].mean())
+        print("median", set2['target_reads'].median())
+
+
+
+
+    exit(-1)
+    for config in configs:
+        try:
+            _, _, train_state, test_state = run_preprocessing(config, AnalysisCallbacks())
+            train_state.df['target'] = train_state.target
+
+            if "unpaired" in config.analysis_name:
+                train_state.df['target'] = train_state.df['target'].map({0:  "Control", 1: "MS"})
+            else:
+                train_state.df['target'] = train_state.df['target'].map({0: "Control-MS", 1: "MS-Control"})
+
+            g = sns.swarmplot(x=train_state.df.columns[0], y="target", orient='h', data=train_state.df)
+            plt.title(config.analysis_name)
+            plt.show()
+
+            # more options can be specified also
+            with pd.option_context('display.max_rows', None, 'display.max_columns', None):
+                print(train_state.df)
+        except Exception as e:
+            print(config.analysis_name)
+            print(e)
 
 

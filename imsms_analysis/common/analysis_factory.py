@@ -3,6 +3,7 @@ from typing import Union
 
 from imsms_analysis.common.analysis_config import AnalysisConfig
 from imsms_analysis.common.dimensionality_reduction import DimensionalityReduction
+from imsms_analysis.common.feature_filter import FeatureFilter
 from imsms_analysis.common.feature_set import FeatureSet
 from imsms_analysis.common.meta_encoder import MetaEncoder
 from imsms_analysis.common.metadata_filter import MetadataFilter
@@ -27,6 +28,7 @@ class AnalysisFactory:
         self.training_set = None
         self.pair_strategy = None
         self.metadata_filter = None
+        self.feature_filter = None
         self.n_random_seeds = None
         self.dimensionality_reduction = None
         self.normalization = None
@@ -64,6 +66,12 @@ class AnalysisFactory:
         if type(metadata_filter) == MetadataFilter:
             metadata_filter = [metadata_filter]
         self.metadata_filter = metadata_filter
+        return self
+
+    def with_feature_filter(self, feature_filter):
+        if isinstance(feature_filter, FeatureFilter):
+            feature_filter = [feature_filter]
+        self.feature_filter = feature_filter
         return self
 
     def with_pca(self, num_components):
@@ -152,6 +160,7 @@ class AnalysisFactory:
                       self.training_set,
                       self.pair_strategy,
                       self.metadata_filter,
+                      self.feature_filter,
                       self.n_random_seeds,
                       self.dimensionality_reduction,
                       self.normalization,
@@ -175,7 +184,7 @@ class AnalysisFactory:
                         yield result
 
         for chosen in _iterate(all_params, 0, []):
-            bt, fs, ts, ps, mf, num_seeds, dr, norm, algo, ft, ai, me, dc = chosen
+            bt, fs, ts, ps, mf, ff, num_seeds, dr, norm, algo, ft, ai, me, dc = chosen
             yield AnalysisConfig(
                 self._analysis_name_gen(all_params, chosen),
                 bt,
@@ -184,6 +193,7 @@ class AnalysisFactory:
                 ts,
                 ps,
                 mf,
+                ff,
                 num_seeds,
                 dr,
                 norm,

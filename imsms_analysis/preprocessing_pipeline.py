@@ -1,6 +1,7 @@
 import pandas as pd
 
 from imsms_analysis.common.analysis_config import AnalysisConfig
+from imsms_analysis.common.feature_filter import ZebraFilter
 from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.common.table_info import BiomTable
 from imsms_analysis.dataset.sample_sets.fixed_training_set import retrieve_training_set
@@ -8,7 +9,7 @@ from imsms_analysis.events.analysis_callbacks import AnalysisCallbacks
 from imsms_analysis.preprocessing import id_parsing, sample_filtering, \
     sample_aggregation, \
     normalization, classifier_target, train_test_split, column_transformation, \
-    visualization, downsampling
+    visualization, downsampling, column_filtering
 from imsms_analysis.preprocessing.column_transformation import build_column_filter, build_feature_set_transform, sum_columns
 from imsms_analysis.preprocessing.train_test_split import TrainTest
 from imsms_analysis.state.pipeline_state import PipelineState
@@ -34,6 +35,7 @@ def process(analysis_config: AnalysisConfig,
             verbose=False,
             pair_strategy="household_concat",
             metadata_filter=None,
+            feature_filter=None,
             dim_reduction=None,
             normalization=Normalization.DEFAULT,
             feature_transform=None,
@@ -51,6 +53,7 @@ def process(analysis_config: AnalysisConfig,
                              verbose,
                              pair_strategy=pair_strategy,
                              metadata_filter=metadata_filter,
+                             feature_filter=feature_filter,
                              dim_reduction=dim_reduction,
                              normalization_strategy=normalization,
                              feature_transform=feature_transform,
@@ -116,6 +119,7 @@ def _apply_transforms(analysis_config: AnalysisConfig,
                       verbose=False,
                       pair_strategy="paired_concat",
                       metadata_filter=None,
+                      feature_filter=None,
                       dim_reduction=None,
                       normalization_strategy=Normalization.DEFAULT,
                       feature_transform=None,
@@ -133,12 +137,21 @@ def _apply_transforms(analysis_config: AnalysisConfig,
             metadata_filter.column_name,
             metadata_filter.acceptable_values
         ))
+
     # Apply some normalization strategy to deal with compositionality of
     # the data, stemming from various sources - whether biological effects
     # and sample coverage/amount or from aggregation of varying numbers of
     # technical replicates.
     steps.append(normalization.build(normalization_strategy.method,
                                      **normalization_strategy.kwargs))
+
+    # Is it okay for all column filtering to occur prior to normalization?
+    # Zebra filter at least should only remove very small counts
+    # so is probably okay...  Let's try after as well
+    if feature_filter is not None:
+        if isinstance(feature_filter, ZebraFilter):
+            steps.append(column_filtering.build_zebra(feature_filter.cov_thresh, feature_filter.cov_file))
+
     if restricted_feature_set is not None:
         steps.append(build_column_filter(restricted_feature_set))
 

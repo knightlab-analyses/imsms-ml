@@ -33,10 +33,9 @@ def configure():
         BiomTable("species"),
         metadata_filepath
     )\
-    .with_lda([1]) \
     .with_feature_set(akkermansia_feature_set.create_univariate_sets()) \
-    .with_pair_strategy("paired_subtract_sex_balanced") \
-    .with_normalization(Normalization.CLR) \
+    .with_pair_strategy(["unpaired", "paired_subtract_sex_balanced"]) \
+    .with_normalization([Normalization.CLR, Normalization.DEFAULT]) \
     .with_metadata_filter([
         None,
         MetadataFilter(
@@ -45,6 +44,8 @@ def configure():
             meta_households
         )
     ])
+    # .with_lda([1]) \
+
 
 
 if __name__ == "__main__":

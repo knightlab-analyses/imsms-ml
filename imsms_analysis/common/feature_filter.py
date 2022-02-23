@@ -1,8 +1,12 @@
-class MetadataFilter:
-    def __init__(self, filter_name, column_name, acceptable_values):
-        self.filter_name = filter_name
-        self.column_name = column_name
-        self.acceptable_values = acceptable_values
+class FeatureFilter:
+    pass
+
+
+class ZebraFilter(FeatureFilter):
+    def __init__(self, cov_thresh, cov_file):
+        self.filter_type = "zebra"
+        self.cov_thresh = cov_thresh
+        self.cov_file = cov_file
 
     def __str__(self):
-        return self.filter_name
+        return "Zebra:" + str(self.cov_thresh)

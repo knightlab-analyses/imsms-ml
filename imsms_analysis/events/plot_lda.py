@@ -58,18 +58,18 @@ class LDAPlot:
             acc2 = (last_step._lda.score(self.df_before, state.target))
             print("LDA Acc:", acc2)
 
+            title = config.analysis_name + "-" + mode
             # Cool 2d plot but only works for 2d data, muck with subplot
             # to make it show up
-            title = config.analysis_name + "-" + mode
-            if mode == "train":
-                self.scratch = None
-            self.scratch = plot_data(last_step._lda,
-                self.df_before,
-                state.target,
-                last_step._lda.predict(self.df_before.to_numpy()),
-                title,
-                self.scratch
-            )
+            # if mode == "train":
+            #     self.scratch = None
+            # self.scratch = plot_data(last_step._lda,
+            #     self.df_before,
+            #     state.target,
+            #     last_step._lda.predict(self.df_before.to_numpy()),
+            #     title,
+            #     self.scratch
+            # )
 
             self.plot_index = self.plot_index + 1
             if self.enable_plots:
@@ -102,7 +102,7 @@ class LDAPlot:
         df.to_csv("./results/lda_all.csv")
 
         with pd.option_context('display.max_rows', None, 'display.max_columns', None):
-            print(df)
+            print(df.transpose())
 
     def _make_presentation_plot(self, df, target):
         # Stupid workaround for LDA only producing one component

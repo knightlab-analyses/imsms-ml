@@ -77,6 +77,52 @@ class SerialRunner:
             print(summary_df)
 
 
+class SavePreprocessedTables():
+    def __init__(self):
+        self.callbacks = AnalysisCallbacks()
+
+    def run(self, factory):
+        factory.validate()
+        _check_unique_names(factory)
+        configs = [x for x in factory.gen_configurations()]
+        self.callbacks.batch_info(configs)
+
+        for config in configs:
+            try:
+                (
+                    final_biom,
+                    target,
+                    train_state,
+                    test_state
+                ) = run_preprocessing(config, self.callbacks)
+
+                # Save table and target column
+                table_fp = path.join(
+                    "tables",
+                    config.analysis_name + "_train.qza"
+                )
+                table_artifact = Artifact.import_data(
+                    "FeatureTable[Frequency]",
+                    final_biom
+                )
+                print(table_fp)
+                table_artifact.save(table_fp)
+
+                target_fp = path.join(
+                    "tables",
+                    config.analysis_name + "_train_target.qza"
+                )
+                print(target_fp)
+                target_artifact = Artifact.import_data(
+                    "SampleData[Target]", target
+                )
+                target_artifact.save(target_fp)
+
+            except Exception as e:
+                print("TEST FAILURE.  CONFIG: " + config.analysis_name)
+                traceback.print_exc()
+
+
 # TODO
 # Try passing the job array id in the config
 # https://waterprogramming.wordpress.com/2013/01/24/pbs-job-submission-with-python/

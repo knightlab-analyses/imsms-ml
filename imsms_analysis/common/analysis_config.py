@@ -1,6 +1,7 @@
 from typing import Optional
 
 from imsms_analysis.common.dimensionality_reduction import DimensionalityReduction
+from imsms_analysis.common.feature_filter import FeatureFilter
 from imsms_analysis.common.feature_set import FeatureSet
 from imsms_analysis.common.meta_encoder import MetaEncoder
 from imsms_analysis.common.metadata_filter import MetadataFilter
@@ -19,6 +20,7 @@ class AnalysisConfig:
                  training_set_index: Optional[int],
                  pair_strategy: Optional[str],
                  metadata_filter: Optional[MetadataFilter],
+                 feature_filter: Optional[FeatureFilter],
                  n_random_seeds: Optional[int],
                  dimensionality_reduction: Optional[DimensionalityReduction],
                  normalization: Optional[Normalization],
@@ -34,6 +36,7 @@ class AnalysisConfig:
         self.training_set_index = training_set_index
         self.pair_strategy = pair_strategy
         self.metadata_filter = metadata_filter
+        self.feature_filter = feature_filter
         self.n_random_seeds = n_random_seeds
         self.dimensionality_reduction = dimensionality_reduction
         self.normalization = normalization

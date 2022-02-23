@@ -1,39 +1,116 @@
-ID	Name
-100886	Catenibacterium mitsuokai
-1226323	Oscillibacter sp. KLE 1745
-1260	Finegoldia magna
-1262775	Clostridium sp. CAG:138
-1262845	Clostridium sp. CAG:91
-1262878	Eubacterium sp. CAG:115
-1262921	Prevotella sp. CAG:1185
-1262925	Prevotella sp. CAG:386
-1262932	Prevotella sp. CAG:604
-1262994	Firmicutes bacterium CAG:65
-1263014	Firmicutes bacterium CAG:270
-1263046	Bacteroides fragilis CAG:47
-1284708	Tissierellia bacterium S7-1-4
-1287640	Anaerococcus obesiensis
-1432052	Eisenbergiella tayi
-1465756	Peptoniphilus grossensis
-154046	Hungatella hathewayi
-1550024	Ruthenibacterium lactatiformans
-165179	Prevotella copri
-1673721	Intestinimonas massiliensis
-169292	Corynebacterium aurimucosum
-169435	Anaerotruncus colihominis
-184870	Varibaculum cambriense
-1855376	Lachnospiraceae bacterium NLAE-zl-G231
-239935	Akkermansia muciniphila
-28127	Prevotella buccalis
-292800	Flavonifractor plautii
-29361	Tyzzerella nexilis
-33039	[Ruminococcus] torques
-386414	Prevotella timonensis
-39491	[Eubacterium] rectale
-40520	Blautia obeum
-410072	Coprococcus comes
-501496	Porphyromonas bennonis
-556262	Coprobacillus sp. D6
-853	Faecalibacterium prausnitzii
-88431	Dorea longicatena
-938289	Levyella massiliensis
+species	MS_untreated_module
+Merdibacter massiliensis	1
+Ruminococcaceae bacterium D16	1
+Subdoligranulum variabile	1
+Traorella massiliensis	1
+Angelakisella massiliensis	1
+Eubacterium sp. ER2	1
+Fournierella massiliensis	1
+Pseudoflavonifractor capillosus	1
+Barnesiella viscericola	2
+Prevotella salivae	2
+Rikenella microfusus	2
+Bacteroides barnesiae	2
+Bacteroides neonati	2
+Prevotella marshii	2
+Riemerella columbina	2
+[Enterobacter] aerogenes	3
+Citrobacter freundii	3
+Enterobacter cloacae	3
+Escherichia coli	3
+Klebsiella oxytoca	3
+Klebsiella pneumoniae	3
+Kluyvera ascorbata	3
+Kluyvera cryocrescens	3
+Kluyvera intermedia	3
+Leclercia adecarboxylata	3
+Lelliottia amnigena	3
+Raoultella ornithinolytica	3
+Shigella dysenteriae	3
+Shigella flexneri	3
+Yersinia pestis	3
+Citrobacter amalonaticus	3
+Cronobacter sakazakii	3
+Enterobacter lignolyticus	3
+Salmonella enterica	3
+[Clostridium] innocuum	4
+Clostridium sp. HGF2	4
+Erysipelotrichaceae bacterium 21_3	4
+Erysipelotrichaceae bacterium I46	4
+Clostridioides difficile	4
+Erysipelotrichaceae bacterium CAG:64	4
+[Eubacterium] rectale	5
+Pseudobutyrivibrio ruminis	5
+Lachnospiraceae bacterium AC2014	5
+Lachnospiraceae bacterium AC2012	5
+Lachnospiraceae bacterium 28-4	6
+Lachnospiraceae bacterium A4	6
+Lachnospiraceae bacterium 10-1	6
+Dorea sp. 5-2	6
+Prevotella pallens	7
+Prevotella scopos	7
+Prevotella amnii	7
+Prevotella histicola	7
+Anaerococcus lactolyticus	8
+Anaerococcus pacaensis	8
+Anaerococcus prevotii	8
+Anaerococcus provenciensis	8
+Anaerococcus tetradius	8
+Casaltella massiliensis	8
+Clostridiales bacterium SIT11	8
+Ezakiella massiliensis	8
+Fenollaria massiliensis	8
+Kallipyga massiliensis	8
+Ndongobacter massiliensis	8
+Neofamilia massiliensis	8
+Peptoniphilus duerdenii	8
+Peptoniphilus grossensis	8
+Peptoniphilus harei	8
+Peptoniphilus lacrimalis	8
+Peptoniphilus obesi	8
+Peptoniphilus senegalensis	8
+Peptoniphilus sp. oral taxon 375	8
+Peptoniphilus timonensis	8
+Porphyromonas bennonis	8
+Streptococcus pseudoporcinus	8
+Tissierellia bacterium S7-1-4	8
+Varibaculum cambriense	8
+Anaerococcus hydrogenalis	8
+Anaerococcus obesiensis	8
+Finegoldia magna	8
+Clostridiales bacterium S5-A14a	8
+Lawsonella clevelandensis	8
+Peptoniphilus rhinitidis	8
+Peptoniphilus sp. BV3C26	8
+Akkermansia sp. 54_46	9
+Akkermansia sp. Phil8	9
+Akkermansia sp. UNK.MGS-1	9
+Akkermansia muciniphila CAG:154	9
+Eubacterium ramulus	10
+Ruminococcus faecis	10
+Dorea formicigenerans	10
+[Ruminococcus] gnavus	11
+Lachnospiraceae bacterium 2_1_46FAA	11
+Coprococcus sp. HPP0048	11
+[Clostridium] bolteae	12
+[Clostridium] citroniae	12
+Clostridium bolteae CAG:59	12
+Coprococcus sp. CAG:131_42_139	13
+Coprococcus eutactus CAG:665	13
+Coprococcus sp. CAG:131	13
+Bacteroides sp. D2	14
+Bacteroides ovatus	14
+Bacteroides ovatus CAG:22	14
+Bifidobacterium longum	15
+Bifidobacterium reuteri	15
+Bifidobacterium saguini	15
+Bifidobacterium breve	15
+Prevotella sp. CAG:604	16
+Prevotella sp. CAG:732	16
+Prevotella sp. CAG:386	16
+[Clostridium] clostridioforme	17
+Clostridium clostridioforme CAG:511	17
+Clostridium clostridioforme CAG:132	17
+Akkermansia sp. KLE1797	18
+Akkermansia sp. KLE1798	18
+Akkermansia sp. KLE1605	18

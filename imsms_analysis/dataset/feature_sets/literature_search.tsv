@@ -1,7 +1,370 @@
 ID	Name
-G000012825	Bacteroides vulgatus
-G001592745	Bdellovibrio bacteriovorus
-G000952975	Peptoniphilus sp. ING2-D1G
+G000191145	Acinetobacter pittii
+G000219275	Acinetobacter lwoffii
+G000271425	Acinetobacter venetianus
+G000367925	Acinetobacter bohemicus
+G000368025	Acinetobacter parvus
+G000368565	Acinetobacter gerneri
+G000368585	Acinetobacter venetianus
+G000368625	Acinetobacter schindleri
+G000368825	Acinetobacter ursingii
+G000368865	Acinetobacter bouvetii
+G000368905	Acinetobacter radioresistens
+G000368925	Acinetobacter bereziniae
+G000369005	Acinetobacter beijerinckii
+G000369105	Acinetobacter lwoffii
+G000369145	Acinetobacter lwoffii
+G000400735	Acinetobacter tandoii
+G000433235	Acinetobacter sp. CAG:196
+G000475335	Acinetobacter sp. COS3
+G000488195	Acinetobacter gyllenbergii
+G000488215	Acinetobacter nectaris
+G000488255	Acinetobacter indicus
+G000488275	Acinetobacter brisouii
+G000632455	Acinetobacter sp. Ver3
+G000746645	Acinetobacter baumannii
+G000816495	Acinetobacter harbinensis
+G000829675	Acinetobacter rudis
+G000964095	Acinetobacter indicus
+G000980495	Acinetobacter sp. N54.MGS-139
+G001307195	Acinetobacter equi
+G001484935	Acinetobacter johnsonii
+G001484985	Acinetobacter venetianus
+G001575095	Acinetobacter haemolyticus
+G001584645	Acinetobacter venetianus
+G001592855	Acinetobacter sp. BMW17
+G001647675	Acinetobacter sp. NCu2D-2
+G001713665	Acinetobacter pittii
+G001758345	Acinetobacter towneri
+G001878775	Acinetobacter sp. AR2-3
+G001917235	Acinetobacter sp. CAG:196_36_41
+G001941805	Acinetobacter junii
+G001953195	Acinetobacter soli
+G900116265	Acinetobacter bohemicus
+G000154305	Anaerostipes caccae
+G000332875	Anaerostipes hadrus
+G000432215	Anaerostipes sp. CAG:276
+G000020225	Akkermansia muciniphila
+G000436395	Akkermansia muciniphila CAG:154
 G000437075	Akkermansia sp. CAG:344
-G000424185	Prevotella sp. AGR2160
-G000221565	Peptoniphilus sp. oral taxon 375
+G000723745	Akkermansia muciniphila
+G000980515	Akkermansia sp. UNK.MGS-1
+G001578645	Akkermansia sp. KLE1797
+G001580195	Akkermansia sp. KLE1798
+G001647615	Akkermansia sp. KLE1605
+G001683795	Akkermansia glycaniphila
+G001917295	Akkermansia sp. 54_46
+G001940945	Akkermansia sp. Phil8
+G900097105	Akkermansia glycaniphila
+G000296465	Barnesiella intestinihominis
+G000512915	Barnesiella viscericola
+G000007525	Bifidobacterium longum
+G000010425	Bifidobacterium adolescentis
+G000022965	Bifidobacterium animalis
+G000165905	Bifidobacterium bifidum
+G000304215	Bifidobacterium asteroides
+G000347695	Bifidobacterium thermophilum
+G000737845	Bifidobacterium bombi
+G000737865	Bifidobacterium coryneforme
+G000738005	Bifidobacterium crudilactis
+G000741135	Bifidobacterium choerinum
+G000741165	Bifidobacterium biavatii
+G000741175	Bifidobacterium callitrichos
+G000741205	Bifidobacterium gallicum
+G000741215	Bifidobacterium gallinarum
+G000741255	Bifidobacterium magnum
+G000741285	Bifidobacterium mongoliense
+G000741525	Bifidobacterium bohemicum
+G000741575	Bifidobacterium cuniculi
+G000741645	Bifidobacterium minimum
+G000741695	Bifidobacterium reuteri
+G000741705	Bifidobacterium psychraerophilum
+G000741715	Bifidobacterium saguini
+G000741765	Bifidobacterium tsurumiense
+G000741775	Bifidobacterium subtile
+G000741785	Bifidobacterium stellenboschense
+G000800475	Bifidobacterium pseudolongum
+G001025155	Bifidobacterium angulatum
+G001025175	Bifidobacterium breve
+G001042595	Bifidobacterium dentium
+G001042635	Bifidobacterium scardovii
+G001263395	Bifidobacterium actinocoloniiforme
+G001417815	Bifidobacterium aesculapii
+G000701705	Bilophila wadsworthia
+G000153905	Blautia obeum
+G000153925	[Ruminococcus] torques
+G000156675	Blautia hansenii
+G000157975	Blautia hydrogenotrophica
+G000373885	Blautia producta
+G000431095	Blautia hydrogenotrophica CAG:147
+G000436615	Blautia sp. CAG:237
+G000438275	Blautia sp. CAG:37
+G000466565	Blautia sp. KLE 1732
+G000526735	[Ruminococcus] gnavus
+G000702025	Blautia schinkii
+G001404455	Blautia obeum
+G001915695	Blautia sp. CAG:37_48_57
+G000379665	Butyricimonas synergistica
+G000519105	Butyricimonas virosa
+G001915615	Butyricimonas synergistica
+G900091675	Butyricimonas sp. Marseille-P2440
+G000154425	Coprococcus eutactus
+G000155875	Coprococcus comes
+G000411355	Coprococcus sp. HPP0048
+G000433295	Coprococcus eutactus CAG:665
+G000436635	Coprococcus sp. CAG:131
+G001916295	Coprococcus sp. 43_8
+G001916305	Coprococcus sp. CAG:131_42_139
+G001678845	Christensenella sp. AF73-05CM02
+G000010665	Desulfovibrio magneticus
+G000012665	Desulfovibrio alaskensis
+G000021385	Desulfovibrio vulgaris
+G000022125	Desulfovibrio desulfuricans
+G000023445	Desulfovibrio salexigens
+G000176915	Desulfovibrio aespoeensis
+G000179555	Desulfovibrio fructosivorans
+G000189295	Desulfovibrio desulfuricans
+G000195755	Desulfovibrio vulgaris
+G000212675	Desulfovibrio africanus
+G000245055	Desulfovibrio sp. U5L
+G000331025	Desulfovibrio hydrothermalis
+G000341895	Desulfovibrio piezophilus
+G000375485	Desulfovibrio oxyclinae
+G000420465	Desulfovibrio desulfuricans
+G000420485	Desulfovibrio longus
+G000422205	Desulfovibrio sp. X2
+G000422245	Desulfovibrio alkalitolerans
+G000422565	Desulfovibrio aminophilus
+G000425265	Desulfovibrio zosterae
+G000429305	Desulfovibrio inopinatus
+G000429325	Desulfovibrio putealis
+G000429985	Desulfovibrio bastinii
+G000430005	Desulfovibrio cuneatus
+G000468495	Desulfovibrio gigas
+G000482745	Desulfovibrio alaskensis
+G000526455	Desulfovibrio magneticus
+G000702665	Desulfovibrio alcoholivorans
+G000711295	Desulfovibrio sp. L21-Syr-AB
+G000711735	Desulfovibrio frigidus
+G001311825	Desulfovibrio brasiliensis
+G001553605	Desulfovibrio fairfieldensis
+G900116045	Desulfovibrio piger
+G900119095	Desulfovibrio desulfuricans
+G900142115	Desulfovibrio desulfuricans
+G900143255	Desulfovibrio litoralis
+G000024265	Eggerthella lenta
+G000270285	Eggerthella sp. YY7918
+G000434775	Eggerthella sp. CAG:368
+G000436075	Eggerthella sp. CAG:209
+G001915265	Eggerthella sp. 51_9
+G000146185	[Eubacterium] eligens
+G000152245	Eubacterium limosum
+G000153885	Eubacterium ventriosum
+G000173975	[Eubacterium] hallii
+G000183525	[Eubacterium] cellulosolvens
+G000242955	Eubacterium sp. 3_1_31
+G000364225	Eubacterium plexicaudatum
+G000403845	Eubacterium sp. 14-2
+G000431695	Eubacterium sp. CAG:146
+G000431895	Eubacterium sp. CAG:603
+G000432175	Eubacterium sp. CAG:786
+G000432435	Eubacterium sp. CAG:180
+G000435815	Eubacterium sp. CAG:192
+G000436475	Eubacterium sp. CAG:248
+G000436535	Eubacterium sp. CAG:252
+G000436675	Eubacterium sp. CAG:115
+G000436775	Eubacterium sp. CAG:202
+G000436835	Eubacterium sp. CAG:251
+G000437375	Eubacterium sp. CAG:841
+G000437615	Eubacterium dolichum CAG:375
+G000437975	Eubacterium sp. CAG:581
+G000469345	Eubacterium ramulus
+G000518685	Eubacterium xylanophilum
+G000688015	Eubacterium sp. AB3007
+G000765215	Eubacterium sp. ER2
+G001916415	Eubacterium sp. 45_250
+G900107125	Eubacterium barkeri
+G900115385	Eubacterium pyruvativorans
+G900116785	Eubacterium pyruvativorans
+G000162015	Faecalibacterium prausnitzii
+G000434675	Faecalibacterium sp. CAG:1138
+G001916495	Faecalibacterium sp. CAG:82-related_59_9
+G000007945	[Haemophilus] ducreyi
+G000021885	[Haemophilus] parasuis
+G000027305	Haemophilus influenzae
+G000172375	[Haemophilus] parasuis
+G000238795	Haemophilus sputorum
+G000259485	Haemophilus parainfluenzae
+G000261285	Haemophilus parainfluenzae
+G000444545	[Haemophilus] parasuis
+G000444565	[Haemophilus] parasuis
+G000444605	[Haemophilus] parasuis
+G000444645	[Haemophilus] parasuis
+G000444685	[Haemophilus] parasuis
+G000444705	[Haemophilus] parasuis
+G000688835	[Haemophilus] parasuis
+G000968335	Haemophilus influenzae
+G001007605	Haemophilus influenzae
+G001055885	Haemophilus parainfluenzae
+G001276545	Haemophilus influenzae
+G001611775	[Haemophilus] parasuis
+G001679325	Haemophilus parainfluenzae
+G001938355	[Haemophilus] parasuis
+G002015085	[Haemophilus] parasuis
+G000016525	Methanobrevibacter smithii
+G000024185	Methanobrevibacter ruminantium
+G000190095	Methanobrevibacter smithii
+G000190135	Methanobrevibacter smithii
+G000190155	Methanobrevibacter smithii
+G000404165	Methanobrevibacter sp. AbM4
+G000437055	Methanobrevibacter smithii CAG:186
+G000513315	Methanobrevibacter arboriphilus
+G000621965	Methanobrevibacter wolinii
+G000824705	Methanobrevibacter smithii
+G001477655	Methanobrevibacter millerae
+G001548675	Methanobrevibacter sp. YE315
+G001639275	Methanobrevibacter oralis
+G000205165	Paraprevotella xylaniphila
+G000436895	Paraprevotella clara CAG:116
+G000023825	Pedobacter heparinus
+G000170795	Pedobacter sp. BAL39
+G000258495	Pedobacter agri
+G000302595	Pedobacter arcticus
+G000410815	Pedobacter heparinus
+G000422945	Pedobacter oryzae
+G000425145	Pedobacter glucosidilyticus
+G000633455	Pedobacter jeongneungensis
+G000708265	Pedobacter sp. R20-19
+G000722885	Pedobacter antarcticus
+G000799115	Pedobacter glucosidilyticus
+G000832545	Pedobacter sp. NL19
+G001027745	Pedobacter sp. BMA
+G001412215	Pedobacter sp. Hv1
+G001412655	Pedobacter sp. PACM 27299
+G001421515	Pedobacter sp. Leaf216
+G001423945	Pedobacter sp. Leaf194
+G001424305	Pedobacter sp. Leaf176
+G001442625	Pedobacter ginsenosidimutans
+G001652725	Pedobacter sp. CCM 8644
+G001721645	Pedobacter steynii
+G900100435	Pedobacter sp. ok626
+G900100705	Pedobacter terrae
+G900101435	Pedobacter soli
+G900103515	Pedobacter antarcticus
+G900103545	Pedobacter ruber
+G900103665	Pedobacter steynii
+G900107535	Pedobacter hartonius
+G900111825	Pedobacter suwonensis
+G900112985	Pedobacter antarcticus
+G900129215	Pedobacter caeni
+G000007565	Pseudomonas putida
+G000007805	Pseudomonas syringae group genomosp. 3
+G000012245	Pseudomonas syringae
+G000016565	Pseudomonas mendocina
+G000026105	Pseudomonas entomophila
+G000213805	Pseudomonas fulva
+G000219605	Pseudomonas stutzeri
+G000222125	Pseudomonas sp. S9
+G000237065	Pseudomonas fluorescens
+G000282775	Pseudomonas luteola
+G000349845	Pseudomonas denitrificans
+G000364625	Pseudomonas thermotolerans
+G000397205	Pseudomonas protegens
+G000410875	Pseudomonas pelagia
+G000412695	Pseudomonas resinovorans
+G000421765	Pseudomonas caeni
+G000425625	Pseudomonas azotifigens
+G000455385	Pseudomonas alcaligenes
+G000467065	Pseudomonas fuscovaginae
+G000498575	Pseudomonas taeanensis
+G000590475	Pseudomonas stutzeri
+G000689415	Pseudomonas knackmussii
+G000746525	Pseudomonas alkylphenolica
+G000756775	Pseudomonas saudiphocaensis
+G000759445	Pseudomonas lutea
+G000759535	Pseudomonas cremoricolorata
+G000761155	Pseudomonas rhizosphaerae
+G000806415	Pseudomonas flexibilis
+G000826105	Pseudomonas sp. CB1
+G000829415	Pseudomonas sp. StFLB209
+G000939975	Pseudomonas saudimassiliensis
+G001446935	Pseudomonas sp. TTU2014-080ASC
+G001518815	Pseudomonas oryzihabitans
+G001543265	Pseudomonas fragi
+G001597285	Pseudomonas alcaligenes
+G001605965	Pseudomonas koreensis
+G001644955	Pseudomonas putida
+G001705225	Pseudomonas xanthomarina
+G001708485	Pseudomonas fluorescens
+G900103375	Pseudomonas balearica
+G900111835	Pseudomonas otitidis
+G000023885	Slackia heliotrinireducens
+G000162875	Slackia exigua
+G000296445	Slackia piriformis
+G000006785	Streptococcus pyogenes
+G000007265	Streptococcus agalactiae
+G000007465	Streptococcus mutans
+G000009545	Streptococcus uberis
+G000014205	Streptococcus sanguinis
+G000017005	Streptococcus gordonii
+G000026745	Streptococcus suis
+G000027165	Streptococcus mitis
+G000164675	Streptococcus parasanguinis
+G000187465	Streptococcus infantis
+G000187975	Streptococcus criceti
+G000187995	Streptococcus macacae
+G000188015	Streptococcus ictaluri
+G000188035	Streptococcus pseudoporcinus
+G000188055	Streptococcus urinalis
+G000213825	Streptococcus parauberis
+G000228185	Streptococcus sobrinus
+G000228205	Streptococcus sobrinus
+G000228385	Streptococcus sobrinus
+G000228505	Streptococcus sobrinus
+G000228805	Streptococcus mutans
+G000228845	Streptococcus mutans
+G000228925	Streptococcus mutans
+G000229145	Streptococcus mutans
+G000229225	Streptococcus mutans
+G000229545	Streptococcus mutans
+G000229705	Streptococcus mutans
+G000230225	Streptococcus mutans
+G000253395	Streptococcus thermophilus
+G000270145	Streptococcus gallolyticus
+G000286075	Streptococcus ratti
+G000317855	Streptococcus dysgalactiae
+G000344275	Streptococcus oralis
+G000347835	Streptococcus mutans
+G000347915	Streptococcus ratti
+G000372425	Streptococcus ferus
+G000376985	Streptococcus henryi
+G000377005	Streptococcus minor
+G000379985	Streptococcus caballi
+G000380005	Streptococcus didelphis
+G000380025	Streptococcus entericus
+G000380045	Streptococcus marimammalium
+G000380065	Streptococcus massiliensis
+G000380085	Streptococcus merionis
+G000380105	Streptococcus orisratti
+G000380125	Streptococcus ovis
+G000385925	Streptococcus cristatus
+G000423725	Streptococcus devriesei
+G000423745	Streptococcus plurextorum
+G000423765	Streptococcus porci
+G000440115	Streptococcus suis
+G000463355	Streptococcus intermedius
+G000463505	Streptococcus anginosus
+G000686605	Streptococcus sobrinus
+G000772915	Streptococcus phocae
+G000785515	Streptococcus salivarius
+G000831485	Streptococcus iniae
+G001182825	Streptococcus sp. X13SY08
+G001514435	Streptococcus thermophilus
+G001598035	Streptococcus halotolerans
+G001638255	Streptococcus pyogenes
+G000190535	Odoribacter splanchnicus
+G000243215	Odoribacter laneus
+G000432935	Odoribacter laneus CAG:561
+G000433935	Odoribacter sp. CAG:788
+G000435735	Odoribacter splanchnicus CAG:14
+G001915655	Odoribacter sp. 43_10

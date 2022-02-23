@@ -1,6 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import matplotlib
+
+matplotlib.use("TkAgg")
 
 # Paired vs unpaired
 # paired = pd.read_csv("./results/RawSpeciesPaired.csv", sep=',')
@@ -99,25 +102,25 @@ import seaborn as sns
 #              value_name="Accuracy")
 # df["hue"] = (["species"] * 50 + ["genus"] * 50) * 25
 
-# df = pd.read_csv("./plottedResults/CLRvsDivide_all.csv", sep=',')
+# df = pd.read_csv("./plottedResults/taxonomic_levels_sex_balanced.csv", sep=',')
 # df = pd.melt(df,
 #              value_vars=df.columns.tolist()[1:],
-#              var_name="Randomized Test Set",
+#              var_name="Taxonomic Level / Bias Correction",
 #              value_name="Accuracy")
 
 #
-df = pd.read_csv("./plottedResults/downsample_50.csv", sep=',')
-df = pd.melt(df,
-             value_vars=df.columns.tolist()[1:],
-             var_name="Num Training Samples",
-             value_name="Accuracy")
-
-
-# df = pd.read_csv("./results/all.csv", sep=',')
+# df = pd.read_csv("./plottedResults/network_features_untreated.csv", sep=',')
 # df = pd.melt(df,
 #              value_vars=df.columns.tolist()[1:],
-#              var_name="Pairing Procedure",
+#              var_name="Network",
 #              value_name="Accuracy")
+
+
+df = pd.read_csv("./plottedResults/zebra_9999_beforeNormalize.csv", sep=',')
+df = pd.melt(df,
+             value_vars=df.columns.tolist()[1:],
+             var_name="Zebra Coverage Threshold",
+             value_name="Accuracy")
 
 
 # df = pd.read_csv("./results/lda_all.csv", sep=',')
@@ -136,12 +139,12 @@ df = pd.melt(df,
 
 
 sns.set(style="ticks")
-g = sns.catplot(x="Num Training Samples", y="Accuracy", data=df)
+g = sns.catplot(x="Zebra Coverage Threshold", y="Accuracy", data=df)
 # g = sns.catplot(x="Randomized Test Set", y="Accuracy", hue="hue", data=df)
 ax = g.ax
 ax.set_xticklabels(ax.get_xticklabels(), rotation=40, ha="right")
 ax.axhline(.5, ls='--')
 # ax2.axhline(30, ls='--')
 plt.tight_layout()
-plt.title("Downsampled Training Sets")
+plt.title("Model Performance With Zebra Filtering")
 plt.show()

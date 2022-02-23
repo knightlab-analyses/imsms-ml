@@ -57,8 +57,8 @@ def split_fixed_set(state, train_households, verbose=False):
     train_df = train_df.drop('household', axis=1)
     test_df = test_df.drop('household', axis=1)
 
-    print(train_df)
-    print(test_df)
+    # print(train_df)
+    # print(test_df)
 
     return TrainTest(
         train=PipelineState(train_df, train_meta, train_target),

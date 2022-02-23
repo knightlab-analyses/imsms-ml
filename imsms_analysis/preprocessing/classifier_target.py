@@ -109,19 +109,19 @@ def matched_pair_subtract_sex_balanced(state: PipelineState,
         else:
             MF_hh.add(hh)
 
-    print("Lengths:")
-    print(len(MM_hh), len(FF_hh), len(FM_hh), len(MF_hh))
-    print("MM")
-    print(MM_hh)
-    print("FF")
-    print(FF_hh)
+    # print("Lengths:")
+    # print(len(MM_hh), len(FF_hh), len(FM_hh), len(MF_hh))
+    # print("MM")
+    # print(MM_hh)
+    # print("FF")
+    # print(FF_hh)
 
     # Pick a subset
     r = default_rng(_CHOICE_RANDOM_SEED)
     accept_set = r.choice(sorted(list(FM_hh)), len(MF_hh), replace=False).tolist()
 
     accept_set = accept_set + list(FF_hh) + list(MM_hh) + list(MF_hh)
-    print("ACCEPT SET: ", len(accept_set))
+    # print("ACCEPT SET: ", len(accept_set))
     state.df = state.df[state.df['__household__'].isin(accept_set)]
     state.df = state.df.drop(["__household__", "__target__"], axis=1)
 
@@ -152,10 +152,10 @@ def matched_pair_subtract_sex_balanced(state: PipelineState,
     E = (df['target'] == 1) & (df['__sex__'] == 0)
     F = (df['target'] == 1) & (df['__sex__'] == 1)
 
-    print(A.sum(), B.sum(), C.sum())
-    print(D.sum(), E.sum(), F.sum())
-
-    print((A | B | C | D | E | F).sum())
+    # print(A.sum(), B.sum(), C.sum())
+    # print(D.sum(), E.sum(), F.sum())
+    #
+    # print((A | B | C | D | E | F).sum())
 
     df = df.drop('target', axis=1)
     df = df.drop('__sex__', axis=1)

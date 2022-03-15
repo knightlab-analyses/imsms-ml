@@ -9,6 +9,7 @@ from imsms_analysis.common.meta_encoder import MetaEncoder
 from imsms_analysis.common.metadata_filter import MetadataFilter
 from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.common.table_info import TableInfo, BiomTable
+from imsms_analysis.common.target_set import TargetSet
 from imsms_analysis.dataset.feature_transforms.feature_transformer import \
     FeatureTransformer
 
@@ -137,6 +138,12 @@ class AnalysisFactory:
         self.downsample_count = downsample_count
         return self
 
+    def with_target_set(self, target_set):
+        if type(target_set) == TargetSet:
+            target_set = [target_set]
+        self.target_set = target_set
+        return self
+
     def _analysis_name_gen(self,
                            all_params,
                            chosen_tuple):
@@ -148,6 +155,7 @@ class AnalysisFactory:
             if len(all_params[i]) > 1:
                 parameters.append(str(chosen_tuple[i]))
         return "-".join(parameters)
+
 
     def validate(self):
         # Check that metadata file exists
@@ -168,7 +176,8 @@ class AnalysisFactory:
                       self.feature_transform,
                       self.allele_info,
                       self.meta_encoder,
-                      self.downsample_count]
+                      self.downsample_count,
+                      self.target_set]
 
         for i in range(len(all_params)):
             if all_params[i] is None:
@@ -184,7 +193,7 @@ class AnalysisFactory:
                         yield result
 
         for chosen in _iterate(all_params, 0, []):
-            bt, fs, ts, ps, mf, ff, num_seeds, dr, norm, algo, ft, ai, me, dc = chosen
+            bt, fs, ts, ps, mf, ff, num_seeds, dr, norm, algo, ft, ai, me, dc, targ = chosen
             yield AnalysisConfig(
                 self._analysis_name_gen(all_params, chosen),
                 bt,
@@ -201,7 +210,8 @@ class AnalysisFactory:
                 ft,
                 ai,
                 me,
-                dc
+                dc,
+                targ
             )
 
 

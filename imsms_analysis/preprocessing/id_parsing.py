@@ -12,20 +12,8 @@ def fix_sample_ids(state: PipelineState) -> PipelineState:
 
 
 def _parse_sample_id(index: str):
-    # print(index)
-    # Input of form Q.71401.0009.2016.02.23
-    # Output of form 71401-0009
-    ss = index.split('.')
-    if len(ss) < 3:
-        print("BAD: ", index)
-        raise ValueError("Can't convert sample id:", index)
-
-    sample_id = ss[1] + "-" + ss[2]
-    # print("GOOD: ", index, "->", sample_id)
-    return sample_id
-
-
-def _parse_household_id(sample_id: str):
-    # Input of form Q.71401.0009.2016.02.23
-    # Output of form 714-0009
-    return sample_id[0:3] + sample_id[5:]
+    # Finrisk sample ids match metadata ids in finrisk_metadata.tsv but must be converted
+    # to match column "Barcode" in FR02.tsv
+    ss = index.split(".")
+    new_index = "S" + ss[1] + "-" + ss[2]
+    return new_index

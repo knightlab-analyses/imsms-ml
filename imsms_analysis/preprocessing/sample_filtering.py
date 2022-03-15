@@ -1,7 +1,6 @@
 import pandas as pd
 
 from imsms_analysis.common.named_functor import NamedFunctor
-from imsms_analysis.preprocessing.id_parsing import _parse_household_id
 from imsms_analysis.state.pipeline_state import PipelineState
 from collections import defaultdict
 
@@ -122,24 +121,8 @@ def _filter_zero_sum(state: PipelineState) -> PipelineState:
     return _filter_to_matched_pairs(state)
 
 
-# Some sample filtering operations may break the matched pair nature of the
-# dataset.  This filters out samples whose matched pair has been removed.
 def _filter_to_matched_pairs(state: PipelineState) -> PipelineState:
-    household_map = defaultdict(list)
-    for key in state.df.index:
-        household_map[_parse_household_id(key)].append(key)
-
-    good_keys = []
-    for household in household_map:
-        sample_ids = household_map[household]
-        if len(sample_ids) == 2:
-            for sample_id in sample_ids:
-                good_keys.append(sample_id)
-
-    good_keys = set(good_keys)
-    return state.update(
-        df=state.df[state.df.index.isin(good_keys)],
-        meta_df=state.meta_df[state.meta_df.index.isin(good_keys)]
-    )
+    # Finrisk has no matched pairs
+    return state
 
 

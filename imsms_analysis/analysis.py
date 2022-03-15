@@ -11,11 +11,13 @@ from imsms_analysis import preprocessing_pipeline
 from imsms_analysis.common.analysis_config import AnalysisConfig
 from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.common import plotter
+from imsms_analysis.common.target_set import TargetSet
 from imsms_analysis.events.analysis_callbacks import AnalysisCallbacks
 from imsms_analysis.state.pipeline_state import PipelineState
 import pdb
 import sqlite3
 import math
+import imsms_analysis.debugcode
 
 
 def _print_read_count_info(df):
@@ -86,6 +88,9 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
     if normalization is None:
         normalization = Normalization.DEFAULT
     feature_transform = analysis_config.feature_transform
+    target_set = analysis_config.target_set
+    if target_set is None:
+        target_set = TargetSet("Male-Female", "MEN", [1])
     # TODO: Probably need to keep the config for the algorithm next to the algo
     #  blahhh.
 
@@ -137,6 +142,8 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
     metadata = Metadata.load(metadata_filepath)
     meta_df = metadata.to_dataframe()
 
+    print(meta_df.index)
+
     state = PipelineState(df, meta_df, None)
 
     print(analysis_name)
@@ -155,11 +162,11 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
         normalization=normalization,
         feature_transform=feature_transform,
         meta_encoder=analysis_config.meta_encoder,
-        downsample_count=analysis_config.downsample_count
+        downsample_count=analysis_config.downsample_count,
+        target_set=target_set
     )
 
     df = train_state.df
-    meta_df = train_state.meta_df
     target = train_state.target
 
     # For normalized reads after preprocessing, uncomment here
@@ -198,8 +205,12 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
     # return
 
     # Convert necessary types for regression-benchmarking
+    print(df)
     final_biom = Artifact.import_data("FeatureTable[Frequency]", df)\
         .view(biom.Table)
+
+    train_state.df = df
+    train_state.target = target
     
     return final_biom, target, train_state, test_state
 
@@ -211,6 +222,7 @@ def run_analysis(analysis_config, callbacks: AnalysisCallbacks):
         train_state,
         test_state
     ) = run_preprocessing(analysis_config, callbacks)
+
     # print(analysis_config.analysis_name)
     # print("Train Shape: ", train_state.df.shape)
     # print("Test Shape: ", test_state.df.shape)
@@ -263,6 +275,7 @@ def run_analysis(analysis_config, callbacks: AnalysisCallbacks):
     #                    }
 
     test_acc_results = []
+    debug_acc_results = []
     mean_cross_val_results = []
 
     param_grid = list(ParameterGrid(RandomForestClassifier_grids))
@@ -290,18 +303,27 @@ def run_analysis(analysis_config, callbacks: AnalysisCallbacks):
         #######################################
 
         test_accuracy = eval_model(best_model, test_state)
+        debug_model = imsms_analysis.debugcode.debug_train(train_state.df, train_state.target)
+        debug_accuracy = eval_model(debug_model, test_state)
         mean_cross_validation_accuracy = results_table["ACCURACY"].mean()
 
         print("Test Set Accuracy")
         print(test_accuracy)
+        print("DEBUG ACCURACY")
+        print(debug_accuracy)
         print("Average Cross Validation Accuracy:")
         print(mean_cross_validation_accuracy)
 
         test_acc_results.append(test_accuracy)
+        debug_acc_results.append(debug_accuracy)
         mean_cross_val_results.append(mean_cross_validation_accuracy)
 
     results = pd.DataFrame(test_acc_results, columns=["TestAccuracy"])
     results.to_csv("./results/" + analysis_name + ".csv")
+
+    print("Expected performance:")
+    debug_series = pd.Series(debug_acc_results, name='debug_'+analysis_name)
+    print("Mean debug:", debug_series.mean(), "Std debug:", debug_series.std())
 
     return pd.Series(test_acc_results, name=analysis_name), \
         pd.Series(mean_cross_val_results, name=analysis_name)

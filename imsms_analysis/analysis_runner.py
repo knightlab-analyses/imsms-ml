@@ -96,6 +96,11 @@ class SavePreprocessedTables():
                     test_state
                 ) = run_preprocessing(config, self.callbacks)
 
+                print(train_state.meta_df.columns)
+                # with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+                #     print(train_state.meta_df["host_body_mass_index"])
+                #     print(train_state.meta_df["sex"])
+
                 # Save table and target column
                 table_fp = path.join(
                     "tables",

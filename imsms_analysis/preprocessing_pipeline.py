@@ -11,7 +11,8 @@ from imsms_analysis.preprocessing import id_parsing, sample_filtering, \
     normalization, classifier_target, train_test_split, column_transformation, \
     visualization, downsampling, column_filtering
 from imsms_analysis.preprocessing.column_transformation import build_column_filter, build_feature_set_transform, sum_columns
-from imsms_analysis.preprocessing.train_test_split import TrainTest
+from imsms_analysis.preprocessing.train_test_split import TrainTest, \
+    passthrough
 from imsms_analysis.state.pipeline_state import PipelineState
 
 BAD_SAMPLE_PREFIXES = [
@@ -40,7 +41,8 @@ def process(analysis_config: AnalysisConfig,
             normalization=Normalization.DEFAULT,
             feature_transform=None,
             meta_encoder=None,
-            downsample_count=None):
+            downsample_count=None,
+            target_set=None):
     filtered = _filter_samples(analysis_config, state, callbacks, verbose)
     train, test = _split_test_set(filtered,
                                   training_set_index,
@@ -58,7 +60,8 @@ def process(analysis_config: AnalysisConfig,
                              normalization_strategy=normalization,
                              feature_transform=feature_transform,
                              meta_encoder=meta_encoder,
-                             downsample_count=downsample_count
+                             downsample_count=downsample_count,
+                             target_set=target_set
                              )
 
 
@@ -102,13 +105,14 @@ def _filter_samples(analysis_config: AnalysisConfig,
 def _split_test_set(state: PipelineState,
                     training_set_index=0,
                     verbose=False) -> TrainTest:
-    train_set_households = retrieve_training_set(training_set_index)
-    return train_test_split.split_fixed_set(state,
-                                            train_set_households,
-                                            verbose)
-    # return train_test_split.split(state,
-    #                               .5,
-    #                               verbose)
+    # return passthrough(state)
+    # train_set_households = retrieve_training_set(training_set_index)
+    # return train_test_split.split_fixed_set(state,
+    #                                         train_set_households,
+    #                                         verbose)
+    return train_test_split.split(state,
+                                  .5,
+                                  verbose)
 
 
 def _apply_transforms(analysis_config: AnalysisConfig,
@@ -124,7 +128,8 @@ def _apply_transforms(analysis_config: AnalysisConfig,
                       normalization_strategy=Normalization.DEFAULT,
                       feature_transform=None,
                       meta_encoder=None,
-                      downsample_count=None
+                      downsample_count=None,
+                      target_set=None
                       ):
     # noinspection PyListCreation
     steps = []
@@ -138,19 +143,19 @@ def _apply_transforms(analysis_config: AnalysisConfig,
             metadata_filter.acceptable_values
         ))
 
-    # Apply some normalization strategy to deal with compositionality of
-    # the data, stemming from various sources - whether biological effects
-    # and sample coverage/amount or from aggregation of varying numbers of
-    # technical replicates.
-    steps.append(normalization.build(normalization_strategy.method,
-                                     **normalization_strategy.kwargs))
-
     # Is it okay for all column filtering to occur prior to normalization?
     # Zebra filter at least should only remove very small counts
     # so is probably okay...  Let's try after as well
     if feature_filter is not None:
         if isinstance(feature_filter, ZebraFilter):
             steps.append(column_filtering.build_zebra(feature_filter.cov_thresh, feature_filter.cov_file))
+
+    # Apply some normalization strategy to deal with compositionality of
+    # the data, stemming from various sources - whether biological effects
+    # and sample coverage/amount or from aggregation of varying numbers of
+    # technical replicates.
+    steps.append(normalization.build(normalization_strategy.method,
+                                     **normalization_strategy.kwargs))
 
     if restricted_feature_set is not None:
         steps.append(build_column_filter(restricted_feature_set))
@@ -170,11 +175,16 @@ def _apply_transforms(analysis_config: AnalysisConfig,
         # Try a summed univariate feature set (not so good with RF)
         # steps.append(sum_columns())
 
+    # TODO FIXME HACK:  Pick classifier target externally.
+    if target_set is None:
+        raise("NO TARGET SET")
+
+    print("Target: ", target_set.name, "Column: ", target_set.target_col, "IN: ", target_set.target_set)
     # Build target series
     steps.append(
         classifier_target.build(
-            "disease",
-            {"MS"},
+            target_set.target_col,
+            target_set.target_set,
             pair_strategy=pair_strategy
         )
     )

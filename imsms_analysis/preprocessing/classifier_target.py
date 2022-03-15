@@ -2,7 +2,6 @@ import pandas as pd
 
 from imsms_analysis.common.named_functor import NamedFunctor
 from imsms_analysis.state.pipeline_state import PipelineState
-from imsms_analysis.preprocessing.id_parsing import _parse_household_id
 
 from numpy.random import default_rng
 import numpy as np
@@ -32,6 +31,12 @@ def build(meta_col_name: str, one_set: set, pair_strategy="paired_concat"):
             "Target: " + meta_col_name,
             lambda state, mode:
                 _target(state, meta_col_name, one_set)
+        )
+    elif pair_strategy == "unpaired_target_balanced":
+        return NamedFunctor(
+            "Target: " + meta_col_name,
+            lambda state, mode:
+                unpaired_target_balanced(state, meta_col_name, one_set)
         )
     elif pair_strategy == "paired_subtract_sex_balanced":
         return NamedFunctor(
@@ -77,6 +82,38 @@ def matched_pair_subtract(state: PipelineState,
     target = df['target'] / 2 + .5
     df = df.drop('target', axis=1)
     return state.update(target=target, df=df)
+
+
+# Subsample for equal number of target and non target (Use this when classifier target is sex, or east/west, or
+# any binary classification to ensure the samples in the in group and out groups are balanced )
+# This prevents you building a classifier that says "No one has disease" and getting 99% accuracy
+# and forces models with no information to approach 50% accuracy.
+def unpaired_target_balanced(state: PipelineState,
+                                       meta_col_name: str,
+                                       one_set: set) -> PipelineState:
+
+    state = _target(state, meta_col_name, one_set)
+    state.df["__target__"] = state.target
+
+    A = state.df[state.df["__target__"] == 1]
+    B = state.df[state.df["__target__"] == 0]
+    bigset = A
+    smallset = B
+    if len(B) > len(A):
+        bigset = B
+        smallset = A
+
+    r = default_rng(_CHOICE_RANDOM_SEED)
+    accept_set = r.choice(sorted(list(bigset.index)), len(smallset.index), replace=False).tolist()
+    accept_set = set(accept_set + list(smallset.index))
+
+    state.df = state.df[state.df.index.isin(accept_set)]
+    state.meta_df = state.meta_df[state.meta_df.index.isin(accept_set)]
+    state.target = state.df['__target__']
+    state.df = state.df.drop(["__target__"], axis=1)
+
+    return state.update(target=state.target, df=state.df, meta_df=state.meta_df)
+
 
 def matched_pair_subtract_sex_balanced(state: PipelineState,
                         meta_col_name: str,

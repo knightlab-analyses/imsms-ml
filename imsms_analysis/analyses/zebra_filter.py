@@ -1,42 +1,47 @@
 from imsms_analysis.analysis_runner import SerialRunner, DryRunner, ParallelRunner
 from imsms_analysis.common.analysis_factory import AnalysisFactory, MultiFactory
 from imsms_analysis.common.feature_filter import ZebraFilter
+from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.common.table_info import BiomTable
+from imsms_analysis.common.target_set import TargetSet
 
 
 def configure():
-    metadata_filepath = "./dataset/metadata/iMSMS_1140samples_metadata.tsv"
-    woltka_levels = AnalysisFactory(
-        [
-            BiomTable("species"),
-        ],
-        metadata_filepath
-    ).with_pair_strategy([
-        "paired_subtract_sex_balanced"
-    ])
+    metadata_filepath = "./dataset/metadata/FR02_sampleid_filtered.tsv"
+
     zebra = AnalysisFactory(
         [BiomTable("none")],
         metadata_filepath
-    ).with_pair_strategy("paired_subtract_sex_balanced") \
-    .with_feature_filter([
-        ZebraFilter(.00, "../zebra.csv"),
-        ZebraFilter(.10, "../zebra.csv"),
-        ZebraFilter(.25, "../zebra.csv"),
-        ZebraFilter(.50, "../zebra.csv"),
-        ZebraFilter(.75, "../zebra.csv"),
-        ZebraFilter(.90, "../zebra.csv"),
-        ZebraFilter(.95, "../zebra.csv"),
-        ZebraFilter(.98, "../zebra.csv"),
-        ZebraFilter(.99, "../zebra.csv"),
-        ZebraFilter(.995, "../zebra.csv"),
-        ZebraFilter(.998, "../zebra.csv"),
-        ZebraFilter(.999, "../zebra.csv"),
-        ZebraFilter(.9999, "../zebra.csv"),
+    ).with_normalization(Normalization.CLR) \
+     .with_pair_strategy("unpaired_target_balanced") \
+     .with_feature_filter([
+        ZebraFilter(.00, "./dataset/metadata/finrisk_cov.tsv"),
+        # ZebraFilter(.10, "./dataset/metadata/finrisk_cov.tsv"),
+        # ZebraFilter(.25, "./dataset/metadata/finrisk_cov.tsv"),
+        # ZebraFilter(.50, "./dataset/metadata/finrisk_cov.tsv"),
+        # ZebraFilter(.75, "./dataset/metadata/finrisk_cov.tsv"),
+        # ZebraFilter(.90, "./dataset/metadata/finrisk_cov.tsv"),
+        # ZebraFilter(.95, "./dataset/metadata/finrisk_cov.tsv"),
+        # ZebraFilter(.98, "./dataset/metadata/finrisk_cov.tsv"),
+        # ZebraFilter(.99, "./dataset/metadata/finrisk_cov.tsv"),
+        # ZebraFilter(.995, "./dataset/metadata/finrisk_cov.tsv"),
+        # ZebraFilter(.998, "./dataset/metadata/finrisk_cov.tsv"),
+        # ZebraFilter(.999, "./dataset/metadata/finrisk_cov.tsv"),
+        # ZebraFilter(.9999, "./dataset/metadata/finrisk_cov.tsv"),
+    ])\
+    .with_target_set([
+        TargetSet("Lactose", "FR02_100A", ["2"]),
+        # TargetSet("Gluten", "FR02_100B", ["2"]),
+        # TargetSet("Food Allergy", "FR02_100C", ["2"]),
+        # TargetSet("Diabetic", "FR02_100D", ["2"]),
+        # TargetSet("Cholesterol-Lowering", "FR02_100E", ["2"]),
+        # TargetSet("Weight-Loser", "FR02_100F", ["2"]),
+        # TargetSet("Vegetarian", "FR02_100G", ["2"]),
+        # TargetSet("Other-Diet", "FR02_100H", ["2"]),
     ])
 
     return MultiFactory([
-        woltka_levels,
-        zebra,
+        zebra
     ])
 
 

@@ -109,14 +109,14 @@ matplotlib.use("TkAgg")
 #              value_name="Accuracy")
 
 #
-# df = pd.read_csv("./plottedResults/network_features_untreated.csv", sep=',')
+# df = pd.read_csv("./plottedResults/zebra_FR02_MEN.csv", sep=',')
 # df = pd.melt(df,
 #              value_vars=df.columns.tolist()[1:],
 #              var_name="Network",
 #              value_name="Accuracy")
 
 
-df = pd.read_csv("./plottedResults/zebra_9999_beforeNormalize.csv", sep=',')
+df = pd.read_csv("plottedResults/zebra_lactose_free_CLR.csv", sep=',')
 df = pd.melt(df,
              value_vars=df.columns.tolist()[1:],
              var_name="Zebra Coverage Threshold",
@@ -146,5 +146,5 @@ ax.set_xticklabels(ax.get_xticklabels(), rotation=40, ha="right")
 ax.axhline(.5, ls='--')
 # ax2.axhline(30, ls='--')
 plt.tight_layout()
-plt.title("Model Performance With Zebra Filtering")
+plt.title("Male/Female Classifier Performance With Zebra Filtering (FINRISK)")
 plt.show()

@@ -12,8 +12,9 @@ def fix_sample_ids(state: PipelineState) -> PipelineState:
 
 
 def _parse_sample_id(index: str):
-    # Finrisk sample ids match metadata ids in finrisk_metadata.tsv but must be converted
-    # to match column "Barcode" in FR02.tsv
-    ss = index.split(".")
-    new_index = "S" + ss[1] + "-" + ss[2]
-    return new_index
+    return index
+    # # Finrisk sample ids match metadata ids in finrisk_metadata.tsv but must be converted
+    # # to match column "Barcode" in FR02.tsv
+    # ss = index.split(".")
+    # new_index = "S" + ss[1] + "-" + ss[2]
+    # return new_index

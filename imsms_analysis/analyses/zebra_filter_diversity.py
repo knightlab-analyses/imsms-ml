@@ -13,6 +13,10 @@ from qiime2.plugins.diversity.methods import alpha, beta
 from qiime2.plugins.diversity.visualizers import alpha_group_significance
 from qiime2.plugins.diversity.visualizers import beta_group_significance
 
+from imsms_analysis.common.target_set import TargetSet
+from skbio import DistanceMatrix
+import skbio
+
 metadata_filepath = "./dataset/metadata/finrisk_metadata.tsv"
 def configure():
     # woltka_levels = AnalysisFactory(
@@ -31,6 +35,9 @@ def configure():
     zebra = AnalysisFactory(
         [BiomTable("none")],
         metadata_filepath
+    ).with_target_set([
+        TargetSet("Sex", "sex", ["male"])
+    ]
     ).with_metadata_filter(
         MetadataFilter("NoBlanks", "empo_3", ["Animal distal gut"])
     )\

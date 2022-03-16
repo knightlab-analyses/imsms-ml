@@ -38,6 +38,7 @@ class AnalysisFactory:
         self.allele_info = None
         self.meta_encoder = None
         self.downsample_count = None
+        self.target_set = None
 
     def with_feature_set(self, feature_set):
         if type(feature_set) == FeatureSet:

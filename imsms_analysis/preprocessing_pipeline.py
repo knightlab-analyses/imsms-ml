@@ -4,6 +4,7 @@ from imsms_analysis.common.analysis_config import AnalysisConfig
 from imsms_analysis.common.feature_filter import ZebraFilter
 from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.common.table_info import BiomTable
+from imsms_analysis.common.train_test import Passthrough, UnpairedSplit
 from imsms_analysis.dataset.sample_sets.fixed_training_set import retrieve_training_set
 from imsms_analysis.events.analysis_callbacks import AnalysisCallbacks
 from imsms_analysis.preprocessing import id_parsing, sample_filtering, \
@@ -42,9 +43,11 @@ def process(analysis_config: AnalysisConfig,
             feature_transform=None,
             meta_encoder=None,
             downsample_count=None,
-            target_set=None):
+            target_set=None,
+            train_test=None):
     filtered = _filter_samples(analysis_config, state, callbacks, verbose)
-    train, test = _split_test_set(filtered,
+    train, test = _split_test_set(train_test,
+                                  filtered,
                                   training_set_index,
                                   verbose)
     return _apply_transforms(analysis_config,
@@ -81,7 +84,7 @@ def _filter_samples(analysis_config: AnalysisConfig,
         # values. do not reorder below id_parsing)
         steps.append(sample_filtering.build_prefix_filter(BAD_SAMPLE_PREFIXES))
         # Parse the IDs and rename to match metadata
-        steps.append(id_parsing.build())
+        steps.append(id_parsing.build(analysis_config.id_parse_func))
     # Run some aggregation function when multiple ids map to the same
     # sample ID, (due to technical replicates)
     steps.append(sample_aggregation.build("sum"))
@@ -102,17 +105,23 @@ def _filter_samples(analysis_config: AnalysisConfig,
 # parameters from the test set, so any type of learned feature (Like PCA)
 # must store its settings (ie, what column vectors to use) based on training
 # set data, then reuse those transformations on the test set.
-def _split_test_set(state: PipelineState,
+def _split_test_set(train_test: TrainTest,
+                    state: PipelineState,
                     training_set_index=0,
                     verbose=False) -> TrainTest:
-    # return passthrough(state)
+
+    if isinstance(train_test, Passthrough):
+        return passthrough(state)
+
+    # TODO FIXME HACK:  Generalize household split into a new TrainTest config.
     # train_set_households = retrieve_training_set(training_set_index)
     # return train_test_split.split_fixed_set(state,
     #                                         train_set_households,
     #                                         verbose)
-    return train_test_split.split(state,
-                                  .5,
-                                  verbose)
+    if isinstance(train_test, UnpairedSplit):
+        return train_test_split.split(state,
+                                      train_test.train_ratio,
+                                      verbose)
 
 
 def _apply_transforms(analysis_config: AnalysisConfig,
@@ -221,7 +230,7 @@ def _apply_transforms(analysis_config: AnalysisConfig,
 
 def _run_pipeline(analysis_config, state, callbacks, steps, verbose=False, mode='train'):
     if verbose:
-        print("Input: ")
+        print("Input: (" + mode + ")")
         print(state)
 
     for s in steps:

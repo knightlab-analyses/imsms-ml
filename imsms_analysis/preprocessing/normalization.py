@@ -49,6 +49,9 @@ def build(method_name, target_count=10000):
 
 # Uses the qiime2 rarefy functionality to rarefy each row's counts.
 def rarefy_wrapper(state: PipelineState, target_count: int) -> PipelineState:
+    if state.df.shape[0] == 0:
+        return state
+
     table = Artifact.import_data("FeatureTable[Frequency]", state.df) \
         .view(biom.Table)
     table = rarefy(table, target_count)

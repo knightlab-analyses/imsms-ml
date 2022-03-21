@@ -12,6 +12,7 @@ from imsms_analysis.common.analysis_config import AnalysisConfig
 from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.common import plotter
 from imsms_analysis.common.target_set import TargetSet
+from imsms_analysis.common.train_test import TrainTest, UnpairedSplit
 from imsms_analysis.events.analysis_callbacks import AnalysisCallbacks
 from imsms_analysis.state.pipeline_state import PipelineState
 import pdb
@@ -73,6 +74,7 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
     analysis_name = analysis_config.analysis_name
     metadata_filepath = analysis_config.metadata_filepath
     feature_set_index = analysis_config.feature_set_index
+    train_test = analysis_config.train_test
     if feature_set_index is not None:
         feature_set_index = feature_set_index.features
     training_set_index = analysis_config.training_set_index
@@ -91,6 +93,8 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
     target_set = analysis_config.target_set
     if target_set is None:
         target_set = TargetSet("Male-Female", "MEN", [1])
+    if train_test is None:
+        train_test = UnpairedSplit()
     # TODO: Probably need to keep the config for the algorithm next to the algo
     #  blahhh.
 
@@ -163,7 +167,8 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
         feature_transform=feature_transform,
         meta_encoder=analysis_config.meta_encoder,
         downsample_count=analysis_config.downsample_count,
-        target_set=target_set
+        target_set=target_set,
+        train_test=train_test
     )
 
     df = train_state.df

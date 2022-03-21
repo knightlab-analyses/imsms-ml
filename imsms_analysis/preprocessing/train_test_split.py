@@ -15,9 +15,6 @@ TrainTest = collections.namedtuple('TrainTest', 'train test')
 
 
 def passthrough(state):
-    print("PASSTHRU")
-    print(state.df)
-    print(state.meta_df)
     tt = TrainTest(
         train=PipelineState(state.df, state.meta_df, state.target),
         test=PipelineState(

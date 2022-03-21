@@ -9,9 +9,12 @@ class TableInfo:
 
 
 class BiomTable(TableInfo):
-    def __init__(self, biom_type):
+    def __init__(self, biom_type, biom_fp=None):
         self.biom_type = biom_type
-        self.biom_filepath = "./dataset/biom/combined-" + biom_type + ".biom"
+        if biom_fp is None:
+            self.biom_filepath = "./dataset/biom/combined-" + biom_type + ".biom"
+        else:
+            self.biom_filepath = biom_fp
 
     def load_dataframe(self):
         biom_table = load_table(self.biom_filepath)

@@ -89,6 +89,10 @@ def _filter_out_sample_ids(state: PipelineState, bad_sample_ids) \
 
 
 def _filter_by_shared_ids(state: PipelineState) -> PipelineState:
+    print("DF")
+    print(state.df.index)
+    print("METADF")
+    print(state.meta_df.index)
     df_set = set(state.df.index)
     meta_set = set(state.meta_df.index)
     valid_set = df_set.intersection(meta_set)

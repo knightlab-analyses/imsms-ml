@@ -4,6 +4,8 @@ from imsms_analysis.common.analysis_config import AnalysisConfig
 from imsms_analysis.common.feature_filter import ZebraFilter
 from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.common.table_info import BiomTable
+from imsms_analysis.common.train_test import Passthrough, SplitByMetadata, \
+    PairedSplit, UnpairedSplit
 from imsms_analysis.dataset.sample_sets.fixed_training_set import retrieve_training_set
 from imsms_analysis.events.analysis_callbacks import AnalysisCallbacks
 from imsms_analysis.preprocessing import id_parsing, sample_filtering, \
@@ -11,7 +13,8 @@ from imsms_analysis.preprocessing import id_parsing, sample_filtering, \
     normalization, classifier_target, train_test_split, column_transformation, \
     visualization, downsampling, column_filtering
 from imsms_analysis.preprocessing.column_transformation import build_column_filter, build_feature_set_transform, sum_columns
-from imsms_analysis.preprocessing.train_test_split import TrainTest
+from imsms_analysis.preprocessing.train_test_split import TrainTest, \
+    passthrough
 from imsms_analysis.state.pipeline_state import PipelineState
 
 BAD_SAMPLE_PREFIXES = [
@@ -21,7 +24,9 @@ BAD_SAMPLE_PREFIXES = [
     'Column.',
     'Q.DOD',
     'Zymo.',
-    'Mag.Bead.Zymo.'
+    'Mag.Bead.Zymo.',
+    '11326.BLANK',
+    '11326.Q.FMT'
 ]
 
 BAD_SAMPLE_IDS = ["71601-0158", "71602-0158"]
@@ -40,9 +45,11 @@ def process(analysis_config: AnalysisConfig,
             normalization=Normalization.DEFAULT,
             feature_transform=None,
             meta_encoder=None,
-            downsample_count=None):
+            downsample_count=None,
+            train_test=None):
     filtered = _filter_samples(analysis_config, state, callbacks, verbose)
-    train, test = _split_test_set(filtered,
+    train, test = _split_test_set(train_test,
+                                  filtered,
                                   training_set_index,
                                   verbose)
     return _apply_transforms(analysis_config,
@@ -78,7 +85,7 @@ def _filter_samples(analysis_config: AnalysisConfig,
         # values. do not reorder below id_parsing)
         steps.append(sample_filtering.build_prefix_filter(BAD_SAMPLE_PREFIXES))
         # Parse the IDs and rename to match metadata
-        steps.append(id_parsing.build())
+        steps.append(id_parsing.build(analysis_config.id_parse_func))
     # Run some aggregation function when multiple ids map to the same
     # sample ID, (due to technical replicates)
     steps.append(sample_aggregation.build("sum"))
@@ -99,16 +106,28 @@ def _filter_samples(analysis_config: AnalysisConfig,
 # parameters from the test set, so any type of learned feature (Like PCA)
 # must store its settings (ie, what column vectors to use) based on training
 # set data, then reuse those transformations on the test set.
-def _split_test_set(state: PipelineState,
+def _split_test_set(train_test: TrainTest,
+                    state: PipelineState,
                     training_set_index=0,
                     verbose=False) -> TrainTest:
-    train_set_households = retrieve_training_set(training_set_index)
-    return train_test_split.split_fixed_set(state,
-                                            train_set_households,
-                                            verbose)
-    # return train_test_split.split(state,
-    #                               .5,
-    #                               verbose)
+
+    if isinstance(train_test, Passthrough):
+        return passthrough(state)
+    elif isinstance(train_test, PairedSplit):
+        return train_test_split.split(state,
+                                      .5,
+                                      verbose)
+    elif isinstance(train_test, SplitByMetadata):
+        return train_test_split.split_by_meta(state, train_test.meta_col, train_test.train_meta)
+    elif isinstance(train_test, UnpairedSplit):
+        raise NotImplemented("Unpaired split is not implemented in iMSMS")
+
+    # Something something fixed training sets?
+    # train_set_households = retrieve_training_set(training_set_index)
+    # return train_test_split.split_fixed_set(state,
+    #                                         train_set_households,
+    #                                         verbose)
+    # TODO Pass this through analysis config
 
 
 def _apply_transforms(analysis_config: AnalysisConfig,
@@ -126,6 +145,7 @@ def _apply_transforms(analysis_config: AnalysisConfig,
                       meta_encoder=None,
                       downsample_count=None
                       ):
+
     # noinspection PyListCreation
     steps = []
 
@@ -171,6 +191,7 @@ def _apply_transforms(analysis_config: AnalysisConfig,
         # steps.append(sum_columns())
 
     # Build target series
+
     steps.append(
         classifier_target.build(
             "disease",
@@ -178,6 +199,7 @@ def _apply_transforms(analysis_config: AnalysisConfig,
             pair_strategy=pair_strategy
         )
     )
+
     # Run PCA - This is a bit wonky in the simplex space,
     # and even more wonky in the household concatted rows space.
     # Give this more thought
@@ -211,7 +233,7 @@ def _apply_transforms(analysis_config: AnalysisConfig,
 
 def _run_pipeline(analysis_config, state, callbacks, steps, verbose=False, mode='train'):
     if verbose:
-        print("Input: ")
+        print("Input: ", mode)
         print(state)
 
     for s in steps:

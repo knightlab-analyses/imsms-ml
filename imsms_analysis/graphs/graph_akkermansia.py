@@ -23,10 +23,13 @@ if __name__ == "__main__":
 
     factory = configure() # use setup from a particular analysis.
     configs = factory.gen_configurations()
-
+    for c in factory.gen_configurations():
+        print(c.analysis_name)
     div10000_config = next(
         config for config in configs
-        if config.analysis_name ==  "Akkermansia sp. CAG:3441262691-unpaired-None-Divide10000" )
+        # if config.analysis_name ==  "Akkermansia sp. KLE16051131336-unpaired-None-Divide10000" )
+        if config.analysis_name ==  "Akkermansia sp. Phil81929996-unpaired-None-Divide10000" )
+        # if config.analysis_name ==  "Akkermansia sp. CAG:3441262691-unpaired-None-Divide10000" )
     gene_config = next(config_target_gene().gen_configurations())
 
     _,_,train_state,test_state = run_preprocessing(div10000_config, AnalysisCallbacks())
@@ -51,7 +54,9 @@ if __name__ == "__main__":
     plt.title("TEST-SET Akk Cag 344 CDD94772.1 (Reads/10000)")
     plt.show()
     g = sns.scatterplot(x=df.columns[0], y=df.columns[1], hue=df.columns[2], data=df)
-    plt.title("TEST-SET Akk Cag sp 344 vs CDD94772.1 Reads/10000")
+    plt.xlabel("Akkermansia muciniphila (239935) Reads/10000")
+    plt.ylabel("CDD94772.1 Reads/10000")
+    plt.title("Akkermansia vs CDD94772.1")
     plt.show()
 
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also

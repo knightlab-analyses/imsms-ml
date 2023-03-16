@@ -4,8 +4,19 @@ import pandas as pd
 import numpy as np
 import sqlite3
 
+from imsms_analysis.common.PairwisePearson import pairwise_pearson
+from imsms_analysis.common.woltka_metadata import filter_and_sort_df
 
-class FeatureTransformer:
+
+class IFeatureTransformer:
+    def transform_df(self, df, mode):
+        return df
+
+    def __str__(self):
+        return "NAME NOT SET"
+
+
+class FeatureTransformer(IFeatureTransformer):
     def __init__(self, name, transform_file, shuffle_seed=None):
         self.genome_to_mimics = defaultdict(list)
         self.name = name
@@ -47,7 +58,7 @@ class FeatureTransformer:
 
         return transform_mat
 
-    def transform_df(self, df):
+    def transform_df(self, df, mode):
         # df has rows corresponding to samples, and columns corresponding to
         # genome IDs.
         # We will build a matrix with rows of genome IDs and columns of mimics
@@ -69,7 +80,7 @@ class FeatureTransformer:
         return self.name
 
 
-class NetworkTransformer:
+class NetworkTransformer(IFeatureTransformer):
     def __init__(self, name, transform_file, shuffle_seed=None):
         conn = sqlite3.connect("mimics.db")
         c = conn.cursor()
@@ -121,7 +132,7 @@ class NetworkTransformer:
 
         return transform_mat
 
-    def transform_df(self, df):
+    def transform_df(self, df, mode):
         # df has rows corresponding to samples, and columns corresponding to
         # genome IDs.
         # We will build a matrix with rows of genome IDs and columns of mimics
@@ -141,3 +152,62 @@ class NetworkTransformer:
 
     def __str__(self):
         return self.name
+
+
+class ChainedTransform(IFeatureTransformer):
+    def __init__(self, transforms):
+        self.transforms = transforms
+
+    def transform_df(self, df, mode):
+        for t in self.transforms:
+            df = t.transform_df(df, mode)
+        return df
+
+    def __str__(self):
+        ss = [str(t) for t in self.transforms]
+        return "_".join(ss)
+
+
+class RelativeAbundanceFilter(IFeatureTransformer):
+    def __init__(self, threshold=1/10000):
+        self.threshold = threshold
+        self.trained_cols = None
+
+    def transform_df(self, df, mode):
+        if mode == "train":
+            # Apply relative abundance filtering
+            total_sum = df.sum().sum()
+            columns_that_pass = df.sum() > total_sum * self.threshold
+            df = df[columns_that_pass[columns_that_pass].index]
+            self.trained_cols = df.columns
+            return df
+        else:
+            df = df[self.trained_cols]
+            self.trained_cols = None
+            return df
+
+    def __str__(self):
+        return "RelativeAbundance_"+str(self.threshold)
+
+
+class PairwisePearsonTransform(IFeatureTransformer):
+    def __init__(self, threshold=None):
+        self.threshold = threshold
+        self.trained_cols = None
+
+    def transform_df(self, df, mode):
+        if mode == "train":
+            col_sums = df.sum()
+            col_sums.name = 'total'
+            col_sums = col_sums.sort_values(ascending=False)
+            df = df[col_sums.index]
+            df, pp_sets = pairwise_pearson(df, self.threshold)
+            self.trained_cols = df.columns
+            return df
+        else:
+            df = df[self.trained_cols]
+            self.trained_cols = None
+            return df
+
+    def __str__(self):
+        return "PairwisePearson_"+str(self.threshold)

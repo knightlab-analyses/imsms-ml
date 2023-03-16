@@ -103,10 +103,27 @@ matplotlib.use("TkAgg")
 # df["hue"] = (["species"] * 50 + ["genus"] * 50) * 25
 
 # df = pd.read_csv("./plottedResults/taxonomic_levels_sex_balanced.csv", sep=',')
+# print(df.mean(axis=0))
 # df = pd.melt(df,
 #              value_vars=df.columns.tolist()[1:],
 #              var_name="Taxonomic Level / Bias Correction",
 #              value_name="Accuracy")
+
+# df = pd.read_csv("./plottedResults/new_data_random_train_test.csv", sep=",")
+# print(df.mean(axis=0))
+# df = pd.melt(df,
+#              value_vars=df.columns.tolist()[1:],
+#              var_name="Random Train Test Split",
+#              value_name="Accuracy")
+
+df = pd.read_csv("./plottedResults/old_vs_new_combined_rf.csv", sep=",")
+# df = pd.read_csv("./plottedResults/old_vs_new_combined_rf_abundance_pairwisepearson.csv", sep=",")
+print(df.mean(axis=0))
+df = pd.melt(df,
+             value_vars=df.columns.tolist()[1:],
+             var_name="Model Prediction Across Datasets",
+             value_name="Accuracy")
+
 
 #
 # df = pd.read_csv("./plottedResults/network_features_untreated.csv", sep=',')
@@ -116,11 +133,18 @@ matplotlib.use("TkAgg")
 #              value_name="Accuracy")
 
 
-df = pd.read_csv("./plottedResults/zebra_9999_beforeNormalize.csv", sep=',')
-df = pd.melt(df,
-             value_vars=df.columns.tolist()[1:],
-             var_name="Zebra Coverage Threshold",
-             value_name="Accuracy")
+# df = pd.read_csv("./results/all.csv", sep=',')
+# df = pd.melt(df,
+#              value_vars=df.columns.tolist()[1:],
+#              var_name="Thing",
+#              value_name="Accuracy")
+
+
+# df = pd.read_csv("./plottedResults/zebra_9999_beforeNormalize.csv", sep=',')
+# df = pd.melt(df,
+#              value_vars=df.columns.tolist()[1:],
+#              var_name="Zebra Coverage Threshold",
+#              value_name="Accuracy")
 
 
 # df = pd.read_csv("./results/lda_all.csv", sep=',')
@@ -139,12 +163,12 @@ df = pd.melt(df,
 
 
 sns.set(style="ticks")
-g = sns.catplot(x="Zebra Coverage Threshold", y="Accuracy", data=df)
+g = sns.catplot(x="Model Prediction Across Datasets", y="Accuracy", data=df)
 # g = sns.catplot(x="Randomized Test Set", y="Accuracy", hue="hue", data=df)
 ax = g.ax
 ax.set_xticklabels(ax.get_xticklabels(), rotation=40, ha="right")
 ax.axhline(.5, ls='--')
 # ax2.axhline(30, ls='--')
 plt.tight_layout()
-plt.title("Model Performance With Zebra Filtering")
+plt.title("Model Prediction Across Datasets")
 plt.show()

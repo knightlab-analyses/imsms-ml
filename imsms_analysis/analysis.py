@@ -11,7 +11,9 @@ from imsms_analysis import preprocessing_pipeline
 from imsms_analysis.common.analysis_config import AnalysisConfig
 from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.common import plotter
+from imsms_analysis.common.train_test import UnpairedSplit
 from imsms_analysis.events.analysis_callbacks import AnalysisCallbacks
+from imsms_analysis.preprocessing.id_parsing import _parse_sample_id
 from imsms_analysis.state.pipeline_state import PipelineState
 import pdb
 import sqlite3
@@ -86,7 +88,13 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
     if normalization is None:
         normalization = Normalization.DEFAULT
     feature_transform = analysis_config.feature_transform
-    # TODO: Probably need to keep the config for the algorithm next to the algo
+    train_test = analysis_config.train_test
+    if train_test is None:
+        train_test = UnpairedSplit()
+    if analysis_config.id_parse_func is None:
+        analysis_config.id_parse_func = _parse_sample_id
+
+# TODO: Probably need to keep the config for the algorithm next to the algo
     #  blahhh.
 
     df = analysis_config.table_info.load_dataframe()
@@ -155,7 +163,8 @@ def run_preprocessing(analysis_config, callbacks: AnalysisCallbacks):
         normalization=normalization,
         feature_transform=feature_transform,
         meta_encoder=analysis_config.meta_encoder,
-        downsample_count=analysis_config.downsample_count
+        downsample_count=analysis_config.downsample_count,
+        train_test=train_test
     )
 
     df = train_state.df
@@ -215,7 +224,6 @@ def run_analysis(analysis_config, callbacks: AnalysisCallbacks):
     # print("Train Shape: ", train_state.df.shape)
     # print("Test Shape: ", test_state.df.shape)
     # print("Target Shape: ", target.shape)
-    # return
     # _print_read_count_info(train_state.df)
 
     analysis_name = analysis_config.analysis_name

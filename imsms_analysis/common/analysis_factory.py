@@ -1,5 +1,5 @@
 from os import path
-from typing import Union
+from typing import Union, Callable
 
 from imsms_analysis.common.analysis_config import AnalysisConfig
 from imsms_analysis.common.dimensionality_reduction import DimensionalityReduction
@@ -9,8 +9,9 @@ from imsms_analysis.common.meta_encoder import MetaEncoder
 from imsms_analysis.common.metadata_filter import MetadataFilter
 from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.common.table_info import TableInfo, BiomTable
+from imsms_analysis.common.train_test import TrainTest
 from imsms_analysis.dataset.feature_transforms.feature_transformer import \
-    FeatureTransformer
+    IFeatureTransformer
 
 
 class AnalysisFactory:
@@ -37,6 +38,8 @@ class AnalysisFactory:
         self.allele_info = None
         self.meta_encoder = None
         self.downsample_count = None
+        self.train_test = None
+        self.id_parse_func = None
 
     def with_feature_set(self, feature_set):
         if type(feature_set) == FeatureSet:
@@ -114,7 +117,7 @@ class AnalysisFactory:
         return self
 
     def with_feature_transform(self, feature_transform):
-        if type(feature_transform) == FeatureTransformer:
+        if isinstance(feature_transform, IFeatureTransformer):
             feature_transform = [feature_transform]
         self.feature_transform = feature_transform
         return self
@@ -135,6 +138,18 @@ class AnalysisFactory:
         if type(downsample_count) == int:
             downsample_count = [downsample_count]
         self.downsample_count = downsample_count
+        return self
+
+    def with_train_test(self, train_test):
+        if isinstance(train_test, TrainTest):
+            train_test = [train_test]
+        self.train_test = train_test
+        return self
+
+    def with_id_parse_func(self, id_parse_func):
+        if isinstance(id_parse_func, Callable):
+            id_parse_func = [id_parse_func]
+        self.id_parse_func = id_parse_func
         return self
 
     def _analysis_name_gen(self,
@@ -168,7 +183,9 @@ class AnalysisFactory:
                       self.feature_transform,
                       self.allele_info,
                       self.meta_encoder,
-                      self.downsample_count]
+                      self.downsample_count,
+                      self.train_test,
+                      self.id_parse_func]
 
         for i in range(len(all_params)):
             if all_params[i] is None:
@@ -184,7 +201,7 @@ class AnalysisFactory:
                         yield result
 
         for chosen in _iterate(all_params, 0, []):
-            bt, fs, ts, ps, mf, ff, num_seeds, dr, norm, algo, ft, ai, me, dc = chosen
+            bt, fs, ts, ps, mf, ff, num_seeds, dr, norm, algo, ft, ai, me, dc, tt, idp = chosen
             yield AnalysisConfig(
                 self._analysis_name_gen(all_params, chosen),
                 bt,
@@ -201,7 +218,9 @@ class AnalysisFactory:
                 ft,
                 ai,
                 me,
-                dc
+                dc,
+                tt,
+                idp
             )
 
 

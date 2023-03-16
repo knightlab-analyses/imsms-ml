@@ -25,10 +25,10 @@ def build_umap():
 
 def build_feature_set_transform(transformer):
     def wrapped(state, mode):
-        return _apply_feature_transform(state, transformer)
+        return _apply_feature_transform(state, transformer, mode)
 
     return NamedFunctor(
-        transformer.name,
+        str(transformer),
         wrapped
     )
 
@@ -121,6 +121,10 @@ class LDAFunctor:
 def _restrict_columns_compositional(state: PipelineState,
                                     chosen_columns: list) \
         -> PipelineState:
+    print(state.df)
+    print(chosen_columns)
+    if state.df.empty:
+        return state
 
     df = state.df
     present_columns = []
@@ -133,11 +137,9 @@ def _restrict_columns_compositional(state: PipelineState,
         print("IS IT HERE?")
         try:
             print("WHAT:", df['1000569'])
-            print("HELLO:", df['1403328'])
         except Exception as e:
             print(e)
             print('Fuck Python')
-        exit(-1)
         raise Exception("Cannot restrict columns, no chosen columns are present")
     chosen_columns = present_columns
     remainder = df.drop(chosen_columns, axis=1)
@@ -191,8 +193,9 @@ class UMAPFunctor:
 
 
 def _apply_feature_transform(state: PipelineState,
-                             transformer: FeatureTransformer):
-    return state.update_df(transformer.transform_df(state.df))
+                             transformer: FeatureTransformer,
+                             mode):
+    return state.update_df(transformer.transform_df(state.df, mode))
 
 
 def _sum_columns(state: PipelineState):

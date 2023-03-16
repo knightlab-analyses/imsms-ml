@@ -103,6 +103,11 @@ def _filter_by_shared_ids(state: PipelineState) -> PipelineState:
 def _filter_by_metadata(state: PipelineState,
                         meta_col: str,
                         meta_val: set) -> PipelineState:
+    if state.df.empty and state.meta_df.empty:
+        return state
+
+    if meta_col == state.meta_df.index.name:
+        state.meta_df[meta_col] = state.meta_df.index
     values = state.meta_df[meta_col]
 
     state.df = state.df.join(values)
@@ -117,6 +122,7 @@ def _filter_by_metadata(state: PipelineState,
 # unable to normalize the data.  This filter removes such samples.
 def _filter_zero_sum(state: PipelineState) -> PipelineState:
     state.df['rowsum'] = state.df.sum(axis=1)
+
     state.df = state.df[state.df['rowsum'] > 0]
     state.df = state.df.drop(['rowsum'], axis=1)
     return _filter_to_matched_pairs(state)

@@ -6,6 +6,7 @@ from skbio.stats.composition import clr
 
 from imsms_analysis.common.named_functor import NamedFunctor
 from imsms_analysis.state.pipeline_state import PipelineState
+import numpy as np
 
 
 # TODO:  Some kind of normalization of rows in the dataframe
@@ -35,6 +36,9 @@ def build(method_name, target_count=10000):
         return NamedFunctor("Truncate Ray To Simplex",
                             lambda state, mode: divide_total(state,
                                                              target_count))
+    if method_name == 'asin_sqrt':
+        return NamedFunctor("AsinSqrt",
+                            lambda state, mode: asin_sqrt(state))
     if method_name == 'ILR':
         # Existing functions for this in skbio
         raise NotImplemented()
@@ -72,3 +76,10 @@ def clr_wrapper(state: PipelineState):
 def divide_total(state: PipelineState, target_count: int) -> PipelineState:
     df = state.df.div(state.df.sum(axis=1) / target_count, axis=0)
     return state.update_df(df)
+
+
+def asin_sqrt(state: PipelineState) -> PipelineState:
+    df_rel_abs = state.df.div(state.df.sum(axis=1), axis=0)
+    df_sqrt_rel_abs = df_rel_abs.pow(0.5)
+    df_asin_sqrt_rel_abs = np.arcsin(df_sqrt_rel_abs)
+    return state.update_df(df_asin_sqrt_rel_abs)

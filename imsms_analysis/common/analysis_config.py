@@ -7,6 +7,7 @@ from imsms_analysis.common.meta_encoder import MetaEncoder
 from imsms_analysis.common.metadata_filter import MetadataFilter
 from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.common.table_info import TableInfo
+from imsms_analysis.common.train_test import TrainTest
 from imsms_analysis.dataset.feature_transforms.feature_transformer import \
     FeatureTransformer
 
@@ -28,7 +29,9 @@ class AnalysisConfig:
                  feature_transform: Optional[FeatureTransformer],
                  allele_info: Optional[str],
                  meta_encoder: Optional[MetaEncoder],
-                 downsample_count: Optional[int]):
+                 downsample_count: Optional[int],
+                 train_test: Optional[TrainTest],
+                 id_parse_func):
         self.analysis_name = analysis_name
         self.table_info = table_info
         self.metadata_filepath = metadata_filepath
@@ -45,3 +48,5 @@ class AnalysisConfig:
         self.allele_info = allele_info
         self.meta_encoder = meta_encoder
         self.downsample_count = downsample_count
+        self.train_test = train_test
+        self.id_parse_func = id_parse_func

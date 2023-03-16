@@ -77,6 +77,32 @@ class SerialRunner:
             print(summary_df)
 
 
+class TableRunner:
+    def __init__(self):
+        self.callbacks = AnalysisCallbacks()
+
+    def run(self, factory):
+        factory.validate()
+        _check_unique_names(factory)
+        configs = [x for x in factory.gen_configurations()]
+        self.callbacks.batch_info(configs)
+
+        results = []
+        for config in configs:
+            try:
+                (
+                    final_biom,
+                    target,
+                    train_state,
+                    test_state
+                ) = run_preprocessing(config, self.callbacks)
+                results.append((config, train_state, test_state))
+            except Exception as e:
+                print("Exception in " + config.analysis_name + ": ", e)
+
+        return results
+
+
 class SavePreprocessedTables():
     def __init__(self):
         self.callbacks = AnalysisCallbacks()

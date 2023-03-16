@@ -12,6 +12,13 @@ Normalization.DEFAULT = Normalization("Divide10000",
                                       "divide_total",
                                       target_count=10000)
 
+Normalization.FRACTION = Normalization("Divide1",
+                                       "divide_total",
+                                       target_count=1)
+
+Normalization.ASIN_SQRT = Normalization("Asin(Sqrt(Rel_ab))",
+                                        "asin_sqrt")
+
 Normalization.CLR = Normalization("CLR", "CLR")
 
 Normalization.NONE = Normalization("None", "none")

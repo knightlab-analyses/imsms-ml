@@ -38,6 +38,13 @@ class FeatureSet:
 
 
     @classmethod
+    def create_univariate_zebra(cls, zebra_file, zebra_thresh):
+        z = pd.read_csv(zebra_file, index_col='genome_id')
+        z = z[z['coverage_ratio'] > zebra_thresh]
+        fs = FeatureSet("", z.index.tolist(), [""]*len(z.index))
+        return fs.create_univariate_sets()
+
+    @classmethod
     def build_feature_set(cls, name, filepath):
         feature_set = pd.read_csv(filepath,
                                   sep='\t',

@@ -9,20 +9,31 @@ class TableInfo:
 
 
 class BiomTable(TableInfo):
-    def __init__(self, biom_type):
+    def __init__(self, biom_type, biom_filepath=None):
         self.biom_type = biom_type
-        self.biom_filepath = "./dataset/biom/combined-" + biom_type + ".biom"
+        if biom_filepath is None:
+            self.biom_filepath = "./dataset/biom/combined-" + biom_type + ".biom"
+        else:
+            self.biom_filepath = biom_filepath
 
     def load_dataframe(self):
-        biom_table = load_table(self.biom_filepath)
-        table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
-        df = table.view(pd.DataFrame)
+        bioms = self.biom_filepath
+        if not isinstance(bioms, list):
+            bioms = [bioms]
+
+        all_dfs = []
+        for biom_path in bioms:
+            biom_table = load_table(biom_path)
+            table = Artifact.import_data("FeatureTable[Frequency]", biom_table)
+            df = table.view(pd.DataFrame)
+            all_dfs.append(df)
+
+        df = pd.concat(all_dfs, sort=True).fillna(0)
         return df
 
     def read_biom_metadata(self):
         biom_table = load_table(self.biom_filepath)
         genera = biom_table.metadata_to_dataframe(axis="observation")
-        # print(genera)
         return genera
 
     def __str__(self):

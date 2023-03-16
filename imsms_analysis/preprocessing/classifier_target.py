@@ -81,8 +81,13 @@ def matched_pair_subtract(state: PipelineState,
 def matched_pair_subtract_sex_balanced(state: PipelineState,
                         meta_col_name: str,
                         one_set: set) -> PipelineState:
+    if state.df.shape[0] == 0 and state.meta_df.shape[0] == 0:
+        # Fail out for empty state.
+        return state
 
     state = _target(state, meta_col_name, one_set)
+
+    # TODO FIXME HACK:  This doesn't correctly handle patients that chose not to provide their sex
     state.df["__sex__"] = state.meta_df.apply(
         lambda row: 1 if row["sex"] == "F" else 0,
         axis=1)
@@ -100,6 +105,9 @@ def matched_pair_subtract_sex_balanced(state: PipelineState,
     FF_hh = set()
     for hh in households:
         hh_frame = state.df[state.df['__household__'] == hh]
+        if hh in ['716-0201', '716-0189', '716-0197']:
+            print("OKAY WHATS GOING ON")
+            print(hh_frame)
         if hh_frame["__sex__"].sum() == 2:
             FF_hh.add(hh)
         elif hh_frame["__sex__"].sum() == 0:
@@ -168,6 +176,7 @@ def _split_left_right(state, meta_col_name, one_set):
 
     state = _target(state, meta_col_name, one_set)
     df = state.df
+
     df['target'] = state.target
     df = df.rename(index=_parse_household_id)
     df = df.sort_index()

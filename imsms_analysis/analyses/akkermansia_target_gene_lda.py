@@ -38,7 +38,9 @@ def configure():
         ],
         metadata_filepath
     ) \
-        .with_pair_strategy("unpaired") \
+        .with_lda([1]) \
+        .with_normalization(Normalization.NONE) \
+        .with_pair_strategy("paired_subtract_sex_balanced")
 
     return MultiFactory([pathways])
 

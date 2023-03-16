@@ -21,4 +21,8 @@ if __name__ == "__main__":
     # Pretend all scripts are run from root of repo for file paths.
     import os
     os.chdir("..")
-    SerialRunner().run(configure())
+
+    df = BiomTable("none").load_dataframe()
+    print(df)
+    print(df.sum()["G000007845"])
+    # SerialRunner().run(configure())

@@ -12,25 +12,85 @@ from imsms_analysis.dataset.feature_transforms.feature_transformer import \
     ChainedTransform, RelativeAbundanceFilter, PairwisePearsonTransform
 import seaborn as sns
 from matplotlib import pyplot as plt
+import statsmodels.api as sm
+import pandas as pd
+import statsmodels.formula.api as smf
 import matplotlib
 matplotlib.use("TkAgg")
+
+# Reproducing xiaoyuan's models:
+# Differential microbiome features by mixed linear regression analysis
+# Global metabolite intensity and SCFA concentration were normalized by log transformation. Mixed linear regression model was applied
+# on transformed data to identify differential features (species, pathways and metabolites) by adjusting random effects of house and
+# recruitment site, and fixed effects of age, sex and BMI. The linear regression was performed using lmer function from R package
+# ‘‘lme4’’ as lmer(y  disease + age + BMI + sex + (1|site) + (1|house)). To reduce the effect of zero-inflation in microbiome data, a variance
+# filtering step was applied to remove species features with very low variance (<1 3 105
+# ). The contribution of individual species in a specific pathway was visualized in a bar plot using HUMAnN2
+# ‘‘humann2_barplot’’ function. Altered metabolites were linked to gut microbes through reactions
+# (MetaCyc and KEGG) mediated by microbial gene families screened in our WGMS data using
+# HUMANnN2. Functional KEGG enrichment analysis of metabolites was performed using MetaboAnalyst 5.0 (Pang et al., 2021).
+# To identify species associated with disease severity, the updated global Multiple Sclerosis Severity Score (uGMSSS) was calcu-
+# lated by combining the EDSS and disease duration using global_msss function from R package ‘‘ms.sev’’. We focused on the species
+# with prevalence in more than 50% samples, spearman correlations were calculated and tested adjusting for age and BMI using
+# pcor.test function from R package ‘‘ppcor’’.
 
 old_metadata_filepath = "./dataset/metadata/iMSMS_1140samples_metadata.tsv"
 new_metadata_filepath = "./dataset/metadata/qiita_metadata_filtered.tsv"
 combined_metadata_filepath = "./dataset/metadata/combined_iMSMS_metadata.tsv"
 
 
-def configure_both():
+def get_species(woltka_meta_df, gotu):
+    return woltka_meta_df[woltka_meta_df["#genome"] == gotu]["species"].iloc[0]
 
+def get_genome_ids_for_species(woltka_meta_df, species):
+    return woltka_meta_df[woltka_meta_df["species"] == species]["#genome"].values
+
+def get_xiaoyuan_top_hits(woltka_meta_df):
+    xz_species = \
+        [
+            "Firmicutes bacterium CAG:65",
+            "FIrmicutes bacterium CAG:270",
+            "Fusicatenibacter saccharivorans",
+            "Blautia sp. CAG:37",
+            "Blautia sp. CAG:37_48_57",
+            "Blautia obeum",
+            "Clostridium sp. CAG:91",
+            "Faecalibacterium prausnitzii",
+            "Akkermansia muciniphila",
+            "Ruthenibacterium lactatiformans",
+            "Akkermansia sp. 54_46",
+            "Akkermansia sp. UNK.MGS-1",
+            "[Ruminococcus] torques",
+            "Ruminococcus torques CAG:61",
+            "Akkermansia muciniphila CAG:154",
+            "Akkermansia sp. Phil8",
+            "Hungatella hathewayi",
+            "Eisenbergiella tayi",
+            "Lachnospiraceae bacterium NLAE-zl-G231",
+            "Tissierellia bacterium S7-1-4",
+            "Coprobacillus sp. D6",
+            "Porphyromonas bennonis",
+            "Peptoniphilus grossensis",
+            "Varibaculum cambriense"
+        ]
+    xz_species = sorted(xz_species)
+    genome_ids = []
+    for s in xz_species:
+        for g_id in get_genome_ids_for_species(woltka_meta_df, s):
+            genome_ids.append(g_id)
+    return genome_ids
+
+
+def configure_both():
     def set_factory_params(fact):
         df_processing = ChainedTransform(
             [
                 RelativeAbundanceFilter(1/10000),
-                PairwisePearsonTransform(.95)
+                # PairwisePearsonTransform(.95)
             ]
         )
         return fact.with_pair_strategy(["unpaired"]) \
-            .with_normalization(Normalization.DEFAULT) \
+            .with_normalization(Normalization.FRACTION) \
             .with_metadata_filter(MetadataFilter("Only Valid Disease States", "disease", ["MS", "Control"])) \
             .with_train_test(
             [
@@ -42,7 +102,7 @@ def configure_both():
         BiomTable("none", biom_filepath=[
             "./dataset/biom/combined-none.biom"
         ]),
-        combined_metadata_filepath,
+        "./dataset/metadata/iMSMS_1140samples_metadata.tsv",
         "old"
     )
     old_fact = set_factory_params(old_fact)
@@ -53,7 +113,7 @@ def configure_both():
             "./dataset/biom/qiita_bioms/imsms-none-Sep2-2022-2of3.biom",
             "./dataset/biom/qiita_bioms/imsms-none-Sep2-2022-3of3.biom"
         ]),
-        combined_metadata_filepath,
+        "./dataset/metadata/qiita_metadata_filtered.tsv",
         "new"
     )
     new_fact = set_factory_params(new_fact)
@@ -91,67 +151,89 @@ if __name__ == "__main__":
     results = TableRunner().run(configure_both())
     woltka_meta_df = CSVTable("dataset/metadata/woltka_metadata.tsv", delimiter="\t").load_dataframe()
 
-
-    def make_sns_df(state, genus, refs=None):
-        if refs is None:
-            sns_df = filter_and_sort_df(state.df, woltka_meta_df, genus)
-        else:
-            refs2 = [r for r in refs if r in state.df.columns]
-            sns_df = state.df[refs2]
-
-        genus_cols = sns_df.columns
-        print(sns_df.shape)
-        sns_df[genus] = sns_df.sum(axis=1)
-        sns_df = sns_df.drop(genus_cols, axis=1)
-        sns_df = sns_df.reset_index()
-        sns_df = sns_df.melt(id_vars='index', var_name='genome_id', value_name='count')
-        state.target.name = "target"
-        sns_df = sns_df.join(state.target, on="index")
-        return sns_df
-
-
     for config, train, test in results:
-        print(config.analysis_name, train.df.shape, test.df.shape)
+        # xz_top_hits = get_xiaoyuan_top_hits(woltka_meta_df)
+        # xz_top_hits = [r for r in xz_top_hits if r in train.df.columns]
+        # Print what gets collapsed where
+        # df, sets = pairwise_pearson(train.df, thresh=0.95)
+        # for g_id in xz_top_hits:
+        #     for rep in sets:
+        #         if g_id in sets[rep]:
+        #             if g_id != rep:
+        #                 print(get_species(woltka_meta_df, g_id), "->", get_species(woltka_meta_df, rep))
 
-        print("Eisenbergiella", "G001717135" in train.df.columns)
-        print("Lachnospiraceae bacterium NLAE-zl-G231", "G900113595" in train.df.columns)
-
-
-        df, sets = pairwise_pearson(train.df, thresh=0.95)
-
-        # Hungatella "G000160095", "G000235505"
-
-        for rep in sets:
-            if "G000160095" in sets[rep] or "G000235505" in sets[rep]:
-                print("Found Hungatella")
-                print(rep, sets[rep])
-
-        # Hard to tell the difference between Eisenbergiella G001717135 and Lachnospiraceae G900113595
-        # Sometimes pairwise pearson calls both 1 thing, sometimes it calls them the other thing.
-        # plt.scatter(x=train.df["G001717135"], y=train.df["G000020225"])
-        # plt.show()
-        # plt.scatter(x=train.df["G001717135"], y=train.df["G000160095"])
-        # plt.show()
-        # plt.scatter(x=train.df["G001717135"], y=train.df["G000235505"])
+        # Show correlation matrix
+        # corr_mat = train.df[xz_top_hits].corr()
+        # corr_mat.index = [get_species(woltka_meta_df, r) for r in xz_top_hits]
+        # ax = sns.heatmap(corr_mat, xticklabels=True, yticklabels=True)
+        # ax.tick_params(axis='both', which='major', labelsize=8)
+        # plt.title("After Pearson Correlation")
+        # plt.tight_layout()
         # plt.show()
 
-        sns.swarmplot(data=make_sns_df(train, genus="Akkermansia"), x='genome_id', y="count", hue="target")
+        print(train.df["G001717135"])
+
+        train.df["MS"] = train.df.index.map(lambda x: x[4])
+        print(train.df["MS"])
+        print(train.meta_df.columns)
+        train.df["household"] = train.meta_df["household"]
+        train.df = train.df[["G001717135", "MS", "household"]]
+
+        plt.scatter(x=train.df["MS"], y=train.df["G001717135"])
+        for household in train.df["household"]:
+            hh_df = train.df[train.df["household"] == household]
+            plt.plot(hh_df["MS"], hh_df["G001717135"], c="gray")
+            # hh_df_1 = hh_df[hh_df["MS"] == "1"]
+            # hh_df_2 = hh_df[hh_df["MS"] == "2"]
+            # plt.plot([1, hh_df_1["G001717135"].iloc[0]], [2, hh_df_2["G001717135"].iloc[0]])
+
+        plt.xticks(ticks=["1", "2"], labels=["MS", "Control"])
+        plt.xlabel("Disease")
+        plt.ylabel("Relative Abundance: " + "G001717135")
+        plt.title("Sanity Check " + config.analysis_name)
         plt.show()
 
-        sns.swarmplot(data=make_sns_df(train, genus="Ruthenibacterium"), x='genome_id', y="count", hue="target")
-        plt.show()
 
-        sns.swarmplot(data=make_sns_df(train, genus="Hungatella"), x='genome_id', y="count", hue="target")
-        plt.show()
 
-        # Hard to tell the difference between Eisenbergiella G001717135 and Lachnospiraceae G900113595
-        sns.swarmplot(data=make_sns_df(train, genus="Eisenbergiella", refs=['G001717135', 'G900113595']), x='genome_id', y="count", hue="target")
-        plt.show()
 
-        # Maybe check just prausnitzii
-        sns.swarmplot(data=make_sns_df(train, genus="Faecalibacterium"), x='genome_id', y="count", hue="target")
-        plt.show()
 
-        # Maybe check just prausnitzii
-        sns.swarmplot(data=make_sns_df(train, genus="Blautia"), x='genome_id', y="count", hue="target")
-        plt.show()
+
+
+        # print(config.analysis_name, train.df.shape, train.meta_df.shape, test.df.shape)
+        # train_meta = train.meta_df
+        # data = pd.concat([train.df, train.meta_df], axis=1, sort=True)
+        #
+        # # ‘‘lme4’’ as lmer(y  disease + age + BMI + sex + (1|site) + (1|house)
+        # # Fix inconsistencies in new metadata
+        # if "collection_site" in data.columns:
+        #     # Dammit, collection site metadata is missing.  Parse a site out of the sample ids.
+        #     # data["site"] = data["collection_site"]
+        #     data["site"] = data.index.map(lambda x: x[:3])
+        # if "host_age" in data.columns:
+        #     data["age"] = pd.to_numeric(data["host_age"])
+        # if "host_body_mass_index" in data.columns:
+        #     data["bmi"] = pd.to_numeric(data["host_body_mass_index"])
+        # # Fix any necessary non numeric columns to be numeric
+        # data["disease"] = data["disease"].map({"MS": 1, "Control": 0})
+        # data["sex"] = data["sex"].map({"M": 1, "F": 0})
+        # lme_results = []
+        # for genome_id in train.df.columns:
+        #     # print(data[[genome_id, "disease", "age", "bmi", "sex", "household", "site"]])
+        #     md = smf.mixedlm(genome_id + " ~ disease + age + bmi + sex", data, groups=data["site"], re_formula="~age")
+        #     mdf = md.fit(method=["lbfgs"])
+        #     summary = mdf.summary()
+        #     convergence = summary.tables[0].iloc[4,3]
+        #     disease_coef = summary.tables[1].loc["disease", "Coef."]
+        #     disease_pval = summary.tables[1].loc["disease", "P>|z|"]
+        #     lme_results.append([genome_id, get_species(woltka_meta_df, genome_id), convergence, disease_coef, disease_pval])
+        #
+        # lme_results.sort(key=lambda x: x[4], reverse=True)
+        # print("--------------------------------")
+        # for res in lme_results:
+        #     print(res[1], res[4])
+        # print("--------------------------------")
+        # print("Old Top Hits")
+        # for g_id in get_xiaoyuan_top_hits(woltka_meta_df):
+        #     for lme_r in lme_results:
+        #         if lme_r[0] == g_id:
+        #             print(lme_r)

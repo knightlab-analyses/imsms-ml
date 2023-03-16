@@ -6,9 +6,19 @@ from imsms_analysis.common.metadata_filter import MetadataFilter
 from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.common.table_info import BiomTable
 from imsms_analysis.events.plot_lda import LDAPlot
+import pandas as pd
 
 
 def configure():
+    df = pd.read_csv("./dataset/allele_info/HLA_alleles_iMSMS_samples.txt", sep='\t')
+    drb1_1501 = df['DRB1:15:01']
+    print("Num Pos:", drb1_1501.sum())
+
+    # 278 haplotyped individuals
+    # 87 are positive for the DRB1_1501
+    for i in drb1_1501.index:
+        print(i, drb1_1501.loc[i])
+
     hla_drb1_1501_households = \
         ['714-0049', '714-0072', '714-0075', '714-0078', '714-0079',
          '714-0086', '714-0094', '714-0101', '714-0102', '714-0107',
@@ -37,15 +47,14 @@ def configure():
     .with_pair_strategy(["unpaired", "paired_subtract_sex_balanced"]) \
     .with_normalization([Normalization.CLR, Normalization.DEFAULT]) \
     .with_metadata_filter([
-        None,
-        MetadataFilter(
-            "DRB1_1501",
-            "household",
-            meta_households
-        )
-    ])
-    # .with_lda([1]) \
-
+        None
+        # MetadataFilter(
+        #     "DRB1_1501",
+        #     "household",
+        #     meta_households
+        # )
+    ]) \
+    .with_lda([1])
 
 
 if __name__ == "__main__":
@@ -53,9 +62,7 @@ if __name__ == "__main__":
     import os
     os.chdir("..")
     runner = SerialRunner()
-    lda_plot = LDAPlot(rows=4, enable_plots=False)
+    lda_plot = LDAPlot(rows=1, enable_plots=True)
     lda_plot.hook_events(runner)
     runner.run(configure())
     lda_plot.print_acc()
-
-

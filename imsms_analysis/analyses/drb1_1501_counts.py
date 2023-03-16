@@ -1,68 +1,122 @@
 # Examine Akkermansia, the most often reported feature
-from imsms_analysis.analysis_runner import SerialRunner
-from imsms_analysis.common.analysis_factory import AnalysisFactory
+from imsms_analysis.analysis_runner import SerialRunner, DryRunner, TableRunner
+from imsms_analysis.common.analysis_factory import AnalysisFactory, \
+    MultiFactory
 from imsms_analysis.common.feature_set import FeatureSet
 from imsms_analysis.common.metadata_filter import MetadataFilter
 from imsms_analysis.common.normalization import Normalization
 from imsms_analysis.common.table_info import BiomTable
+from imsms_analysis.common.train_test import Passthrough
 from imsms_analysis.events.plot_lda import LDAPlot
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use("TkAgg")
 
 
-def configure():
-    df = pd.read_csv("./dataset/allele_info/HLA_alleles_iMSMS_samples.txt", sep='\t')
-    drb1_1501 = df['DRB1:15:01']
-    print("Num Pos:", drb1_1501.sum())
-
-    # 278 haplotyped individuals
-    # 87 are positive for the DRB1_1501
-    for i in drb1_1501.index:
-        print(i, drb1_1501.loc[i])
-
-    hla_drb1_1501_households = \
-        ['714-0049', '714-0072', '714-0075', '714-0078', '714-0079',
-         '714-0086', '714-0094', '714-0101', '714-0102', '714-0107',
-         '714-0110', '714-0111', '714-0118', '714-0119', '714-0122',
-         '714-0123', '714-0128', '714-0133', '714-0135', '714-0148',
-         '714-0149', '714-0157', '714-0161', '714-0162', '714-0165',
-         '714-0167', '714-0172', '714-0176', '714-0184', '714-0189',
-         '714-0190', '714-0201', '714-0210', '714-0212', '714-0224',
-         '714-0254', '714-0255', '716-0009', '716-0015', '716-0020',
-         '716-0031', '716-0032', '716-0035', '716-0039', '716-0052',
-         '716-0076', '716-0082', '716-0095', '716-0101', '716-0110',
-         '716-0137', '716-0141', '716-0143', '716-0160']
-    meta_households = [hh[:3] + hh[4:] for hh in hla_drb1_1501_households]
+def configure(drb1_1501):
+    metadata_filepath = "./dataset/metadata/iMSMS_1140samples_metadata.tsv"
 
     akkermansia_feature_set = FeatureSet.build_feature_set(
         "Akkermansia (all)",
         "./dataset/feature_sets/just_akkermansia.tsv"
     )
-    metadata_filepath = "./dataset/metadata/iMSMS_1140samples_metadata.tsv"
 
-    return AnalysisFactory(
+    baseline_downsample = AnalysisFactory(
         BiomTable("species"),
-        metadata_filepath
-    )\
-    .with_feature_set(akkermansia_feature_set.create_univariate_sets()) \
-    .with_pair_strategy(["unpaired", "paired_subtract_sex_balanced"]) \
-    .with_normalization([Normalization.CLR, Normalization.DEFAULT]) \
-    .with_metadata_filter([
-        None,
-        MetadataFilter(
-            "DRB1_1501",
-            "household",
-            meta_households
-        )
-    ])
-    # .with_lda([1]) \
+        metadata_filepath,
+        "downsample"
+    ) \
+        .with_pair_strategy(["unpaired"]) \
+        .with_normalization([Normalization.CLR]) \
+        .with_downsampling(126)
+
+    baseline_downsample_2 = AnalysisFactory(
+        BiomTable("species"),
+        metadata_filepath,
+        "downsample_paired"
+    ) \
+        .with_pair_strategy(["paired_subtract_sex_balanced"]) \
+        .with_normalization([Normalization.CLR]) \
+        .with_downsampling(46)
+
+    baseline = AnalysisFactory(
+        BiomTable("species"),
+        metadata_filepath,
+        "baseline"
+    ) \
+        .with_pair_strategy(["unpaired", "paired_subtract_sex_balanced"]) \
+        .with_normalization([Normalization.CLR]) \
+        # .with_feature_set(akkermansia_feature_set)
+
+    haplotyped_individuals =  AnalysisFactory(
+        BiomTable("species"),
+        metadata_filepath,
+        'haplotyped'
+    ) \
+        .with_pair_strategy(["unpaired", "paired_subtract_sex_balanced"]) \
+        .with_normalization([Normalization.CLR]) \
+        .with_metadata_filter([
+            MetadataFilter(
+                "DRB1_1501",
+                "sampleid",
+                drb1_1501.index
+            )
+        ]) \
+        # .with_feature_set(akkermansia_feature_set) \
+
+    return haplotyped_individuals
+    # return baseline_downsample_2
+    return MultiFactory([baseline_downsample, baseline_downsample_2, baseline, haplotyped_individuals])
 
 
 if __name__ == "__main__":
     # Pretend all scripts are run from root of repo for file paths.
     import os
     os.chdir("..")
-    runner = SerialRunner()
-    lda_plot = LDAPlot(rows=4, enable_plots=False)
-    lda_plot.hook_events(runner)
-    runner.run(configure())
-    lda_plot.print_acc()
+
+    df = pd.read_csv("./dataset/allele_info/HLA_alleles_iMSMS_samples.txt", sep='\t')
+    drb1_1501 = df['DRB1:15:01']
+    print("Num Pos:", drb1_1501.sum())
+
+    # 278 haplotyped individuals
+    # 87 are positive for the DRB1_1501
+
+    fact = configure(drb1_1501)
+    # SerialRunner().run(fact)
+    config,train,test = TableRunner().run(fact)[0]
+
+    train.df['drb1_1501'] = drb1_1501
+    print(train.df)
+    print(train.meta_df)
+
+    orthogonal_akkermansias = ['1262691', '239935', '1263034', '1574265', '1679444']
+    akkermansia_names = [
+        'Akkermansia sp. CAG 344',
+        'Akkermansia muciniphila',
+        'Akkermansia muciniphila sp. CAG 154',
+        'Akkermansia sp. KLE1798',
+        'Akkermansia glycaniphila'
+    ]
+
+    rough = train.df[orthogonal_akkermansias + ['drb1_1501']]
+    print(rough)
+
+    # sns.scatterplot(x='1262691', y='239935', hue='drb1_1501', data=rough)
+    # plt.show()
+
+    fig, axes = plt.subplots(5,5, sharex=True, sharey=True)
+    for y in range(5):
+        for x in range(5):
+            xs = orthogonal_akkermansias[x]
+            ys = orthogonal_akkermansias[y]
+            ax = axes[y,x]
+            sns.scatterplot(x=xs, y=ys, ax=ax, hue='drb1_1501', data=rough, legend=False)
+
+    fig, axes = plt.subplots(1, 5)
+    for y in range(5):
+        g = sns.swarmplot(ax=axes[y], x="drb1_1501", y=orthogonal_akkermansias[y], data=rough)
+        axes[y].set_ylabel(akkermansia_names[y])
+    fig.tight_layout()
+    plt.show()
